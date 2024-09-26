@@ -1,7 +1,7 @@
 
 import { Metadata } from 'next';
 import Link from 'next/link';
-import FrogetAuthForm from '@/components/form/frogetAuthForm';
+import FrogetAuthForm from '@/components/forms/frogetAuthForm';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
