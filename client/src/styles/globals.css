@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+div{
+  font-family: 'Inter', sans-serif;
+}
+
+ul {
+    list-style: disc inside;
+  }
+  
+  .font-space-mono {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px; /* Adjust this value as needed */
+    color: #333; /* Adjust the color as needed */
+    line-height: 1.5;
+    text-align: center; /* Optional: center-align the text */
+    margin-top: 16px; /* Optional: add some space at the top */
+  }
+  .dashed-line {
+    border-top: 1px dashed #ccc;
+    margin: 10px 0;
+  }
