@@ -84,8 +84,6 @@ export default  function Sidebar() {
   
   };
   
-const {data: session } = useSession();
-const im = session?.user?.image || undefined;
 
   return (
     <Sheet
@@ -336,15 +334,15 @@ const im = session?.user?.image || undefined;
 
       {/* dfweasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss */}
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-        <Avatar
+        {/* <Avatar
       variant="outlined"
       size="lg"
       src={im }
       alt="Profile Picture"
-    />
-        <Box sx={{ minWidth: 0, flex: 1 }}>
+    /> */}
+        {/* <Box sx={{ minWidth: 0, flex: 1 }}>
           <Typography level="title-sm">{session?.user?.name}</Typography>
-        </Box>
+        </Box> */}
         
         <IconButton variant="plain" color="neutral" onClick={handleLogout} >
       <LogoutRoundedIcon />

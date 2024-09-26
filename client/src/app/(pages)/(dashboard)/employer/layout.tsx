@@ -19,22 +19,22 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const session = await getServerSession();
+  // const session = await getServerSession();
 
   
-  if(!session || !session.user) 
-    {
-      redirect('/');
-    }
+  // if(!session || !session.user) 
+  //   {
+  //     redirect('/');
+  //   }
 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider session={session} >
+        
         <Drawer>
         {children}
         </Drawer>
-        </SessionProvider>
+     
         </body>
     </html>
   );
