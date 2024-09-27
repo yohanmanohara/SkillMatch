@@ -28,9 +28,9 @@ interface FormElements extends HTMLFormControlsCollection {
   password: HTMLInputElement;
   persistent: HTMLInputElement;
 }
-interface SignInFormElement extends HTMLFormElement {
-  readonly elements: FormElements;
-}
+
+
+
 
 
 
@@ -94,9 +94,9 @@ const haddlesubmit = async (e:any) => {
 
   return (
     <>
-    <div className=' flex justify-center items-center'>
-      <Box
-        sx={(theme) => ({
+   <div className=' flex justify-center items-center'>
+       <Box
+          sx={(theme) => ({
           width: { xs: '100%', md: '50vw' },
           transition: 'width var(--Transition-duration)',
           transitionDelay: 'calc(var(--Transition-duration) + 0.1s)',
@@ -109,9 +109,9 @@ const haddlesubmit = async (e:any) => {
           [theme.getColorSchemeSelector('dark')]: {
             backgroundColor: 'rgba(19 19 24 / 0.4)',
           },
-        })}
-      >
-        <Box
+            })}
+             >
+          <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -128,8 +128,8 @@ const haddlesubmit = async (e:any) => {
               justifyContent: 'space-between',
             }}
           >
-          
-         
+           
+            
           </Box>
           <Box
             component="main"
@@ -154,24 +154,23 @@ const haddlesubmit = async (e:any) => {
               },
             }}
           >
-            <Stack gap={1} >
-              <Stack gap={1} >
+            <Stack gap={1} sx={{ mb: 2 }}  className='flex justify-center '>
+              <Stack gap={1}>
                 <Typography component="h1" level="h3" >
-                Let’s get started
+                   Welcome back !
                 </Typography>
                 <Typography level="body-sm">
-                  Already have an Account ?{' '}
-                  <Link href="/login" level="title-sm">
-                    Sign In!
+                  Don't you have an Account ?{' '}
+                  <Link href="/signup" level="title-sm">
+                    Sign UP !
                   </Link>
                 </Typography>
               <Button onClick={() => signIn('google')}>
                 <GoogleIcon/>
               </Button>
-             
+              
               </Stack>
             </Stack>
-
             <Divider
               sx={(theme) => ({
                 [theme.getColorSchemeSelector('light')]: {
@@ -183,10 +182,7 @@ const haddlesubmit = async (e:any) => {
             </Divider>
             <Stack gap={4} sx={{ mt: 2 }}>
               <form onSubmit={haddlesubmit} >
-                <FormControl >
-                  <FormLabel>Name</FormLabel>
-                  <Input type='text'  value={name} onChange={(e)=>setName(e.target.value)} required />
-                </FormControl>
+                
                 <FormControl >
                   <FormLabel>Email</FormLabel>
                   <Input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
@@ -195,32 +191,39 @@ const haddlesubmit = async (e:any) => {
                   <FormLabel>Password</FormLabel>
                   <Input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} required/>
                 </FormControl>
-                <FormControl >
-                  <FormLabel>Confirm Password</FormLabel>
-                  <Input type="password" value={confirmpassword} onChange={(e)=>setConfirmPassword(e.target.value)} required/>
-                </FormControl>
-                <Stack gap={4} sx={{ mt: 2 }}>
-                 
+                <Typography level="body-sm">
+                  <Link href="/frogetpassword" level="title-sm">
+                   Froget Password ?
+                  </Link>
+                </Typography>
+
+                <Stack gap={1} sx={{ mt: 2 }}>
+               
                   <Button type="submit"  fullWidth>
-                    Sign Up
+                    Login
                   </Button>
+                  
                 </Stack>
               </form>
+             
             </Stack>
+            <Box>
             <Typography className=" w-fit p-5 text-center">
             By clicking continue, you agree to our Terms of Service and Privacy Policy.
             </Typography>
           </Box>
-          <Box component="footer">
+          </Box>
+          
+          <Box component="footer" >
             <Typography level="body-xs" textAlign="center">
               © Recruitwise {new Date().getFullYear()}
             </Typography>
           </Box>
+           
         </Box>
       </Box>
       </div>
     </>
- 
   );
 }
 
