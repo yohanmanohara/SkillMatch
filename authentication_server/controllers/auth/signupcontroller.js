@@ -135,7 +135,7 @@ const verifyOtp = async (req, res) => {
 
     res.status(200).json({
       message: 'Login successful',
-        redirectUrl: `${process.env.PORT}/customer/overview`,
+        redirectUrl: `/customer/overview`,
         user: { email: newUser.email },
         token,
     });

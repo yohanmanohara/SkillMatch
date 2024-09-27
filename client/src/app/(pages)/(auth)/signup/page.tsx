@@ -36,59 +36,69 @@ interface SignInFormElement extends HTMLFormElement {
 
 
 export default function JoySignInSideTemplate() {
-
+const [isLoading, setIsLoading] = useState(false);
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState('');
-const [name, setName] = useState('');
+const [username, setusername] = useState('');
 const [confirmpassword, setConfirmPassword] = useState('');
 const router =useRouter();
+
+
+
 const haddlesubmit = async (e:any) => {
   e.preventDefault();
-  if(password !== confirmpassword){
+  setIsLoading(true);
+
+
+  if (password !==confirmpassword) {
+    
     alert('passwords do not match');
+
     return;
-  };
+  }
 
-  try{
-   const res= await fetch ('/api/register', {	
-      method: 'POST',
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/signup`, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({name , email, password, confirmpassword}),
+      body: JSON.stringify({
+        email: email,
+        username: username,
+        password: password,
+      }),
+
+      
+    });
+
+
+   
+    const result = await response.json();
+
+    if (response.ok) {
+      router.push(`/otp?email=${encodeURIComponent(email)}`);
+      sessionStorage.setItem("otp",email);
+
+    } else {
+     
+      alert(result.message);
+      sessionStorage.removeItem("otp");
+      setIsLoading(false);
     }
-    );
-
-    if (res.ok)
-      {
-        setName('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
-        router.push('/employer/hiring');
-        
-        
-       
-      }
-      else{
-        setName('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
-        
-        console.log('not registers  ');
-        alert('Already have account');
-      }
-
-  }catch (error){
-
-    console.log('An error occured',error);
-    alert('An error occured');
+  } catch (error) {
+    
+    alert("An error occurred. Please try again.");
+    }
+    setIsLoading(false);
   }
 
 
 
-}
+ 
+
+
+
 
 
 
@@ -185,7 +195,7 @@ const haddlesubmit = async (e:any) => {
               <form onSubmit={haddlesubmit} >
                 <FormControl >
                   <FormLabel>Name</FormLabel>
-                  <Input type='text'  value={name} onChange={(e)=>setName(e.target.value)} required />
+                  <Input type='text'  value={username} onChange={(e)=>setusername(e.target.value)} required />
                 </FormControl>
                 <FormControl >
                   <FormLabel>Email</FormLabel>
@@ -222,5 +232,6 @@ const haddlesubmit = async (e:any) => {
     </>
  
   );
+
 }
 
