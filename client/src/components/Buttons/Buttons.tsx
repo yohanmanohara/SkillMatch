@@ -21,6 +21,7 @@ const buttonVariants = cva(base, {
       "bg-primary-800 text-white hover:bg-white-0 hover:text-primary-800",
       secondary:
         "bg-white-0 text-primary-800 border border-white hover:border hover:border-primary-800",
+       red: "bg-red-200 text-white hover:bg-red-200 hover:text-white", 
     },
     size: {
       small: "px-4 py-2",

@@ -97,6 +97,9 @@ const signupUser = async (req, res) => {
 const verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
 
+  if ( !otp) {
+    return res.status(400).json({ message: 'Email and OTP are required' });
+  }
   
   const otpDetails = otpStore[email];
   if (!otpDetails) {
@@ -135,7 +138,7 @@ const verifyOtp = async (req, res) => {
 
     res.status(200).json({
       message: 'Login successful',
-        redirectUrl: `/customer/overview`,
+        redirectUrl: `/login`,
         user: { email: newUser.email },
         token,
     });
