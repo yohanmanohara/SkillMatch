@@ -26,7 +26,7 @@ const loginUser = async (req, res) => {
         res.cookie('token', token, { httpOnly: true, maxAge:86400000 });
         return res.status(200).json({
           message: "Login successful as admini",
-          redirectUrl:`${process.env.PORT}/admin/overview`,
+          redirectUrl:`/admin/overview`,
           token,
           
 
@@ -60,7 +60,7 @@ const loginUser = async (req, res) => {
      
         res.status(200).json({
           message: 'Login successful',
-          redirectUrl: `${process.env.PORT}/customer/overview`,
+          redirectUrl: `/employer/overview`,
           user: { email: user.email ,
                   id: user._id.toString(),
           },

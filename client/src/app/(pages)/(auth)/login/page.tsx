@@ -23,70 +23,54 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { signIn } from 'next-auth/react';
 import {useRouter} from 'next/navigation';
 
-interface FormElements extends HTMLFormControlsCollection {
-  email: HTMLInputElement;
-  password: HTMLInputElement;
-  persistent: HTMLInputElement;
-}
-
-
-
-
-
 
 
 export default function JoySignInSideTemplate() {
-
+const [loading, setLoading] = React.useState(false);
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState('');
-const [name, setName] = useState('');
-const [confirmpassword, setConfirmPassword] = useState('');
-const router =useRouter();
+
+
+
 const haddlesubmit = async (e:any) => {
-  e.preventDefault();
-  if(password !== confirmpassword){
-    alert('passwords do not match');
-    return;
-  };
-
-  try{
-   const res= await fetch ('/api/register', {	
-      method: 'POST',
+e.preventDefault();
+ 
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/login`, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({name , email, password, confirmpassword}),
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        
+      }),
+    });
+
+    
+   
+    const result = await response.json();
+
+    if (response.ok) {
+
+      sessionStorage.setItem("token", result.token); 
+      console.log(result);
+      
+      if (result.redirectUrl) {
+        window.location.href = result.redirectUrl; 
+      }
+
+    } else {
+      alert(result.message);
+     
+      setLoading(false);
     }
-    );
-
-    if (res.ok)
-      {
-        setName('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
-        router.push('/employer/hiring');
-        
-        
-       
-      }
-      else{
-        setName('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
-        
-        console.log('not registers  ');
-        alert('Already have account');
-      }
-
-  }catch (error){
-
-    console.log('An error occured',error);
-    alert('An error occured');
+  } catch (error) {
+    console.error("An unexpected error occurred:", error);
+    
+    setLoading(false);
   }
-
-
 
 }
 
@@ -199,7 +183,7 @@ const haddlesubmit = async (e:any) => {
 
                 <Stack gap={1} sx={{ mt: 2 }}>
                
-                  <Button type="submit"  fullWidth>
+                  <Button type="submit" fullWidth>
                     Login
                   </Button>
                   
