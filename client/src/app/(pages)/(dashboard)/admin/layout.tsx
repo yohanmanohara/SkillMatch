@@ -1,7 +1,7 @@
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Drawer from "@/components/layouts/dashbord/drawer-employee";
+import Drawer from "@/components/layouts/dashbord/drawer-admin";
 import { getServerSession } from "next-auth";
 import SessionProvider  from "@/components/layouts/other/sessionprovider";
 import { redirect } from 'next/navigation';
