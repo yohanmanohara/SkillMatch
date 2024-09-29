@@ -10,7 +10,7 @@ const breadcrumbItems = [
 
 export default async function UserPage() {
   // Fetch data from the API
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/getusers`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/getusers`, {
       cache: 'no-store', 
       
     });

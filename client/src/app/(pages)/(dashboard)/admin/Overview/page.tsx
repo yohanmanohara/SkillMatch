@@ -1,14 +1,9 @@
-'use client'
 import React from 'react'
 
-
-
-const page = () => {
-  
-    
+function page() {
   return (
     <div>
-     admin page
+      ef
     </div>
   )
 }

@@ -1,20 +1,14 @@
-"use client"
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import Drawer from "@/components/layouts/dashbord/drawer-employee";
-import { getServerSession } from "next-auth";
-import SessionProvider  from "@/components/layouts/other/sessionprovider";
-import { redirect } from 'next/navigation';
-import React, { useEffect, useState } from "react";
-const inter = Inter({ subsets: ["latin"] });
+  "use client";
+  import { useEffect, useState } from 'react';
+  import Header from '@/components/layout/header';
+  import Sidebarcustom from '@/components/layout/sidebar';
 
-
-export default  function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const [data, setData] = useState<string | null>(null);
+  export default function DashboardLayout({
+    children,
+  }: {
+    children: React.ReactNode;
+  }) {
+    const [data, setData] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -29,7 +23,7 @@ export default  function RootLayout({
         }
     
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/protected`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/protected`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,
@@ -101,15 +95,15 @@ export default  function RootLayout({
       return <p>{error}</p>;
     }
 
-  return (
-    <html lang="en">
-      <body className={inter.className}>
-      
-        <Drawer>
-        {children}
-        </Drawer>
-       
-        </body>
-    </html>
-  );
-}
+    return (
+      <div className="flex flex-wrap min-h-screen  pr-2 md:pr-8">
+        <Sidebarcustom />
+        <main className="flex-1 flex flex-col w-full">
+          <Header />
+          <div className="pl-0 md:pl-[310px] ">
+            <div>{children}</div> 
+          </div>
+        </main>
+      </div>
+    );
+  }
