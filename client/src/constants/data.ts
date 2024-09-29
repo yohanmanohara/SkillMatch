@@ -70,6 +70,31 @@ export const navItem: NavItem[] = [//customer view
   },
 
   {
+    title: 'Interviews',
+    href: '/employee/interviews',
+    icon: 'spinner',
+    label: 'profile'
+  },
+  {
+    title: 'Jobs',
+    href: '/employee/jobs',
+    icon: 'spinner',
+    label: 'profile'
+  },
+  {
+    title: 'Support',
+    href: '/employee/support',
+    icon: 'media',
+    label: 'profile'
+  },
+  {
+    title: 'Recomanded jobs',
+    href: '/employee/recomandadjobs',
+    icon: 'profile',
+    label: 'profile'
+  },
+
+  {
     title: 'Settings',
     href: '/employee/settings',
     icon: 'car',
