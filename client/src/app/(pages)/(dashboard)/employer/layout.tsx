@@ -43,7 +43,7 @@ export default function DashboardLayout({
           console.log('User Role:', result.role.role);
           
 
-          if (role == 'admin'|| role == 'Employer') {
+          if (role == 'admin'|| role == 'Employee') {
             setError('Access denied');
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('poop');
