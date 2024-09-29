@@ -29,6 +29,7 @@ const loginUser = async (req, res) => {
           redirectUrl:`/admin/overview`,
           token,
           
+          
 
         });
       }
@@ -67,6 +68,7 @@ const loginUser = async (req, res) => {
                   id: user._id.toString(),
           },
           token,
+          role,
           
         });
 
@@ -83,6 +85,7 @@ const loginUser = async (req, res) => {
                   id: user._id.toString(),
           },
           token,
+          role,
           
         });
       }

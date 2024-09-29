@@ -41,7 +41,7 @@ export default function TabsDemo() {
     const fetchUser = async () => {
       if (userId) {
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/getsingleuser/?id=${userId}`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/getsingleuser/?id=${userId}`, {
             cache: 'no-store',
           });
           const data = await res.json();
@@ -73,7 +73,7 @@ export default function TabsDemo() {
         status: formData.get('status'),
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/updateuser/?id=${userId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/updateuser/?id=${userId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -121,7 +121,7 @@ export default function TabsDemo() {
         confirmPassword: formData.get('confirmPassword') as string,
       };
   
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/updatpassword/?id=${userId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/updatpassword/?id=${userId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

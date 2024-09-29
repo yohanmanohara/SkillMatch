@@ -42,9 +42,10 @@ export default function DashboardLayout({
           sessionStorage.setItem('role', JSON.stringify(result.role));
           const role = result.role.role;
           console.log('User Role:', result.role.role);
+          
 
   
-          if (role === 'customer') {
+          if (role === 'Employee' || role === 'Employer') {
             setError('Access denied');
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('user');
