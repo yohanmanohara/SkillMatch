@@ -1,20 +1,28 @@
-// page.tsx (Server Component)
+
 import { UserClient } from '@/components/tables/user-tables/client';
 import { Breadcrumbs } from '@/components/ui/breadcrumbs';
-
+import { useEffect, useState } from 'react';
 const breadcrumbItems = [
   { title: 'Dashboard', link: '/admin/overview' },
   { title: 'User', link: '/admin/user' }
 ];
 
-export default async function UserPage() {
-  // Fetch data from the API
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/getusers`, {
-      cache: 'no-store', 
-     
+
+export default  async function UserPage() {
+    
+    const role = 'employer';
+    const res = await  fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/getusers`, {
+       method: 'POST',
+       headers: {
+        'Content-Type': 'application/json',
+      }, 
+      body: JSON.stringify({
+      role:role,
+        
+      }),
     });
-  const users = await res.json(); 
-  console.log(users.message);
+    const users = await res.json(); 
+    console.log(users.message);
   return (
 
       <div className="space-y-2">
