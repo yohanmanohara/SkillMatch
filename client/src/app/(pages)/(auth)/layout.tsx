@@ -6,13 +6,12 @@ import { Toaster } from '@/components/ui/toaster';
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
-  // Ensure the component renders only after it is mounted
   useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) {
-    return null; // Prevents mismatches during hydration
+    return null; 
   }
 
   return (

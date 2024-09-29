@@ -7,9 +7,9 @@ const mongoose = require('mongoose')
 // get all workouts
 const getUsers = async (req, res) => {
 
-  const {role} = req.user
+  const {role} = req.body
 
-  if (role=='admin') {
+  if (role =='admin') {
   try {
     const users = await userModel.find(); // Fetch all users
     res.status(200).json(users);
