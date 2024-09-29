@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Features = () => {
+function page() {
   return (
     <div>
-      
+      head hunting
     </div>
   )
 }
 
-export default Features
+export default page
