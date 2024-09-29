@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
-import { getServerSession } from "next-auth";
-import SessionProvider  from "@/components/layouts/other/sessionprovider";
-import Sidebar from "@/components/layouts/dashbord/Sidebar-employer";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +16,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const session = await getServerSession();
+
   return (
     <html lang="en">
       <body className={inter.className}>

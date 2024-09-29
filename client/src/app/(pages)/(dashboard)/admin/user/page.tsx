@@ -1,6 +1,5 @@
 // page.tsx (Server Component)
-import PageContainer from '@/components/layout/page-container';
-import { UserClient } from '@/components/tables/user-tables/client';
+import PageContainer from '@/components/layout/page-container';import { UserClient } from '@/components/tables/user-tables/client';
 import { Breadcrumbs } from '@/components/ui/breadcrumbs';
 
 const breadcrumbItems = [
@@ -16,11 +15,12 @@ export default async function UserPage() {
     });
   const users = await res.json(); 
   return (
-    <PageContainer>
+
       <div className="space-y-2">
         <Breadcrumbs items={breadcrumbItems} />
         <UserClient data={users} /> 
       </div>
-    </PageContainer>
+      
+   
   );
 }

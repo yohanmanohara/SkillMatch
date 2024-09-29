@@ -18,7 +18,7 @@ const UserVehicles = () => {
   useEffect(() => {
     const fetchVehicles = async () => {
       if (userId) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/vehicle/getvehicles?id=${userId}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/vehicle/getvehicles?id=${userId}`, {
           cache: 'no-store',
         });
         const data = await res.json();
@@ -36,6 +36,7 @@ const UserVehicles = () => {
       <Breadcrumbs items={breadcrumbItems} />
      
       <UserClient data={vehicles} />
+      
     </div>
   );
 };

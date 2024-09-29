@@ -1,5 +1,5 @@
 'use client';
-// import { AlertModal } from '@/components/modal/alert-modals';
+import { AlertModal } from '@/components/modal/alert-modals';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -40,7 +40,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const ondeactivate = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/putinactive/`+ data._id, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/putinactive/`+ data._id, {
         method: 'PUT',   
        
       });
@@ -62,7 +62,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onactivate = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/putactive/`+ data._id, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/putactive/`+ data._id, {
         method: 'PUT',   
        
       });
@@ -85,7 +85,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onConfirm = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/deleteuser/`+ data._id, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/deleteuser/`+ data._id, {
         method: 'DELETE',   
        
         
@@ -108,12 +108,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   return (
     <>
-      {/* <AlertModal
+      <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={onConfirm}
         loading={loading}
-      /> */}
+      />
    
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>

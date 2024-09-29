@@ -100,11 +100,13 @@ export default function DashboardLayout({
 
 
   return (
-    <div className="flex">
+    <div className="flex flex-wrap min-h-screen  pr-2 md:pr-8">
       <Sidebaradmin/>
-      <main className="w-full flex-1 overflow-hidden">
+      <main className="flex-1 flex flex-col w-full">
         <Headeradmin />
+        <div className="pl-0 md:pl-[310px] ">
         {children}
+        </div>
       </main>
     </div>
   );
