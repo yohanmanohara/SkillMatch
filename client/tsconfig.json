@@ -18,9 +18,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "components/*": ["./src/app/components/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/data/jobtitles.js", "src/components/layouts/cards/SearchComponent.tsx", ".next/types/app/(pages)/(dashboard)/employer/settings/profile/page.tsx"],
   "exclude": ["node_modules"]
 }

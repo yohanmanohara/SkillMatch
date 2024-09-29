@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { DashboardNav } from '@/components/ui/dashboard-nav';
 import {  navItem } from '@/constants/data';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib copy/utils';
 import { ChevronLeft } from 'lucide-react';
 import { useSidebar } from '@/hooks/useSidebar';
 import Link from 'next/link';

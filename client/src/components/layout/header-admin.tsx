@@ -1,5 +1,5 @@
 import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib copy/utils';
 import { MobileSidebar } from './mobile-sidebar-admin';
 import UserNavadmin from './user-nav-admin';
 export default function Header() {
