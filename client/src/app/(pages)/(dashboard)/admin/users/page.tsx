@@ -47,6 +47,24 @@ const rows = [
   createData('Marshmallow', 318, 0, 81, 2.0),
   createData('Nougat', 360, 19.0, 9, 37.0),
   createData('Oreo', 437, 18.0, 63, 4.0),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Honeycomb', 408, 3.2, 87, 6.5),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Jelly Bean', 375, 0.0, 94, 0.0),
+  createData('KitKat', 518, 26.0, 65, 7.0),
+  createData('Lollipop', 392, 0.2, 98, 0.0),
+  createData('Marshmallow', 318, 0, 81, 2.0),
+  createData('Nougat', 360, 19.0, 9, 37.0),
+  createData('Oreo', 437, 18.0, 63, 4.0),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Honeycomb', 408, 3.2, 87, 6.5),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Jelly Bean', 375, 0.0, 94, 0.0),
+  createData('KitKat', 518, 26.0, 65, 7.0),
+  createData('Lollipop', 392, 0.2, 98, 0.0),
+  createData('Marshmallow', 318, 0, 81, 2.0),
+  createData('Nougat', 360, 19.0, 9, 37.0),
+  createData('Oreo', 437, 18.0, 63, 4.0),
 ];
 
 function labelDisplayedRows({ from, to, count }: { from: number; to: number; count: number }) {
@@ -122,7 +140,6 @@ function EnhancedTableHead(props: { onSelectAllClick: any; order: any; orderBy: 
       <tr>
         <th>
           
-         
         </th>
         {headCells.map((headCell) => {
           const active = orderBy === headCell.id;
@@ -133,7 +150,7 @@ function EnhancedTableHead(props: { onSelectAllClick: any; order: any; orderBy: 
                 active ? (order === 'asc' ? 'ascending' : 'descending') : undefined
               }
             >
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+             
               <Link
                 underline="none"
                 color="neutral"
@@ -199,7 +216,7 @@ export default function TableSortAndSelection() {
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState<string[]>([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const handleRequestSort = (event: any, property: React.SetStateAction<string>) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -210,12 +227,7 @@ export default function TableSortAndSelection() {
   const handleChangePage = (newPage: React.SetStateAction<number>) => {
     setPage(newPage);
   };
-  const handleChangeRowsPerPage = (event: any, value: number | null) => {
-    if (value !== null) {
-      setRowsPerPage(value);
-      setPage(0);
-    }
-  };
+  
   const getLabelDisplayedRowsTo = () => {
     if (rows.length === -1) {
       return (page + 1) * rowsPerPage;
@@ -224,13 +236,18 @@ export default function TableSortAndSelection() {
       ? rows.length
       : Math.min(rows.length, (page + 1) * rowsPerPage);
   };
-  // Avoid a layout jump when reaching the last page with empty rows.
+
+
+
+
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+    
   return (
     <Sheet
       variant="outlined"
-      sx={{ width: '100%', boxShadow: 'sm', borderRadius: 'sm' }}
+      sx={{ width:'100%', boxShadow: 'sm', borderRadius: 'sm' , bgcolor: 'background.surface' , height: 'auto' }}
     >
      
       <Table
@@ -314,11 +331,7 @@ export default function TableSortAndSelection() {
               >
                   <FormControl>
                     <FormLabel>Rows per page:</FormLabel>
-                    <Select onChange={handleChangeRowsPerPage} value={rowsPerPage}>
-                      <Option value={5}>5</Option>
-                      <Option value={10}>10</Option>
-                      <Option value={25}>25</Option>
-                    </Select>
+                   
                   </FormControl>
                 <Typography sx={{ textAlign: 'center', minWidth: 80 }}>
                   {labelDisplayedRows({
