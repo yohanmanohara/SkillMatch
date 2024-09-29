@@ -96,7 +96,7 @@ const signupUser = async (req, res) => {
 
 const verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
-
+  
   if ( !otp) {
     return res.status(400).json({ message: 'Email and OTP are required' });
   }
@@ -127,20 +127,19 @@ const verifyOtp = async (req, res) => {
       password: hashedPassword,
       username,
       status: 'Active',
+      role:'Employee',
     });
 
     await newUser.save();
 
-   
-    const token = createToken(newUser._id);
 
     delete otpStore[email];
 
     res.status(200).json({
       message: 'Login successful',
-        redirectUrl: `/login`,
+        redirectUrl: '/login',
         user: { email: newUser.email },
-        token,
+        
     });
 
 

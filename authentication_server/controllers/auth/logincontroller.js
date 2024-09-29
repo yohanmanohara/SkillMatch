@@ -53,9 +53,11 @@ const loginUser = async (req, res) => {
       if (!isMatch) {
         return res.status(400).json({ message: 'Invalid email or password' });
       }
-  
-    
-      const token = jwt.sign({ email: user.email,role: "customer",id: user._id },process.env.JWT_SECRET, { expiresIn: '24h' });
+
+      const role = await User.findOne({email,role:"Employee"});
+
+      if(role.role=="Employee"){
+        const token = jwt.sign({ email: user.email,id: user._id,role:"Employee" },process.env.JWT_SECRET, { expiresIn: '24h' });
       res.cookie('token', token, { httpOnly: true, maxAge: 86400000 });
      
         res.status(200).json({
@@ -67,6 +69,27 @@ const loginUser = async (req, res) => {
           token,
           
         });
+
+      }
+      else if(role.role=="Employer")
+      {
+        const token = jwt.sign({ email: user.email,id: user._id,role:"Employer" },process.env.JWT_SECRET, { expiresIn: '24h' });
+      res.cookie('token', token, { httpOnly: true, maxAge: 86400000 });
+     
+        res.status(200).json({
+          message: 'Login successful',
+          redirectUrl: `/employer/overview`,
+          user: { email: user.email ,
+                  id: user._id.toString(),
+          },
+          token,
+          
+        });
+      }
+
+  
+    
+      
       
 
      

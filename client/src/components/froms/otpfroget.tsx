@@ -37,6 +37,9 @@ interface OtpFormProps {
 const OtpFroget: React.FC<OtpFormProps> = ({ setIsSentOtp,setLoadings }) => {
 const [loading, setLoading] = React.useState(false);
 const [email, setEmail] = useState<string | null>(null);
+const [password,setpassword]= useState("");
+const [conpassword,setconpassword]=useState("");
+const [issentotp, setissentotp] = useState(false);
 
     useEffect(() => {
       
@@ -47,59 +50,56 @@ const [email, setEmail] = useState<string | null>(null);
     }, []);
 
 
-const [otps, setotps] = useState('');
+    const [otps, setotps] = useState('');
 const haddlesubmit = async (e:any) => {
+    const email = sessionStorage.getItem("email");
     setLoading(true);
-    e.preventDefault();
+
     if (!email) {
-        alert('email not found');
-        setLoading(false);
-      }
-     if(!otps){
-        alert('otp is required');
-        setLoading(false);
-     }  
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/verifyotp`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            otp: otps,
-          }),
-        });
-            console.log(response);
-            console.log(email);
-        const result = await response.json();
-  
-        if (response.ok) {
-    
-        sessionStorage.removeItem("email");
-        window.location.href = result.redirectUrl;
-        
-        } else {
-            alert('otp verification failed');
-            setLoading(false);
-           
-        //   toast({
-        //     title: "OTP Verification Failed",
-        //     description: result.message || "An error occurred during OTP verification.",
-        //   });
-        }
-      } catch (error) {
-        alert('An unexpected error occurred');
-        sessionStorage.removeItem("email");
-        setIsSentOtp(false);   
-        setLoading(false);
+        setissentotp(false);
+    }
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/resetpassword`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          newPassword: password,
+          confirmPassword: conpassword,
+          otp: otps,
+        }),
+      });
+
+      const result = await response.json();
+
+
+      if (response.ok) {
         // toast({
-        //   title: "Verification Error",
-        //   description: "An unexpected error occurred.",
+        //   title: "Password Reset Successful",
+        //   description: "Your password has been reset successfully.",
         // });
+        sessionStorage.removeItem("email");
+        router.push("/login"); 
+      } else {
+        // toast({
+        //   title: "Reset Failed",
+        //   description: result.message || "Failed to reset password.",
+        // });
+        alert(result.message)
+        console.log("Reset Faild");
+        setLoading(false);
       }
-
-
+    } catch (error) {
+      console.error("An error occurred while resetting password:", error);
+    //   toast({
+    //     title: "Error",
+    //     description: "An unexpected error occurred.",
+    //   });
+      setLoading(false);
+    }
     }
 
 const router =useRouter();
@@ -180,16 +180,24 @@ const router =useRouter();
                 <FormLabel>OTP</FormLabel>
                 <Input type='text'  value={otps} onChange={(e)=>setotps(e.target.value)} />
               </FormControl>
-             
+
+              <FormControl >
+                <FormLabel>Password</FormLabel>
+                <Input type='password'  value={password} onChange={(e) => setpassword(e.target.value)} />
+              </FormControl>
+              <FormControl >
+                <FormLabel>Confirm Password</FormLabel>
+                <Input type='password'  value={conpassword} onChange={(e)=>setconpassword(e.target.value)} />
+              </FormControl>
               <Stack gap={4} direction="row">
                         <Button type="submit" fullWidth disabled={loading}>
                           {loading? "Processing..." : "Submit"}
                         </Button>
                         <Button 
                           type="button" 
-                          onClick={() => {setIsSentOtp(false) 
-                              router.refresh();
-                              setLoadings(false)
+                          onClick={() => { setIsSentOtp(false) 
+                            router.refresh();
+                            setLoadings(false)
                           }
                                      } // Setting false to cancel OTP state
                           fullWidth

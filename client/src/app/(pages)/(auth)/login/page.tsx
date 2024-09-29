@@ -34,7 +34,7 @@ const [password, setPassword] = useState('');
 
 const haddlesubmit = async (e:any) => {
 e.preventDefault();
- 
+setLoading(true);
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/login`, {
       method: "POST",
@@ -60,6 +60,7 @@ e.preventDefault();
       if (result.redirectUrl) {
         window.location.href = result.redirectUrl; 
       }
+     
 
     } else {
       alert(result.message);
@@ -183,8 +184,8 @@ e.preventDefault();
 
                 <Stack gap={1} sx={{ mt: 2 }}>
                
-                  <Button type="submit" fullWidth>
-                    Login
+                  <Button type="submit" fullWidth disabled={loading}>
+                    {loading ? 'Loading...' : 'Sign In'}
                   </Button>
                   
                 </Stack>
