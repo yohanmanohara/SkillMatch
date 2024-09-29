@@ -1,5 +1,5 @@
 'use client';
-// import { AlertModal } from '@/components/modal/alert-modals';
+import { AlertModal } from '@/components/modal/alert-modals';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -108,12 +108,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   return (
     <>
-      {/* <AlertModal
+      <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={onConfirm}
         loading={loading}
-      /> */}
+      />
    
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>

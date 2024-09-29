@@ -1,6 +1,0 @@
-[
-    { "id": 1, "JobDescription": "Snow", "Title": "Jon", "DueDate": 14 },
-    { "id": 2, "JobDescription": "Lannister", "Title": "Cersei", "DueDate": 31 },
-    { "id": 3, "JobDescription": "Lannister", "Title": "Jaime", "DueDate": 31 },
-    { "id": 4, "JobDescription": "Stark", "Title": "Arya", "DueDate": 11 }
-]
