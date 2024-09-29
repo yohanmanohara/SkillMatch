@@ -55,7 +55,7 @@ const loginUser = async (req, res) => {
         return res.status(400).json({ message: 'Invalid email or password' });
       }
 
-      const role = await User.findOne({email,role:"Employee"});
+      const role = await User.findOne({ email, role: { $in: ["Employee", "Employer"] } });
 
       if(role.role=="Employee"){
         const token = jwt.sign({ email: user.email,id: user._id,role:"Employee" },process.env.JWT_SECRET, { expiresIn: '24h' });
