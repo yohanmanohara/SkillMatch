@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
-import Header from '@/components/layout/header';
-import Sidebarcustom from '@/components/layout/sidebar';
+import Header from '@/components/layout/employer/header';
+import Sidebarcustom from '@/components/layout/employer/sidebar';
 
 export default function DashboardLayout({
   children,
@@ -43,7 +43,7 @@ export default function DashboardLayout({
           console.log('User Role:', result.role.role);
           
 
-          if (role == 'admin') {
+          if (role == 'admin'|| role == 'Employer') {
             setError('Access denied');
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('poop');

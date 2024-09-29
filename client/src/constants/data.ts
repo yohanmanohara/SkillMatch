@@ -1,4 +1,4 @@
-import { NavItemadmin, NavItem } from '@/types';
+import { NavItemadmin, NavItem, } from '@/types';
 import { on } from 'events';
 
 export type User = {
@@ -97,6 +97,54 @@ export const navItem: NavItem[] = [//customer view
   {
     title: 'Settings',
     href: '/employee/settings',
+    icon: 'car',
+    label: 'settings'
+  },
+ 
+
+  
+];
+
+
+export const navItemempy: NavItem[] = [//employer view
+  {
+    title: 'Overview',
+    href: '/employer/overview',
+    icon: 'dashboard',
+    label: 'overview'
+  },
+ 
+
+  {
+    title: 'hiring',
+    href: '/employer/hiring',
+    icon: 'profile',
+    label: 'profile'
+  },
+
+  {
+    title: 'Interviews',
+    href: '/employer/interview',
+    icon: 'spinner',
+    label: 'profile'
+  },
+  {
+    title: 'Manage',
+    href: '/employer/manage',
+    icon: 'spinner',
+    label: 'profile'
+  },
+  {
+    title: 'Support',
+    href: '/employer/support',
+    icon: 'media',
+    label: 'profile'
+  },
+ 
+
+  {
+    title: 'Settings',
+    href: '/employer/settings',
     icon: 'car',
     label: 'settings'
   },
