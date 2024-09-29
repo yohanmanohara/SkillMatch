@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import * as React from 'react';
 import { useState } from 'react';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
@@ -22,6 +22,7 @@ import GoogleIcon from '@/components/Icons/GoogleIcon';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import { signIn } from 'next-auth/react';
 import {useRouter} from 'next/navigation';
+import ThemeProvider from '@/components/layout/ThemeToggle/theme-provider';
 
 
 
@@ -79,6 +80,7 @@ setLoading(true);
 
   return (
     <>
+   
    <div className=' flex justify-center items-center'>
        <Box
           sx={(theme) => ({
@@ -209,6 +211,7 @@ setLoading(true);
       </Box>
       </div>
     </>
+  
   );
 }
 

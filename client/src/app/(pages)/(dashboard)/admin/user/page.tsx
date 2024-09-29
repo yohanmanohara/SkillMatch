@@ -1,5 +1,5 @@
 // page.tsx (Server Component)
-import PageContainer from '@/components/layout/page-container';import { UserClient } from '@/components/tables/user-tables/client';
+import { UserClient } from '@/components/tables/user-tables/client';
 import { Breadcrumbs } from '@/components/ui/breadcrumbs';
 
 const breadcrumbItems = [
@@ -7,13 +7,19 @@ const breadcrumbItems = [
   { title: 'User', link: '/admin/user' }
 ];
 
+const role = sessionStorage.getItem('role');
+
 export default async function UserPage() {
   // Fetch data from the API
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/getusers`, {
       cache: 'no-store', 
-      
+      body: JSON.stringify({
+      role:role,
+        
+      }),
     });
-  const users = await res.json(); 
+    const users = await res.json(); 
+    console.log(users.message);
   return (
 
       <div className="space-y-2">
