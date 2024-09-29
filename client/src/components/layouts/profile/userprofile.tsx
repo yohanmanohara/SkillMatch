@@ -53,23 +53,23 @@ function UserProfile() {
 
 
 
-    const {data:session} = useSession();
+    // const {data:session} = useSession();
     const [selectedFile, setSelectedFile] = React.useState(null);
     const [firstname, setFirstname] = React.useState('');
     const [lastname,setLastname]=React.useState('');
     const [role,setrole]=React.useState('');
     const [bio,setbio]=React.useState('');
     const [secoundemail,setsecoundemail]=React.useState('');
-    const email = session?.user?.email;
+    // const email = session?.user?.email;
 
     
-    const cancel = () => {
-      setFirstname(session?.user?.firstname);
-      setLastname(session?.user?.lastname);
-      setrole(session?.user?.role);
-      setbio(session?.user?.bio);
-      setsecoundemail(session?.user?.secoundemail);
-    }
+    // const cancel = () => {
+    //   setFirstname(session?.user?.firstname);
+    //   setLastname(session?.user?.lastname);
+    //   setrole(session?.user?.role);
+    //   setbio(session?.user?.bio);
+    //   setsecoundemail(session?.user?.secoundemail);
+    // }
   
     
     const hadlesubmit = async (e:any) => {
@@ -85,7 +85,7 @@ function UserProfile() {
            headers: {
              'Content-Type': 'application/json',
            },
-           body: JSON.stringify({firstname, lastname,role,secoundemail,bio ,email}),
+           body: JSON.stringify({firstname, lastname,role,secoundemail,bio }),
          }
          );
           const data = await res.json();
@@ -150,7 +150,7 @@ function UserProfile() {
               maxHeight={200}
               sx={{ flex: 1, minWidth: 120, borderRadius: '100%' }}
             >
-              <Image src={session?.user?.image} alt="Profile Picture" height={100} width={100} />
+              {/* <Image src={session?.user?.image} alt="Profile Picture" height={100} width={100} /> */}
             </AspectRatio>
             <IconButton
               aria-label="upload new picture"
@@ -179,14 +179,14 @@ function UserProfile() {
               >
                
               
-                <Input size="sm" value={firstname} placeholder={session?.user?.firstname}   onChange={(e) => setFirstname(e.target.value)} />
-                <Input size="sm" value={lastname} placeholder={session?.user?.lastname} onChange={(e) => setLastname(e.target.value)} sx={{ flexGrow: 1 }} />
+                {/* <Input size="sm" value={firstname} placeholder={session?.user?.firstname}   onChange={(e) => setFirstname(e.target.value)} />
+                <Input size="sm" value={lastname} placeholder={session?.user?.lastname} onChange={(e) => setLastname(e.target.value)} sx={{ flexGrow: 1 }} /> */}
               </FormControl>
             </Stack>
             <Stack direction="row" spacing={2}>
               <FormControl>
                 <FormLabel>Role</FormLabel>
-                <Input size="sm" value={role} placeholder={session?.user?.role} onChange={(e) => setrole(e.target.value)}   />
+                {/* <Input size="sm" value={role} placeholder={session?.user?.role} onChange={(e) => setrole(e.target.value)}   /> */}
               </FormControl>
               
               <FormControl sx={{ flexGrow: 1 }}>
@@ -196,7 +196,7 @@ function UserProfile() {
                   name='secoundemail'
                   value={secoundemail}
                   startDecorator={<EmailRoundedIcon />}
-                  placeholder={session?.user?.secoundemail || "Enter your secoundary "}
+                  // placeholder={session?.user?.secoundemail || "Enter your secoundary "}
                   onChange={(e) => setsecoundemail(e.target.value)} 
                   sx={{ flexGrow: 1 }}
                 />
@@ -209,7 +209,7 @@ function UserProfile() {
                    name='email'
                    size="sm"
                    startDecorator={<EmailRoundedIcon />}
-                   value={session?.user?.email}
+                  //  value={session?.user?.email}
                    sx={{ flexGrow: 1 }}
                    disabled
                  />
@@ -230,7 +230,7 @@ function UserProfile() {
             value={bio}
             minRows={4}
             sx={{ mt: 1.5 }}
-            placeholder={session?.user?.bio}
+            // placeholder={session?.user?.bio}
             onChange={(e) => setbio(e.target.value)}
           />
           <FormHelperText sx={{ mt: 0.75, fontSize: 'xs' }}>
@@ -239,9 +239,9 @@ function UserProfile() {
         </Stack>
         <CardOverflow sx={{ borderTop: '1px solid', borderColor: 'divider' }}>
           <CardActions sx={{ alignSelf: 'flex-end', pt: 2 }}>
-            <Button size="sm" variant="outlined" color="neutral" onClick={cancel}>
+            {/* <Button size="sm" variant="outlined" color="neutral" onClick={cancel}>
               Cancel
-            </Button>
+            </Button> */}
             <Button size="sm" variant="solid" type='submit'>
               Save
             </Button>

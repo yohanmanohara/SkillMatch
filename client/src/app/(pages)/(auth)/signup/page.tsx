@@ -44,13 +44,13 @@ const [email, setEmail] = useState("");
 const [password, setPassword] = useState('');
 const [username, setusername] = useState('');
 const [confirmpassword, setConfirmPassword] = useState('');
-const router =useRouter();
-const [issentotp, setissentotp] = useState(false);
 
+const [issentotp, setissentotp] = useState(false);
+const [loading, setLoading] = React.useState(false);
 
 const haddlesubmit = async (e:any) => {
   e.preventDefault();
-  setIsLoading(true);
+  setLoading(true);
 
 
   if (password !==confirmpassword) {
@@ -82,18 +82,23 @@ const haddlesubmit = async (e:any) => {
     if (response.ok) {
       setissentotp(true);
       sessionStorage.setItem("email",email);
+      
 
     } else {
      
       alert(result.message);
       sessionStorage.removeItem("email");
       setIsLoading(false);
+      setLoading(false);
+
     }
   } catch (error) {
     
     alert("An error occurred. Please try again.");
     }
     setIsLoading(false);
+    setLoading(false);
+
   }
 
 
@@ -108,7 +113,7 @@ const haddlesubmit = async (e:any) => {
   return (
     <>
      { issentotp ? (
-       <OtpForm setIsSentOtp={setissentotp} />
+       <OtpForm setIsSentOtp={setissentotp} setLoadings={setLoading} />
       ) : (
     
     <div className=' flex justify-center items-center'>
@@ -218,8 +223,8 @@ const haddlesubmit = async (e:any) => {
               </FormControl>
               <Stack gap={4} sx={{ mt: 2 }}>
                
-                <Button type="submit"  fullWidth>
-                  Sign Up
+                <Button type="submit"  fullWidth disabled={loading}>
+                {loading? "Processing..." : "Sign Up"}
                 </Button>
               </Stack>
             </form>

@@ -53,13 +53,12 @@ function UserProfile() {
 
 
 
-    const {data:session} = useSession();
+    // const {data:session} = useSession();
     const [selectedFile, setSelectedFile] = React.useState(null);
     const [firstname, setFirstname] = React.useState('');
     const [lastname,setLastname]=React.useState('');
     const [mobile,setMobile]=React.useState('');
     const [bio,setbio]=React.useState('');
-    const email = session?.user?.email;
 
     
     
@@ -126,8 +125,8 @@ function UserProfile() {
               >
                
               
-                <Input size="sm" value={firstname} placeholder={session?.user?.firstname}   onChange={(e) => setFirstname(e.target.value)} />
-                <Input size="sm" value={lastname} placeholder={session?.user?.lastname} onChange={(e) => setLastname(e.target.value)} sx={{ flexGrow: 1 }} />
+                {/* <Input size="sm" value={firstname} placeholder={session?.user?.firstname}   onChange={(e) => setFirstname(e.target.value)} />
+                <Input size="sm" value={lastname} placeholder={session?.user?.lastname} onChange={(e) => setLastname(e.target.value)} sx={{ flexGrow: 1 }} /> */}
               </FormControl>
             </Stack>
 
@@ -139,7 +138,7 @@ function UserProfile() {
                    name='email'
                    size="sm"
                    startDecorator={<EmailRoundedIcon />}
-                   value={session?.user?.email}
+                  //  value={session?.user?.email}
                    sx={{ flexGrow: 1 }}
                    disabled
                  />
@@ -175,7 +174,7 @@ function UserProfile() {
             value={bio}
             minRows={4}
             sx={{ mt: 1.5 }}
-            placeholder={session?.user?.bio}
+            // placeholder={session?.user?.bio}
             onChange={(e) => setbio(e.target.value)}
           />
           <FormHelperText sx={{ mt: 0.75, fontSize: 'xs' }}>
