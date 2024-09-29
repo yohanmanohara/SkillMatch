@@ -1,7 +1,19 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
-
+import localFont from "next/font/local";
+import ThemeProvider from "@/components/layout/ThemeToggle/theme-provider";
+import { Toaster } from "@/components/ui/toaster"
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+  weight: "100 900",
+});
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+  weight: "100 900",
+});
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +31,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
-       
+        <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      > <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         {children}
-      
+        <Toaster />
+        </ThemeProvider>
         </body>
     </html>
   );
