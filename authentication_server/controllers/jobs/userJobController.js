@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 
 
 
-const getVehicle = async (req, res) => {
+const getJobs = async (req, res) => {
 
   const { id } = req.query;
   try {
@@ -27,7 +27,7 @@ const getVehicle = async (req, res) => {
 }
 
 
-const deleteVehicle = async (req, res) => {
+const deleteJobs = async (req, res) => {
   const { id } = req.params; 
 
 
@@ -64,55 +64,10 @@ const deleteVehicle = async (req, res) => {
 
 
 
-const putActive = async (req, res) => {
-  const { id } = req.params
-  
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({error: 'cluster id is not valid'})
-  }
-
-  const user = await userModel.findOneAndUpdate(
-    { _id: id }, // Query to find the user by id
-    { status: "Active" }, // Update the status to 'active'
-    { new: true } // Return the updated document
-  );
-
-
-  if (!user) {
-    return res.status(400).json({error: 'notto update'})
-  }
- 
-  res.status(200).json(user)
-}
 
 
 
-const putInactive = async (req, res) => {
-  const { id } = req.params
-  
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({error: 'cluster id is not valid'})
-  }
-
-  const user = await userModel.findOneAndUpdate(
-    { _id: id }, // Query to find the user by id
-    { status: "Inactive" }, // Update the status to 'active'
-    { new: true } // Return the updated document
-  );
-
-
-  if (!user) {
-    return res.status(400).json({error: 'notto update'})
-  }
- 
-  res.status(200).json(user)
-}
-
-
-
-const addVehicle = async (req, res) => {
+const addJobs = async (req, res) => {
   const { name, numberPlate, driverName, iotid, contactnumber } = req.body;
   const { id } = req.query;
 
@@ -169,10 +124,8 @@ const addVehicle = async (req, res) => {
 
 
 module.exports = {
-  getVehicle,
-  addVehicle,
-  // putInactive,
-  // putActive,
-  deleteVehicle,
+  getJobs,
+  addJobs,
+  deleteJobs,
   
 };

@@ -7,7 +7,8 @@ import { User } from '@/constants/data';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { columns } from './columns';
-
+import Cards  from '@/components/layout/employer/cards-job';
+import AlertDialogDemo from '@/components/layout/employer/alert-dialog-but';
 interface ProductsClientProps {
   data: User[];
 }
@@ -19,18 +20,26 @@ export const UserClient: React.FC<ProductsClientProps> = ({ data }) => {
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Users (${data.length})`}
+          title={`Total Jobs (${data.length})`}
           description="Manage users "
         />
         {/* <Button
           className="text-xs md:text-sm"
-          onClick={() => router.push(`/dashboard/user/new`)}
+          onClick={() => router.push(`/employer/job/addnew`)}
         >
           <Plus className="mr-2 h-4 w-4" /> Add New
         </Button> */}
+        <AlertDialogDemo/>
       </div>
       <Separator />
-      <DataTable searchKey="username" columns={columns} data={data} />
+
+
+
+<Cards/>
+
+
+
+      {/* <DataTable searchKey="username" columns={columns} data={data} /> */}
     </>
   );
 };

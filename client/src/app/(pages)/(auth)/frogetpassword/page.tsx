@@ -38,7 +38,7 @@ interface SignInFormElement extends HTMLFormElement {
 
 
 
-export default function JoySignInSideTemplate() {
+export default async function JoySignInSideTemplate() {
 
 const [email, setEmail] = useState("");
 const [issentotp, setissentotp] = useState(false);

@@ -101,6 +101,7 @@ export default function DashboardLayout({
 
 
   return (
+    
     <div className="flex flex-wrap min-h-screen  pr-2 md:pr-8">
       <Sidebaradmin/>
       <main className="flex-1 flex flex-col w-full">

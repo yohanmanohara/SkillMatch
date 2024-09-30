@@ -10,8 +10,8 @@ const breadcrumbItems = [
 
 export default  async function UserPage() {
     
-    const role = 'admin';
-    const res = await  fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/getusers`, {
+    const role = 'employer';
+    const res = await  fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/job/getJobs`, {
        method: 'POST',
        headers: {
         'Content-Type': 'application/json',

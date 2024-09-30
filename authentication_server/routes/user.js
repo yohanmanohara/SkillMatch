@@ -21,7 +21,7 @@ router.post('/signup', signupUser)
 
 router.post('/verifyotp', verifyOtp)
 
-router.get('/getusers', getUsers)
+router.post('/getusers', getUsers)
 
 router.delete('/deleteuser/:id', deleteUser)
 
