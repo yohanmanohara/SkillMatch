@@ -1,6 +1,6 @@
-import * as React from "react"
-
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,52 +8,57 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 export default function CardWithForm() {
+  const [cards, setCards] = useState([
+    {
+      name: "Sample Project 1",
+      framework: "Next.js",
+    },
+    {
+      name: "Sample Project 2",
+      framework: "Nuxt.js",
+    },
+  ]); // Initial example data
+
+  const handleDeploy = () => {
+    // Example data to be added on button click
+    const exampleData = {
+      name: "New Project",
+      framework: "SvelteKit",
+    };
+
+    setCards([...cards, exampleData]);
+  };
+
   return (
-    <Card className="w-full shadow-xl">
-      <CardHeader>
-        <CardTitle>Create project</CardTitle>
-        <CardDescription>Deploy your new project in one-click.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Name of your project" />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="framework">Framework</Label>
-              <Select>
-                <SelectTrigger id="framework">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  <SelectItem value="next">Next.js</SelectItem>
-                  <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                  <SelectItem value="astro">Astro</SelectItem>
-                  <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Deploy</Button>
-      </CardFooter>
-    </Card>
-  )
+    <div className="w-full">
+   
+
+      {/* Render Deployed Cards */}
+      <div className="mt-4">
+        {cards.map((card, index) => (
+          <Card key={index} className="w-full shadow-lg mt-4">
+            <CardHeader>
+              <CardTitle>{card.name}</CardTitle>
+              <CardDescription>Framework: {card.framework}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Project created successfully!</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
 }
