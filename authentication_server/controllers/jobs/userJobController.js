@@ -1,7 +1,7 @@
 
 
 const userModel = require('../../models/userModel')
-const vehicleModel = require('../../models/vehicleModel')
+const jobModel = require('../../models/jobModel')
 const mongoose = require('mongoose')
 
 
@@ -14,13 +14,13 @@ const getJobs = async (req, res) => {
   try {
    
     const user = await userModel.findById(id);
-    const vehicles = await vehicleModel.find({ user: id });
+    const jobs = await jobModel.find({ user: id });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.status(200).json(vehicles);
+    res.status(200).json(jobs);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching user', error: error.message });
   }
@@ -37,24 +37,24 @@ const deleteJobs = async (req, res) => {
 
   try {
     
-    const vehicle = await vehicleModel.findById(id).select('user');
+    const job = await jobModel.findById(id).select('user');
 
     
-    if (!vehicle) {
+    if (!job) {
       return res.status(404).json({ error: 'No such vehicle' });
     }
 
    
-    const deletedVehicle = await vehicleModel.findOneAndDelete({ _id: id });
+    const deletedjob = await jobModel.findOneAndDelete({ _id: id });
 
     
-    await userModel.findByIdAndUpdate(vehicle.user, { $pull: { vehicles: id } });
+    await userModel.findByIdAndUpdate(job.user, { $pull: { job: id } });
 
     
-    res.status(200).json(deletedVehicle);
+    res.status(200).json(deletedjob);
   } catch (error) {
     
-    res.status(500).json({ error: 'Error deleting vehicle', details: error.message });
+    res.status(500).json({ error: 'Error deleting jobs', details: error.message });
   }
 };
 
