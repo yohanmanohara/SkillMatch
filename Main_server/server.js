@@ -1,34 +1,46 @@
-// server.js
-const express = require('express');
-const mongoose = require('mongoose');
+require('dotenv').config()
 const cors = require('cors');
-const dotenv = require('dotenv');
-const JobRoutes = require('./routes/JobRoutes');
-const JobSearch = require('./routes/JobRoutes');
-const OrganizationRoutes = require("./routes/OrganizationRoutes")
-// const MeeitngRoutes = require('./routes/MeetingRoutes')
+const express = require('express')
+const mongoose = require('mongoose')
+mongoose.set('strictQuery', true);
+const userRoutes = require('./routes/user');
+const usejob = require('./routes/job');
+const app = express()
+app.use(cors()); 
+app.use(express.json())
 
-dotenv.config();
-const app = express();
-const port = process.env.PORT || 8080;
 
-// Middleware
-app.use(express.json());
-app.use(cors());
 
-// Routes
-app.use('/api/jobs', JobRoutes);
-app.use('/api/organization',OrganizationRoutes);
-// app.use('/api/meetings', MeeitngRoutes);
-app.use('/api/jobsearch', JobSearch);
+app.use((req, res, next) => {
+  console.log(req.path, req.method)
+  next()
+})
 
-// Connect to MongoDB
+
+
+app.use('/api/user', userRoutes);
+
+app.use('/api/job',usejob);
+  
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+
+
 mongoose.connect(process.env.MONGO_URI)
-.then(() => {
-  app.listen(port, () => {
-    console.log(`Connected to DB & listning on port: ${port}`);
-  });
-})
-.catch((error) => {
-  console.log(error);
-})
+  .then(() => {
+    app.listen(process.env.PORT, () => {
+      console.log('Mono db scussefully & listening on port', process.env.PORT)
+    })
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+
+
+  console.log(`Server is running on port ${process.env.PORT}`);
+
+
+
+

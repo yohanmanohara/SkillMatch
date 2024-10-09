@@ -1,48 +1,66 @@
-const mongoose = require('mongoose');
-const { Schema, models } = mongoose;
-const userSchema = new Schema(
-    {
-        authprivider:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'CredentialProvider',
-            required: true
-        },
-        firstname:
-        {
-            type:String,
-            required:true
-        },
-        lastname:
-        {
-            type:String,
-            required:true
-        },
-        email:
-        {
-            type:String,
-            required:true
-        },
-        password:
-        {
-            type:String,
-            required:true
-        },
-        status:{
-            type:String,
-            enum:['employee','employer'],
-            default:'employee',
-            required:true   
-        },
-        organization:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Organization',
-        },
-    }
-    ,{
-        timestamps:true,
-        
-    }
-);
+const mongoose = require('mongoose')
 
-const User = models.User || mongoose.model("User",userSchema);
+const Schema = mongoose.Schema
+
+const userSchema = new Schema({
+  id: {
+    type: Number,
+    required: true,
+    autoIncrement: true,
+    unique: true
+  },
+ 
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  username: {
+    type: String,
+    required: true,
+    unique: false
+    
+  },
+
+  firstname:{
+    type: String,
+    required: false
+  },
+  lastname:{
+    type: String,
+    required  : false
+  },
+  contactnumber:{
+    type: Number,
+    required: false
+  },
+  country:{
+    type: String,
+    required: false
+
+  },
+  city:{
+    type: String,
+    required: false
+  },
+
+  password: {
+    type: String,
+    required: true
+  },
+  status: {
+    type: String,
+    required: true
+  },
+  role: {
+    type: String,
+    required: true
+  },
+  vehicles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle' ,required: true}], 
+
+
+
+}, { timestamps: true });
+
+const User = mongoose.model('User', userSchema);
 module.exports = User;
