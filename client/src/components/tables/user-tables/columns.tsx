@@ -56,6 +56,11 @@ export const columns: ColumnDef<User>[] = [
     enableSorting: true, // Enable sorting for this column
   },
   {
+    accessorKey: 'role',
+    header: 'job role',
+    enableSorting: true, // Enable sorting for this column
+  },
+  {
     
     accessorKey: 'city',
     header: 'City',

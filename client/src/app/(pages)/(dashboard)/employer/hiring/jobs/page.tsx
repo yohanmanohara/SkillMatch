@@ -1,5 +1,5 @@
 
-import { UserClient } from '@/components/tables/user-tables/client';
+import { UserClient } from '@/components/tables/employer-tables/client';
 import { Breadcrumbs } from '@/components/ui/breadcrumbs';
 import { useEffect, useState } from 'react';
 const breadcrumbItems = [
@@ -10,8 +10,8 @@ const breadcrumbItems = [
 
 export default  async function UserPage() {
     
-    const role = 'employer';
-    const res = await  fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/job/getJobs`, {
+    const role = 'admin';
+    const res = await  fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/getusers`, {
        method: 'POST',
        headers: {
         'Content-Type': 'application/json',

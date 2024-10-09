@@ -20,7 +20,7 @@ export const UserClient: React.FC<ProductsClientProps> = ({ data }) => {
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Total Jobs (${data.length})`}
+          title={`Total Users (${data.length})`}
           description="Manage users "
         />
         {/* <Button
@@ -29,15 +29,8 @@ export const UserClient: React.FC<ProductsClientProps> = ({ data }) => {
         >
           <Plus className="mr-2 h-4 w-4" /> Add New
         </Button> */}
-        <AlertDialogDemo/>
       </div>
       <Separator />
-
-
-{/* 
-          <Cards/> */}
-
-
 
         <DataTable searchKey="username" columns={columns} data={data} />
     </>
