@@ -11,7 +11,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { signOut, useSession } from 'next-auth/react';
+
 export default function UserNav() {
  
 
@@ -19,6 +19,7 @@ export default function UserNav() {
       <div className='flex gap-5'>
         <p>Hello! Admin  </p>
       <DropdownMenu>
+        
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar >

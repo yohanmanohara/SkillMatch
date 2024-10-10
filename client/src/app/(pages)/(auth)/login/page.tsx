@@ -20,7 +20,7 @@ import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
 import GoogleIcon from '@/components/Icons/GoogleIcon';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import { signIn } from 'next-auth/react';
+
 import {useRouter} from 'next/navigation';
 import ThemeProvider from '@/components/layout/ThemeToggle/theme-provider';
 
@@ -152,7 +152,7 @@ setLoading(true);
                     Sign UP !
                   </Link>
                 </Typography>
-              <Button onClick={() => signIn('google')}>
+              <Button >
                 <GoogleIcon/>
               </Button>
               

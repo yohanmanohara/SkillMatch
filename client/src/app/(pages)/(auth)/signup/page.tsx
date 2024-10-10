@@ -20,7 +20,6 @@ import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
 import GoogleIcon from '@/components/Icons/GoogleIcon';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import { signIn } from 'next-auth/react';
 import {useRouter} from 'next/navigation';
 import { OtherHouses } from '@mui/icons-material';
 
@@ -187,7 +186,7 @@ const haddlesubmit = async (e:any) => {
                   Sign In!
                 </Link>
               </Typography>
-            <Button onClick={() => signIn('google')}>
+            <Button >
               <GoogleIcon/>
             </Button>
            

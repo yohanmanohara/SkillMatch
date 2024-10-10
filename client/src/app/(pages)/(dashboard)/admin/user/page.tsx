@@ -14,7 +14,7 @@ export default  async function UserPage() {
     const res = await  fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/getusers`, {
        method: 'POST',
        headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json', 
       }, 
       body: JSON.stringify({
       role:role,
