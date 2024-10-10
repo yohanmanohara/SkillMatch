@@ -89,7 +89,7 @@ export default function TabsDemo() {
             <CardHeader>
               <CardTitle>Add Your Vehicle Details</CardTitle>
               <CardDescription>
-                Enter your vehicle details. Click 'Add Vehicle' when done.
+                Enter your vehicle details. Click &apos;Add Vehicle&apos; when done.
               </CardDescription>
             </CardHeader>
 
