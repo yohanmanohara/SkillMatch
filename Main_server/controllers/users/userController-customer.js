@@ -1,5 +1,5 @@
 
-const userModel = require('../../models/userModel')
+const userModel = require('../../Models/userModel')
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
