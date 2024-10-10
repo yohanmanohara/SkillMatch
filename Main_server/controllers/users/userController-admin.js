@@ -1,5 +1,5 @@
 
-const userModel = require('../../Models/userModel')
+const userModel = require('../../models/userModel')
 const mongoose = require('mongoose')
 
 

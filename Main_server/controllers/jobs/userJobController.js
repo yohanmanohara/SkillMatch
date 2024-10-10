@@ -1,7 +1,7 @@
 
 
-const userModel = require('../../Models/userModel')
-const jobModel = require('../../Models/jobModel')
+const userModel = require('../../models/userModel')
+const jobModel = require('../../models/jobModel')
 const mongoose = require('mongoose')
 
 
