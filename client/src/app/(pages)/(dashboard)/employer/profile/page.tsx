@@ -55,21 +55,6 @@ export default function TabsDemo() {
   }, [userId]);
   const router = useRouter();  
 
-  useEffect(() => {
-
-    const roleData = sessionStorage.getItem('role');
-    const role = roleData ? JSON.parse(roleData).role : null;
-    if (role === 'Employer') {
-      window.location.href = '/employee/overview';
-    }
-    
-  }, []);
-
-
-
-
-
-
   const handleProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     

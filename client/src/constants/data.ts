@@ -62,12 +62,7 @@ export const navItem: NavItem[] = [//customer view
   },
  
 
-  {
-    title: 'Profile',
-    href: '/employee/profile',
-    icon: 'profile',
-    label: 'profile'
-  },
+ 
 
   {
     title: 'Interviews',
