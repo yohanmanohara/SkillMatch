@@ -1,5 +1,5 @@
 
-import { UserClient } from '@/components/tables/employer-tables/client';
+import { UserClient } from '@/components/tables/employer-tables-hiring/client';
 import { Breadcrumbs } from '@/components/ui/breadcrumbs';
 import { useEffect, useState } from 'react';
 const breadcrumbItems = [

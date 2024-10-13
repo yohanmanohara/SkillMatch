@@ -3,6 +3,7 @@
   import Header from '@/components/layout/header';
   import Sidebarcustom from '@/components/layout/sidebar';
 
+
   export default function DashboardLayout({
     children,
   }: {
@@ -88,11 +89,23 @@
     }, []);
 
     if (loading) {
-      return <p>Loading...</p>;
+     
+      return (
+        <div>
+          <div className="flex items-center justify-center min-h-screen">
+         <span className="loader"></span>
+        </div>
+        </div>
+      );
     }
 
     if (error) {
-      return <p>{error}</p>;
+      return (
+        <div className="flex items-center justify-center min-h-screen flex-col">
+              <span className="loader"></span>
+              <p className=' text-2xl'>{error}</p>
+            </div>
+        );
     }
 
     return (
