@@ -1,4 +1,3 @@
-"use client";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -19,7 +18,12 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
-
+export const metadata: Metadata = {
+  title: "SkillMatch", // Set your site name
+  icons: {
+    icon: "/favicon.png", // Replace with the path to your favicon
+  },
+};
 
 
 

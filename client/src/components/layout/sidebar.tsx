@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { useSidebar } from '@/hooks/useSidebar';
 import { Button } from '@/components/ui/button';
 import {useRouter} from 'next/navigation';
+import Image from 'next/image';
 type SidebarProps = {
   className?: string;
 };
@@ -32,9 +33,10 @@ export default function Sidebar({ className }: SidebarProps) {
         className
       )}
     >
-      <div className="hidden p-5 pt-10 lg:block">
-        LoGO
-      </div>
+      <div className="hidden pl-5 pt-10 lg:flex items-center">
+     <Image src="/favicon.png" width={20} height={30} alt="Logo" />
+     <p className="ml-2 font-open-sans font-extrabold">SkillMatch</p> {/* Replace 'Your Text Here' with the actual text you want */}
+  </div>
 
       <div className="space-y-4 py-4 ">
         <div className="px-3 py-2 ">
