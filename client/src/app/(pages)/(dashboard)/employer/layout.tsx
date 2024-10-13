@@ -104,7 +104,16 @@ if (loading) {
 }
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen flex-col">
+            <l-tail-chase
+              size="84"
+              speed="2.9"
+              color="#62F985"
+            ></l-tail-chase>
+            <p className=' text-2xl'>{error}</p>;
+          </div>
+      );
   }
 
   return (
