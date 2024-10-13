@@ -15,11 +15,30 @@ const createToken = (id) => {
   });
 };
 
-let baseId = 1; // Starting value for sequential IDs
-
-function getSequentialId() {
-  return baseId++; // Increment by 1 for each new user
+async function getUserCount() {
+  try {
+   
+    const count = await User.countDocuments(); 
+    console.log(`Current user count: ${count}`);
+    return count;
+  } catch (error) {
+    console.error('Error fetching user count:', error);
+    throw error; 
+  }
 }
+
+async function getSequentialId() {
+  try {
+    const userCount = await getUserCount(); 
+    const baseId = userCount + 1; 
+    console.log(`Next sequential ID: ${baseId}`);
+    return baseId;
+  } catch (error) {
+    console.error('Error getting sequential ID:', error);
+    throw error; 
+  }
+}
+
 
 
 
@@ -93,14 +112,15 @@ const signupUser = async (req, res) => {
   }
 };
 
-
 const verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
-  
-  if ( !otp) {
+
+ 
+  if (!email || !otp) {
     return res.status(400).json({ message: 'Email and OTP are required' });
   }
-  
+
+ 
   const otpDetails = otpStore[email];
   if (!otpDetails) {
     return res.status(400).json({ message: 'OTP has expired or is invalid' });
@@ -113,42 +133,40 @@ const verifyOtp = async (req, res) => {
     return res.status(400).json({ message: 'Invalid OTP' });
   }
 
-  
+
   if (Date.now() > otpExpires) {
-    delete otpStore[email]; // Clean up expired OTP
+    delete otpStore[email];
     return res.status(400).json({ message: 'OTP has expired' });
   }
 
   try {
-    
+    const newUserId = await getSequentialId();
     const newUser = new User({
-      id: getSequentialId(),
+      id: newUserId,
       email,
       password: hashedPassword,
       username,
       status: 'Active',
-      role:'Employee',
+      role: 'Employee',
+      
     });
 
     await newUser.save();
 
-
+    
     delete otpStore[email];
 
+   
     res.status(200).json({
-      message: 'Login successful',
-        redirectUrl: '/login',
-        user: { email: newUser.email },
-        
+      message: 'User registration successful',
+      redirectUrl: '/login',
+      user: { email: newUser.email },
     });
-
-
   } catch (error) {
+   
     res.status(500).json({ message: 'Error creating user', error: error.message });
   }
 };
-
-
 
 
 

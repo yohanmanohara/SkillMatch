@@ -54,6 +54,7 @@ const [isLoading, setIsLoading] = useState(false);
 async function onSubmitSignup(data: z.infer<typeof FormSchema>) {
 
   setLoading(true);
+  setIsLoading(true);
 
 
   if (data.password !== data.confirmPassword) {
