@@ -36,7 +36,7 @@ export default function SignUpDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button className="text-xs md:text-sm">Add job</Button>
+        <Button variant="secondary" className="w-40 ">Add job</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <form onSubmit={handleSubmit}>
@@ -89,8 +89,8 @@ export default function SignUpDialog() {
           </div>
 
           <AlertDialogFooter>
-            <AlertDialogCancel type="button">Cancel</AlertDialogCancel>
-            <AlertDialogAction type="submit">Sign Up</AlertDialogAction>
+            <AlertDialogCancel type="button" >Cancel</AlertDialogCancel>
+            <AlertDialogAction type="submit">Submit</AlertDialogAction>
           </AlertDialogFooter>
         </form>
       </AlertDialogContent>
