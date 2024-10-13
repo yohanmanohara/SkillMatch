@@ -2,9 +2,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
+import "../styles/spiner.css"
 import localFont from "next/font/local";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
+
 
 // Load local fonts
 const geistSans = localFont({
@@ -44,6 +46,7 @@ export default function RootLayout({
           defaultTheme="system" // Ensure the system theme is the default
           enableSystem
         >
+         
           {children}
           <Toaster />
         </ThemeProvider>
