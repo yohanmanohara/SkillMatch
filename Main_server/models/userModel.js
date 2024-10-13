@@ -56,7 +56,7 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  vehicles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle' ,required: true}], 
+  company: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Company' ,required: true}], 
 
 
 
