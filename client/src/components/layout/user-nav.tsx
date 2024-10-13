@@ -46,6 +46,16 @@ export  function UserNav() {
    
   }, [userId]);
 
+  const [showButton, setShowButton] = useState(false);
+  useEffect(() => {
+    const roleData = sessionStorage.getItem('role');
+    const role = roleData ? JSON.parse(roleData).role : null;
+    
+    if (role === 'Employer') {
+      setShowButton(true);
+    } 
+  }, []); 
+
 
 
 
@@ -84,6 +94,31 @@ export  function UserNav() {
              }>
             Log out
           </DropdownMenuItem>
+
+
+               {showButton ? (
+                 <DropdownMenuItem 
+                 onClick={() => {
+                   window.location.href = '/employer/profile';
+                 }
+               }
+                 >
+                   Profile
+                 </DropdownMenuItem>
+               
+               ):(<DropdownMenuItem 
+                 onClick={() => {
+                   window.location.href = '/employee/profile';
+                 }
+               }
+                 >
+                   Profile
+                 </DropdownMenuItem>
+               
+               ) }
+          
+
+
         </DropdownMenuContent>
       </DropdownMenu>
       </div>

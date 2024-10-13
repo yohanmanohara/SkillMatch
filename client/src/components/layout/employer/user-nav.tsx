@@ -11,7 +11,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 export  function UserNav() {
  
@@ -45,6 +45,7 @@ export  function UserNav() {
     fetchUsers();
    
   }, [userId]);
+
 
 
 
@@ -83,6 +84,15 @@ export  function UserNav() {
             }
              }>
             Log out
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+          onClick={() => {
+            window.location.href = '/employer/profile';
+          }
+          }
+          >
+            Profile
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

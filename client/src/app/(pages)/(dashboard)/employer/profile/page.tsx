@@ -55,21 +55,6 @@ export default function TabsDemo() {
   }, [userId]);
   const router = useRouter();  
 
-  useEffect(() => {
-
-    const roleData = sessionStorage.getItem('role');
-    const role = roleData ? JSON.parse(roleData).role : null;
-    if (role === 'Employer') {
-      window.location.href = '/employee/overview';
-    }
-    
-  }, []);
-
-
-
-
-
-
   const handleProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
@@ -172,9 +157,11 @@ export default function TabsDemo() {
   return (
     <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
       <Tabs defaultValue="account" className="w-[300px] md:w-[800px]">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="account">Account</TabsTrigger>
+          <TabsTrigger value="company">Company</TabsTrigger>
           <TabsTrigger value="password">Password</TabsTrigger>
+          
         </TabsList>
 
         
@@ -262,6 +249,68 @@ export default function TabsDemo() {
           </Card>
         </TabsContent>
         </form>
+
+
+         
+        <TabsContent value="company">
+          <Card>
+            <CardHeader>
+              <CardTitle>Edit Your Compaby Details</CardTitle>
+              <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
+                <AvatarImage src="/company.jpg" alt="User Avatar" />
+              </Avatar>
+              <CardDescription>
+                Make changes to your account here. Click save when you&apos;re done.
+              </CardDescription>
+            </CardHeader>
+
+            <form onSubmit={handleProfile}>
+              <CardContent className="space-y-2">
+                <div className="space-y-1">
+                  <Label htmlFor="name">Company Name</Label>
+                  <Input id="username" name="companyname" defaultValue={user?.username} placeholder="Enter Company Name" />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="email">Company Email</Label>
+                  <Input id="email" name="companyemail" defaultValue={user?.email} readOnly />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="firstname">First Name</Label>
+                  <Input id="firstname" name="firstname" defaultValue={user?.firstname } placeholder="Enter First Name" />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="lastname">Last Name</Label>
+                  <Input id="lastname" name="lastname" defaultValue={user?.lastname} placeholder="Enter Last Name"  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="contactnumber">Contact Number</Label>
+                  <Input id="contactnumber" name="contactnumber" defaultValue={user?.contactnumber} placeholder="0772243631"/>
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="country">Country</Label>
+                  <Input id="country" name="country" defaultValue={user?.country} placeholder="Enter Your Living Country" />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="city">City</Label>
+                  <Input id="city" name="city" defaultValue={user?.city } placeholder="Enter Your Living City" />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="status">Status</Label>
+                  <Input id="status" name="status" defaultValue={user?.status} readOnly />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button type="submit">Save Changes</Button>
+              </CardFooter>
+            </form>
+          </Card>
+        </TabsContent>
+
+
+
+
+
+
       </Tabs>
     </div>
   );
