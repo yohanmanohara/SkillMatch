@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Header from '@/components/layout/employer/header';
 import Sidebarcustom from '@/components/layout/employer/sidebar';
+import Spinner from '@/components/ui/spinner';
 
 export default function DashboardLayout({
   children,
@@ -87,21 +88,35 @@ export default function DashboardLayout({
     fetchData();
   }, []);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+if (loading) {
+  
+  return (
+    <div>
+      <div className="flex items-center justify-center min-h-screen">
+     <span className="loader"></span>
+    </div>
+    </div>
+  );
+}
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen flex-col">
+             <span className="loader"></span>
+            <p className=' text-2xl'>{error}</p>
+          </div>
+      );
   }
 
   return (
     <div className="flex flex-wrap min-h-screen  pr-2 md:pr-8">
       <Sidebarcustom />
+     
       <main className="flex-1 flex flex-col w-full">
         <Header />
         <div className="pl-0 md:pl-[310px] ">
-          <div>{children}</div> 
+       
+          {children}
         </div>
       </main>
     </div>

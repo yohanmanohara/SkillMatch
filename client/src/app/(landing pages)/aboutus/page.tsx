@@ -1,15 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React from 'react';
+import Image from 'next/image'
 
+import pic from '@/../public/about us.png'
 function Page() {
   return (
     <div className="flex items-center justify-center h-screen p-10">
       <div className="flex-1 flex justify-center items-center">
-        <img
-          src="C:/Users/yashira de silva/Desktop/Project/SkillMatch/client/public/about us.png"
-          alt="About Us"
-          className="w-full max-w-md h-auto rounded-lg shadow-lg"
-        />
+     <Image src={pic} alt = 'pic'></Image>
       </div>
 
       <Card className="flex-1 ml-10 bg-gray-100 shadow-md rounded-lg">

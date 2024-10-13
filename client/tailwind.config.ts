@@ -1,5 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+
+  daisyui: {
+    themes: ["light", "dark", "cupcake"],
+  },
   darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -17,6 +21,9 @@ module.exports = {
       }
     },
     extend: {
+      fontFamily: {
+        encode: ['Encode Sans', 'sans-serif']
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -73,5 +80,8 @@ module.exports = {
       }
     }
   },
-  plugins: [require('tailwindcss-animate')]
+  plugins: [
+    require('tailwindcss-animate'),
+    require('daisyui'),
+  ]
 };

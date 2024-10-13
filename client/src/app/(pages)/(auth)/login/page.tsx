@@ -38,7 +38,7 @@ export default function JoySignInSideTemplate() {
  
     },
   });
- 
+  
 
 
 async function onSubmitLogin(data: z.infer<typeof FormSchema>) {
@@ -92,6 +92,15 @@ setLoading(true);
     setLoading(false);
   }
 
+}
+if (loading) {
+  return (
+    <div>
+    <div className="flex items-center justify-center min-h-screen">
+   <span className="loader"></span>
+  </div>
+  </div>
+  );
 }
 
 
