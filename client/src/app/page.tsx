@@ -1,12 +1,20 @@
 import React from 'react'
-import Feature_section from '@/components/landing/feature_section'
+import Navbar from '../components/landing/navbar'
+import Hero from '@/components/landing/hero'
+
 
 const page = () => {
   return (
-    <div>
-      <Feature_section />
-   
+    <main> 
+       <div  className='bg-white  '>
+      <Navbar />
     </div>
+    <div className='flex align-top'>
+    <Hero />
+    </div>
+    
+    </main>
+   
   )
 }
 
