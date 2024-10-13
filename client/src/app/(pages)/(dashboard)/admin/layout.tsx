@@ -3,6 +3,7 @@ import Headeradmin from '@/components/layout/header-admin';
 import Sidebaradmin from '@/components/layout/sidebar-admin';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useEffect, useState } from 'react';
+import { tailChase } from 'ldrs'
 
 
 
@@ -88,7 +89,18 @@ export default function DashboardLayout({
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    tailChase.register();
+      return (
+        <div>
+          <div className="flex items-center justify-center min-h-screen">
+          <l-tail-chase
+            size="84"
+            speed="2.9"
+            color="#62F985"
+          ></l-tail-chase>
+        </div>
+        </div>
+      );
   }
 
   if (error) {

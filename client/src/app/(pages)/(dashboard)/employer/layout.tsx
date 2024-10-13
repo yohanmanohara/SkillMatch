@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Header from '@/components/layout/employer/header';
 import Sidebarcustom from '@/components/layout/employer/sidebar';
-
+import { tailChase } from 'ldrs'
 export default function DashboardLayout({
   children,
 }: {
@@ -87,9 +87,21 @@ export default function DashboardLayout({
     fetchData();
   }, []);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+if (loading) {
+  
+  tailChase.register();
+  return (
+    <div>
+     <div className="flex items-center justify-center min-h-screen">
+          <l-tail-chase
+            size="84"
+            speed="2.9"
+            color="#62F985"
+          ></l-tail-chase>
+        </div>
+    </div>
+  );
+}
 
   if (error) {
     return <p>{error}</p>;
