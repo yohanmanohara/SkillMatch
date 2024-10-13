@@ -48,6 +48,7 @@ const [email, setEmail] = useState<string | null>(null);
 
 
 const [otps, setotps] = useState('');
+
 const haddlesubmit = async (e:any) => {
     setLoading(true);
     e.preventDefault();
@@ -70,16 +71,17 @@ const haddlesubmit = async (e:any) => {
             otp: otps,
           }),
         });
-            console.log(response);
-            console.log(email);
+        
+          
         const result = await response.json();
   
         if (response.ok) {
-    
-        sessionStorage.removeItem("email");
         window.location.href = result.redirectUrl;
+        sessionStorage.removeItem("email");
+       
         
         } else {
+          console.log(result);
             alert('otp verification failed');
             setLoading(false);
            
