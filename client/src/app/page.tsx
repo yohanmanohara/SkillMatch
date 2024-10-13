@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../components/landing/navbar'
 import Hero from '@/components/landing/hero'
-
+import Footer from '@/components/layout/footer'
 
 const page = () => {
   return (
@@ -10,9 +10,11 @@ const page = () => {
       <Navbar />
     </div>
     <div className='flex align-top'>
-    <Hero />
+    <Hero/>
     </div>
-    
+    <Footer>
+      
+    </Footer>
     </main>
    
   )
