@@ -1,40 +1,47 @@
 "use client"
 import * as React from 'react';
 import { useState } from 'react';
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
-import GlobalStyles from '@mui/joy/GlobalStyles';
-import CssBaseline from '@mui/joy/CssBaseline';
-import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import Checkbox from '@mui/joy/Checkbox';
-import Divider from '@mui/joy/Divider';
-import FormControl from '@mui/joy/FormControl';
-import FormLabel from '@mui/joy/FormLabel';
-import IconButton, { IconButtonProps } from '@mui/joy/IconButton';
-import Link from '@mui/joy/Link';
-import Input from '@mui/joy/Input';
-import Typography from '@mui/joy/Typography';
-import Stack from '@mui/joy/Stack';
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
-import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
-import GoogleIcon from '@/components/Icons/GoogleIcon';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import Image from 'next/image';
+import Link from 'next/link';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { toast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
-import {useRouter} from 'next/navigation';
-import ThemeProvider from '@/components/layout/ThemeToggle/theme-provider';
 
+
+const FormSchema = z.object({
+  email: z.string().email({ message: "Invalid email address." }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters." }),
+
+});
 
 
 export default function JoySignInSideTemplate() {
-const [loading, setLoading] = React.useState(false);
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState('');
+  const [loading, setLoading] = React.useState(false);
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+ 
+    },
+  });
+ 
 
 
+async function onSubmitLogin(data: z.infer<typeof FormSchema>) {
 
-const haddlesubmit = async (e:any) => {
-e.preventDefault();
 setLoading(true);
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/login`, {
@@ -43,8 +50,8 @@ setLoading(true);
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: email,
-        password: password,
+        email: data.email,
+        password: data.password,
         
       }),
     });
@@ -57,6 +64,10 @@ setLoading(true);
 
       sessionStorage.setItem("token", result.token); 
       console.log(result);
+      toast({
+        title: "Login Successful",
+        description: "You have successfully logged in.",
+      });
       
       if (result.redirectUrl) {
         window.location.href = result.redirectUrl; 
@@ -64,12 +75,18 @@ setLoading(true);
      
 
     } else {
-      alert(result.message);
+      toast({
+        title: "Login Failed",
+        description: result.message || "An error occurred during login.",
+      });
      
       setLoading(false);
     }
   } catch (error) {
-    console.error("An unexpected error occurred:", error);
+    toast({
+      title: "Login Error",
+      description: "An unexpected error occurred.",
+    });
     
     setLoading(false);
   }
@@ -81,135 +98,111 @@ setLoading(true);
   return (
     <>
    
-   <div className=' flex justify-center items-center'>
-       <Box
-          sx={(theme) => ({
-          width: { xs: '100%', md: '50vw' },
-          transition: 'width var(--Transition-duration)',
-          transitionDelay: 'calc(var(--Transition-duration) + 0.1s)',
-          position: 'relative',
-          zIndex: 1,
-          display: 'flex',
-          justifyContent: 'flex-end',
-          backdropFilter: 'blur(12px)',
-          backgroundColor: 'rgba(255 255 255 / 0.2)',
-          [theme.getColorSchemeSelector('dark')]: {
-            backgroundColor: 'rgba(19 19 24 / 0.4)',
-          },
-            })}
-             >
-          <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100dvh',
-            width: '100%',
-            px: 2,
-          }}
-        >
-          <Box
-            component="header"
-            sx={{
-              py: 3,
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
-          >
-           
-            
-          </Box>
-          <Box
-            component="main"
-            sx={{
-              my: 'auto',
-              py: 2,
-              pb: 5,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 2,
-              width: 400,
-              maxWidth: '100%',
-              mx: 'auto',
-              borderRadius: 'sm',
-              '& form': {
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-              },
-              [`& .MuiFormLabel-asterisk`]: {
-                visibility: 'hidden',
-              },
-            }}
-          >
-            <Stack gap={1} sx={{ mb: 2 }}  className='flex justify-center '>
-              <Stack gap={1}>
-                <Typography component="h1" level="h3" >
-                   Welcome back !
-                </Typography>
-                <Typography level="body-sm">
-                  Don&apos;t you have an Account ?{' '}
-                  <Link href="/signup" level="title-sm">
-                    Sign UP !
-                  </Link>
-                </Typography>
-              <Button >
-                <GoogleIcon/>
-              </Button>
-              
-              </Stack>
-            </Stack>
-            <Divider
-              sx={(theme) => ({
-                [theme.getColorSchemeSelector('light')]: {
-                  color: { xs: '#FFF', md: 'text.tertiary' },
-                },
-              })}
-            >
-              or
-            </Divider>
-            <Stack gap={4} sx={{ mt: 2 }}>
-              <form onSubmit={haddlesubmit} >
-                
-                <FormControl >
-                  <FormLabel>Email</FormLabel>
-                  <Input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
-                </FormControl>
-                <FormControl >
-                  <FormLabel>Password</FormLabel>
-                  <Input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} required/>
-                </FormControl>
-                <Typography level="body-sm">
-                  <Link href="/frogetpassword" level="title-sm">
-                   Froget Password ?
-                  </Link>
-                </Typography>
-
-                <Stack gap={1} sx={{ mt: 2 }}>
-               
-                  <Button type="submit" fullWidth disabled={loading}>
-                    {loading ? 'Loading...' : 'Sign In'}
-                  </Button>
-                  
-                </Stack>
-              </form>
-             
-            </Stack>
-            <Box>
-            <Typography className=" w-fit p-5 text-center">
-            By clicking continue, you agree to our Terms of Service and Privacy Policy.
-            </Typography>
-          </Box>
-          </Box>
+   <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      
+      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+        <div className="absolute inset-0 bg-zinc-900" />
+        <div className="relative z-20 flex items-center text-lg font-medium">
           
-          <Box component="footer" >
-            <Typography level="body-xs" textAlign="center">
-              © Recruitwise {new Date().getFullYear()}
-            </Typography>
-          </Box>
-           
-        </Box>
-      </Box>
+      
+          Logo
+        </div>
+        <Image
+                src="/map.jpg"
+                alt="Map"
+                layout="fill"
+                objectFit="cover"
+                className="absolute inset-0"
+            />
+          
+        
       </div>
+  
+      
+      <div className="flex h-full items-center p-9 lg:p-8  ">
+    
+        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+          
+         
+        <div>
+          <div className="flex flex-col space-y-2 text-center">
+            <h1 className="text-4xl font-semibold tracking-tight">Login</h1>
+            <p className="text-sm">Enter your email and password below to login.</p>
+          </div>
+
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmitLogin)} className="space-y-6">
+              {/* Email */}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="ronaldo@example.com" {...field} required />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Password */}
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="********" {...field}  />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="w-full flex items-center justify-center flex-col">
+                <p>
+                  Don't have an account?{" "}
+                  <a href="/signup" className="text-blue-700 cursor-pointer">
+                    Click here
+                  </a>
+                </p>
+               
+                <Button type="submit" disabled={loading}>{loading? "Processing..." : "login"}</Button>
+               
+                <p className='px-8 text-center text-sm text-muted-foreground'>
+            Froget Password? {' '}
+          <a href="/frogetpassword" className="text-blue-700 cursor-pointer">Click here </a>
+          </p>
+                
+              </div>
+            </form>
+          </Form>
+        </div>
+          <p className="px-8 text-center text-sm text-muted-foreground">
+            By clicking continue, you agree to our{' '}
+            <Link
+              href="/terms"
+              className="underline underline-offset-4 hover:text-primary"
+            >
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link
+              href="/privacy"
+              className="underline underline-offset-4 hover:text-primary"
+            >
+              Privacy Policy
+            </Link>
+            .
+          </p>
+       
+        
+        </div>
+      </div>
+    </div>
     </>
   
   );
