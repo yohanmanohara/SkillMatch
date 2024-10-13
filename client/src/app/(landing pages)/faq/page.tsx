@@ -1,6 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 
+import Minus from '@/../public/minus-cirlce.png'
+
 function Page() {
   return (
     <>
@@ -11,7 +13,7 @@ function Page() {
     </div>
 
     <div>
-      <div className='flex flex-row items-center'>
+      <div className='flex flex-row items-center justify-center mb-4'>
         <div className='text-lg'>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
@@ -23,16 +25,16 @@ function Page() {
 
         <div>
           <Image
-            src="/minus-circle.png"
+            src={Minus}
             alt=''
-            width={20}
-            height={20}
+            width={35}
+            height={35}
           />
         </div>
       </div>
 
     <div>
-        < div className='flex flex-row'>
+        < div className='flex flex-row items-center space-x-56  mb-4'>
         <div className='text-lg'>
          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>
@@ -48,7 +50,7 @@ function Page() {
         </div>
 
 
-        < div className='flex flex-row'>
+        < div className='flex flex-row items-center space-x-56 mb-4'>
         <div className='text-lg'>
          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>
@@ -63,7 +65,7 @@ function Page() {
         </div>
         </div>
 
-        < div className='flex flex-row'>
+        < div className='flex flex-row items-center space-x-56 mb-4'>
         <div className='text-lg'>
          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>
@@ -78,7 +80,7 @@ function Page() {
         </div>
         </div>
 
-        < div className='flex flex-row'>
+        < div className='flex flex-row items-center space-x-56 mb-4'>
         <div className='text-lg'>
          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>
@@ -93,7 +95,7 @@ function Page() {
         </div>
         </div>
 
-        < div className='flex flex-row'>
+        < div className='flex flex-row items-center space-x-56 mb-4'>
         <div className='text-lg'>
          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </div>
