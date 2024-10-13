@@ -6,13 +6,25 @@ import { cn } from '@/lib/utils';
 import { ChevronLeft } from 'lucide-react';
 import { useSidebar } from '@/hooks/useSidebar';
 import Link from 'next/link';
-
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 type SidebarProps = {
   className?: string;
 };
 
 export default function Sidebar({ className }: SidebarProps) {
   const { isMinimized, toggle } = useSidebar();
+  const [showButton, setShowButton] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    const roleData = sessionStorage.getItem('role');
+    const role = roleData ? JSON.parse(roleData).role : null;
+    
+    if (role === 'Employer') {
+      setShowButton(true);
+    } 
+  }, []); 
 
  
 
@@ -33,6 +45,11 @@ export default function Sidebar({ className }: SidebarProps) {
         <div className="px-3 py-2 ">
           <div className="mt-3 space-y-1 ">
             <DashboardNav items={navItemempy} />
+            <div className='pt-7 pl-4 '>
+            {showButton && (
+              <Button variant="secondary" onClick={() => router.push('/employee/overview')}>Employee View</Button> // Update button text as needed
+            )}
+            </div>
           </div>
         </div>
       </div>
