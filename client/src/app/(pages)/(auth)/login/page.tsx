@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
 
 
 
@@ -106,7 +107,9 @@ setLoading(true);
           
       
           Logo
+          
         </div>
+        
         <Image
                 src="/map.jpg"
                 alt="Map"
@@ -119,7 +122,9 @@ setLoading(true);
       </div>
   
       
-      <div className="flex h-full items-center p-9 lg:p-8  ">
+       
+        
+      <div className="flex h-full items-center p-9 lg:p-8 ">
     
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           
@@ -203,6 +208,7 @@ setLoading(true);
         </div>
       </div>
     </div>
+    
     </>
   
   );
