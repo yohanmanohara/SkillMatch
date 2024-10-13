@@ -86,7 +86,15 @@ async function onSubmitSignup(data: z.infer<typeof FormSchema>) {
   }
 
  
-
+  if (loading) {
+    return (
+      <div>
+      <div className="flex items-center justify-center min-h-screen">
+     <span className="loader"></span>
+    </div>
+    </div>
+    );
+  }
 
 
 
