@@ -2,7 +2,7 @@ import React from 'react'
 
 const navbar = () => {
   return (
-   <div className="navbar bg-white text-black font-encode font-semibold">
+   <div className="navbar bg-white text-black font-encode font-semibold ">
   <div className="navbar-start">
     <div className="dropdown">
       <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -28,19 +28,19 @@ const navbar = () => {
       </ul>
    
     </div>
-    <a className=" text-xl cursor-pointer">SkillMatch</a>
+    <a className=" text-2xl cursor-pointer sm:text-xl">SkillMatch</a>
   </div>
   <div className="navbar-center hidden lg:flex">
-    <ul className="menu menu-horizontal px-1 space-x-10">
+    <ul className="menu menu-horizontal px-1 space-x-10 text-lg">
       {['Home', 'Jobs', 'About Us'].map((item) => (
-        <li key={item} className="hover:bg-green-500 rounded-box ">
+        <li key={item} className="hover:bg-green-500 rounded-sm ">
           <a>{item}</a>
         </li>
       ))}
     </ul>
   </div>
   <div className="navbar-end flex space-x-5" >
-  <a className="btn btn-ghost  hover:bg-green-500 rounded-box "><img src='./Notification.png' className="w-4 h-4"/></a>
+  <a className="btn btn-ghost  hover:bg-green-500 rounded-box"><img src='./Notification.png' className="w-4 h-4"/></a>
     <img src='./favicon.png' alt='logo' className="w-6 h-10" />
   </div>
 </div>
