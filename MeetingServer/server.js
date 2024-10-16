@@ -3,8 +3,8 @@ const cors = require('cors');
 const express = require('express')
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', true);
-const userRoutes = require('./routes/user');
-const usejob = require('./routes/job');
+// const userRoutes = require('./routes/user');
+// const usejob = require('./routes/job');
 const app = express()
 app.use(cors()); 
 app.use(express.json())
@@ -18,9 +18,9 @@ app.use((req, res, next) => {
 
 
 
-app.use('/api/user', userRoutes);
+// app.use('/api/user', userRoutes);
 
-app.use('/api/job',usejob);
+// app.use('/api/job',usejob);
   
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`);

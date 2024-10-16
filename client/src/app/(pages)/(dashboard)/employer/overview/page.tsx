@@ -1,9 +1,10 @@
 import React from 'react'
+import Chart from '@/components/charts/sample_chart'
 
 function page() {
   return (
     <div>
-      Overview
+      <Chart></Chart>
     </div>
   )
 }
