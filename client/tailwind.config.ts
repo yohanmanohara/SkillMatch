@@ -13,6 +13,7 @@ module.exports = {
     './src/**/*.{ts,tsx}'
   ],
   theme: {
+    
     container: {
       center: true,
       padding: '2rem',
@@ -23,6 +24,9 @@ module.exports = {
     extend: {
       fontFamily: {
         encode: ['Encode Sans', 'sans-serif']
+      },
+      backgroundImage: {
+        'custom-gradient': 'linear-gradient(180deg, #FFF 0%, #E1F7E4 100%)',
       },
       colors: {
         border: 'hsl(var(--border))',
