@@ -110,10 +110,10 @@ async function onSubmitSignup(data: z.infer<typeof FormSchema>) {
       
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
           <div className="absolute inset-0 bg-zinc-900" />
-          <div className="relative z-20 flex items-center text-lg font-medium">
+          <div className="relative z-20 flex items-center text-lg font-medium cursor-pointer ">
             
         
-          <Image src="/favicon.png" width={30} height={40} alt="Logo" />
+          <Image src="/favicon.png" width={30} height={40} alt="Logo" onClick={() => window.location.href = "/"}  />
           </div>
           <Image
                   src="/map.jpg"
