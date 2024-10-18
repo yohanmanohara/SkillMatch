@@ -96,6 +96,16 @@ export  function UserNav() {
           </DropdownMenuItem>
 
 
+          <DropdownMenuItem 
+                 onClick={() => {
+                   window.location.href = '/employee/resum';
+                 }
+                 }
+                 >
+                   Resume CV
+          </DropdownMenuItem>
+
+
                {showButton ? (
                 <>
                 <DropdownMenuItem 
@@ -106,14 +116,7 @@ export  function UserNav() {
                  >
                    Profile
                  </DropdownMenuItem>
-                 <DropdownMenuItem 
-                 onClick={() => {
-                   window.location.href = '/employer/profile';
-                 }
-                 }
-                 >
-                   Resume CV
-                 </DropdownMenuItem>
+                
                </>
                 
                  
