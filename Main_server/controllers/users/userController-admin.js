@@ -4,10 +4,11 @@ const mongoose = require('mongoose')
 
 
 
-// get all workouts
+
 const getUsers = async (req, res) => {
 
   const {role} = req.body
+  
 
   if (role =='admin') {
   try {
@@ -18,7 +19,7 @@ const getUsers = async (req, res) => {
   }
 }
 else{
-  res.status(401).json({ message: 'Unauthorized' });
+  alert('You are not an admin')
 }
 }
 

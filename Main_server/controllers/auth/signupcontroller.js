@@ -16,18 +16,22 @@ const createToken = (id) => {
 };
 
 async function getUserCount() {
-  try {
+    try {
    
-    const count = await User.countDocuments(); 
-    console.log(`Current user count: ${count}`);
-    return count;
-  } catch (error) {
-    console.error('Error fetching user count:', error);
-    throw error; 
-  }
+
+      const latestUser = await User.find().sort({id: -1}).limit(1);
+      const currentId = latestUser.length > 0 ? latestUser[0].id : 0;
+      console.log(`Current highest user id: ${currentId}`);
+      
+      return currentId;
+    } catch (error) {
+      console.error('Error fetching user count:', error);
+      throw error; 
+    }
 }
 
 async function getSequentialId() {
+
   try {
     const userCount = await getUserCount(); 
     const baseId = userCount + 1; 
@@ -138,6 +142,8 @@ const verifyOtp = async (req, res) => {
     delete otpStore[email];
     return res.status(400).json({ message: 'OTP has expired' });
   }
+  
+ 
 
   try {
     const newUserId = await getSequentialId();
