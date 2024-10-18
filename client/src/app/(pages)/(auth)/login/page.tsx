@@ -115,7 +115,7 @@ if (loading) {
         <div className="relative z-20 flex items-center text-lg font-medium">
           
       
-          Logo
+        <Image src="/favicon.png" width={30} height={40} alt="Logo" />
           
         </div>
         
