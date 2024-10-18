@@ -36,7 +36,7 @@ export default function SignUpDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="secondary" className="w-40 ">Upload Resum</Button>
+        <Button variant="secondary" className="w-40 ">Update CV </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <form onSubmit={handleSubmit}>

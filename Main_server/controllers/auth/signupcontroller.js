@@ -9,11 +9,11 @@ require('dotenv').config();
 const otpStore = {};
 
 
-const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: 3 * 24 * 60 * 60, // 3 days
-  });
-};
+// const createToken = (id) => {
+//   return jwt.sign({ id }, process.env.JWT_SECRET, {
+//     expiresIn: 3 * 24 * 60 * 60, // 3 days
+//   });
+// };
 
 async function getUserCount() {
     try {
@@ -22,8 +22,15 @@ async function getUserCount() {
       const latestUser = await User.find().sort({id: -1}).limit(1);
       const currentId = latestUser.length > 0 ? latestUser[0].id : 0;
       console.log(`Current highest user id: ${currentId}`);
-      
+      if(latestUser.length > 0){
+        currentId=999;
+        return currentId;
+      }else{
+        
       return currentId;
+      }
+
+      
     } catch (error) {
       console.error('Error fetching user count:', error);
       throw error; 
