@@ -1,224 +1,69 @@
-import React from 'react'
-import Image from 'next/image'
+import React from 'react';
 
-import Security from '@/../public/security.png'
-import Invest from '@/../public/investing.png'
-import Multiple from '@/../public/multiple.png'
-import Frame from '@/../public/Frame.png'
-import elipse from '@/../public/Ellipse.png'
+function Page() {
+  // Array of data for each card
+  const cardData = [
+    {
+      title: 'Basic dialog title 1',
+      description: 'A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made.',
+      actions: ['Action 1', 'Action 2'],
+    },
+    {
+      title: 'Basic dialog title 2',
+      description: 'Dialogs can be used to notify users, provide warnings, or to ask for confirmations.',
+      actions: ['Confirm', 'Cancel'],
+    },
+    {
+      title: 'Basic dialog title 3',
+      description: 'They can contain text, images, or forms that require user input.',
+      actions: ['Submit', 'Close'],
+    },
+    {
+      title: 'Basic dialog title 4',
+      description: 'Ensure dialog contents are concise and meaningful for better user experience.',
+      actions: ['Proceed', 'Back'],
+    },
+    {
+      title: 'Basic dialog title 5',
+      description: 'Use dialogs sparingly to avoid overwhelming users with too many prompts.',
+      actions: ['Agree', 'Disagree'],
+    },
+    {
+      title: 'Basic dialog title 6',
+      description: 'Remember to follow accessibility guidelines when using dialogs in your application.',
+      actions: ['Ok', 'Dismiss'],
+    },
+  ];
 
-function page() {
   return (
-    
-    <div className='flex flex-col items-center h-screen'>
-        
-        <div className='text-xl font-bold mb-6'>What do we offer?</div>
+    <>
+      <div className='mb-6'>
+        <h1>Features</h1>
+      </div>
 
-        <div className='flex md:flex-row flex-col md:gap-28 gap-14 font-medium mb-8'>
-
-        <div className='flex flex-row items-center gap-4'>
-            <Image
-            src={Security}
-            alt=''
-            width={40}
-            height={40}
-            />
-
-            <p>Security Guarantee </p>
-        </div>
-
-        <div className='flex flex-row items-center gap-4'>
-            <Image
-            src={Invest}
-            alt=''
-            width={40}
-            height={40}
-            />
-
-            <p>Investing </p>
-        </div>
-
-        <div className='flex flex-row items-center gap-4'>
-            <Image
-            src={Multiple}
-            alt=''
-            width={40}
-            height={40}
-            />
-
-            <p>Multiple Method </p>
-        </div>
-
-        </div>
-
-        <div className='flex w-3/4 overflow-x-auto gap-8 px-4 '>
-        
-
-        <div className="card bg-green-200 style={{ backgroundColor: '#DCFCE0' }} text-neutral-content w-80 flex-shrink-0">
-            <div className='p-2'>
-            <Image
-            src={Frame}
-            alt=''
-            width={50}
-            height={50}
-            />
+      <div>
+        <div className='flex space-x-4 p-4 w-max'>
+          {cardData.map((card, index) => (
+            <div
+              key={index}
+              className='card bg-green-200 text-neutral-content w-80'
+              style={{ backgroundColor: '#DCFCE0' }}
+            >
+              <div className='card-body text-left text-gray-900'>
+                <h2 className='card-title'>{card.title}</h2>
+                <div className='text-sm'>{card.description}</div>
+                <div className='card-actions justify-end gap-8'>
+                  {card.actions.map((action, actionIndex) => (
+                    <div key={actionIndex}>{action}</div>
+                  ))}
+                </div>
+              </div>
             </div>
-        <div className="card-body text-left justify-start text-gray-900">
-            <div className='text-sm'>"Great session! Dani was super helpful. She shared some practical advice on how can lorem ip we go about refining our service offerings."</div>
-        <div className="card-actions justify-start">
-            <Image
-            src={elipse}
-            alt=''
-            width={40}
-            height={40}
-            />
-            <div className='flex flex-col'>
-            <div className='font-bold'>Hadid Khan</div>
-            <div className='text-xs font-light'>UI/UX Designer</div>
-            </div>
+          ))}
         </div>
-        </div>
-        </div>
-
-
-        <div className="card bg-green-200 style={{ backgroundColor: '#DCFCE0' }} text-neutral-content w-80 flex-shrink-0">
-            <div className='p-2'>
-            <Image
-            src={Frame}
-            alt=''
-            width={50}
-            height={50}
-            />
-            </div>
-        <div className="card-body text-left justify-start text-gray-900">
-            <div className='text-sm'>"Great session! Dani was super helpful. She shared some practical advice on how can lorem ip we go about refining our service offerings."</div>
-        <div className="card-actions justify-start">
-            <Image
-            src={elipse}
-            alt=''
-            width={40}
-            height={40}
-            />
-            <div className='flex flex-col'>
-            <div className='font-bold'>Hadid Khan</div>
-            <div className='text-xs font-light'>UI/UX Designer</div>
-            </div>
-        </div>
-        </div>
-        </div>
-
-
-        <div className="card bg-green-200 style={{ backgroundColor: '#DCFCE0' }} text-neutral-content w-80 flex-shrink-0">
-            <div className='p-2'>
-            <Image
-            src={Frame}
-            alt=''
-            width={50}
-            height={50}
-            />
-            </div>
-        <div className="card-body text-left justify-start text-gray-900">
-            <div className='text-sm'>"Great session! Dani was super helpful. She shared some practical advice on how can lorem ip we go about refining our service offerings."</div>
-        <div className="card-actions justify-start">
-            <Image
-            src={elipse}
-            alt=''
-            width={40}
-            height={40}
-            />
-            <div className='flex flex-col'>
-            <div className='font-bold'>Hadid Khan</div>
-            <div className='text-xs font-light'>UI/UX Designer</div>
-            </div>
-        </div>
-        </div>
-        </div>
-
-
-        <div className="card bg-green-200 style={{ backgroundColor: '#DCFCE0' }} text-neutral-content w-80 flex-shrink-0">
-            <div className='p-2'>
-            <Image
-            src={Frame}
-            alt=''
-            width={50}
-            height={50}
-            />
-            </div>
-        <div className="card-body text-left justify-start text-gray-900">
-            <div className='text-sm'>"Great session! Dani was super helpful. She shared some practical advice on how can lorem ip we go about refining our service offerings."</div>
-        <div className="card-actions justify-start">
-            <Image
-            src={elipse}
-            alt=''
-            width={40}
-            height={40}
-            />
-            <div className='flex flex-col'>
-            <div className='font-bold'>Hadid Khan</div>
-            <div className='text-xs font-light'>UI/UX Designer</div>
-            </div>
-        </div>
-        </div>
-        </div>
-
-
-        <div className="card bg-green-200 style={{ backgroundColor: '#DCFCE0' }} text-neutral-content w-80 flex-shrink-0">
-            <div className='p-2'>
-            <Image
-            src={Frame}
-            alt=''
-            width={50}
-            height={50}
-            />
-            </div>
-        <div className="card-body text-left justify-start text-gray-900">
-            <div className='text-sm'>"Great session! Dani was super helpful. She shared some practical advice on how can lorem ip we go about refining our service offerings."</div>
-        <div className="card-actions justify-start">
-            <Image
-            src={elipse}
-            alt=''
-            width={40}
-            height={40}
-            />
-            <div className='flex flex-col'>
-            <div className='font-bold'>Hadid Khan</div>
-            <div className='text-xs font-light'>UI/UX Designer</div>
-            </div>
-        </div>
-        </div>
-        </div>
-
-
-        <div className="card bg-green-200 style={{ backgroundColor: '#DCFCE0' }} text-neutral-content w-80 flex-shrink-0">
-            <div className='p-2'>
-            <Image
-            src={Frame}
-            alt=''
-            width={50}
-            height={50}
-            />
-            </div>
-        <div className="card-body text-left justify-start text-gray-900">
-            <div className='text-sm'>"Great session! Dani was super helpful. She shared some practical advice on how can lorem ip we go about refining our service offerings."</div>
-        <div className="card-actions justify-start">
-            <Image
-            src={elipse}
-            alt=''
-            width={40}
-            height={40}
-            />
-            <div className='flex flex-col'>
-            <div className='font-bold'>Hadid Khan</div>
-            <div className='text-xs font-light'>UI/UX Designer</div>
-            </div>
-        </div>
-        </div>
-        </div>
-
-        </div>
-        
-    </div>
-  )
+      </div>
+    </>
+  );
 }
 
-export default page
+export default Page;
