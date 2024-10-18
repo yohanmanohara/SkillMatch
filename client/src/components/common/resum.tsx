@@ -69,7 +69,7 @@ const Resume = () => {
                                             <div className="flex items-center flex-col gap-2">
                                                 <div className="flex items-center gap-1.5 text-sm font-medium">
                                                     <span className="text-blue-500">Upload files</span>
-                                                    <svg
+                                                    {/* <svg
                                                         className="w-5 h-5 text-blue-500"
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         fill="none"
@@ -82,7 +82,7 @@ const Resume = () => {
                                                             strokeWidth="2"
                                                             d="M3 7v4a1 1 0 001 1h3m10 0h3a1 1 0 001-1V7m-2 10h-3m-6 0h-3m4-5V7a4 4 0 00-4-4H7a4 4 0 00-4 4v3m16 0a4 4 0 01-4-4h-3"
                                                         />
-                                                    </svg>
+                                                    </svg> */}
                                                 </div>
                                                 <div className="text-xs text-gray-400 font-medium">
                                                     Drag and drop files here, or click to select.
