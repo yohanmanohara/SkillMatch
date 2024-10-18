@@ -20,6 +20,7 @@ import {
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { Textarea } from "@/components/ui/textarea"
 export default function TabsDemo() {
 
   // User interface for type-checking
@@ -73,7 +74,7 @@ export default function TabsDemo() {
         status: formData.get('status'),
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/updateuser/?id=${userId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/updateusser/?id=${userId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -213,7 +214,7 @@ export default function TabsDemo() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button type="submit">Save Changes</Button>
+                <Button type="submit" variant="secondary">Save Changes</Button>
               </CardFooter>
             </form>
           </Card>
@@ -244,7 +245,7 @@ export default function TabsDemo() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button type="submit">Save Password</Button>
+              <Button type="submit" variant="secondary">Save Password</Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -257,7 +258,7 @@ export default function TabsDemo() {
             <CardHeader>
               <CardTitle>Edit Your Compaby Details</CardTitle>
               <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
-                <AvatarImage src="/company.jpg" alt="User Avatar" />
+                <AvatarImage src="/avatadefault.jpg" alt="User Avatar" />
               </Avatar>
               <CardDescription>
                 Make changes to your account here. Click save when you&apos;re done.
@@ -265,44 +266,76 @@ export default function TabsDemo() {
             </CardHeader>
 
             <form onSubmit={handleProfile}>
-              <CardContent className="space-y-2">
-                <div className="space-y-1">
-                  <Label htmlFor="name">Company Name</Label>
-                  <Input id="username" name="companyname" defaultValue={user?.username} placeholder="Enter Company Name" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="email">Company Email</Label>
-                  <Input id="email" name="companyemail" defaultValue={user?.email} readOnly />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="firstname">First Name</Label>
-                  <Input id="firstname" name="firstname" defaultValue={user?.firstname } placeholder="Enter First Name" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="lastname">Last Name</Label>
-                  <Input id="lastname" name="lastname" defaultValue={user?.lastname} placeholder="Enter Last Name"  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="contactnumber">Contact Number</Label>
-                  <Input id="contactnumber" name="contactnumber" defaultValue={user?.contactnumber} placeholder="0772243631"/>
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="country">Country</Label>
-                  <Input id="country" name="country" defaultValue={user?.country} placeholder="Enter Your Living Country" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="city">City</Label>
-                  <Input id="city" name="city" defaultValue={user?.city } placeholder="Enter Your Living City" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="status">Status</Label>
-                  <Input id="status" name="status" defaultValue={user?.status} readOnly />
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button type="submit">Save Changes</Button>
-              </CardFooter>
-            </form>
+  <CardContent className="space-y-5">
+    {/* Company Name */}
+    <div className="space-y-1">
+      <Label htmlFor="orgName">Company Name</Label>
+      <Input id="orgName" name="orgName" placeholder="Enter Company Name" required />
+    </div>
+    
+    {/* Company Email */}
+    <div className="space-y-1">
+      <Label htmlFor="orgEmail">Company Type</Label>
+      <Input id="orgEmail" name="orgType"  readOnly />
+    </div>
+    <div className="space-y-1">
+      <Label htmlFor="orgEmail">Company Email</Label>
+      <Input id="orgEmail" name="orgEmail"  readOnly />
+    </div>
+    
+    {/* Contact Number */}
+    <div className="space-y-1">
+      <Label htmlFor="orgPhone">Contact Number</Label>
+      <Input id="orgPhone" name="orgPhone"  placeholder="0772243631" required />
+    </div>
+    
+    {/* Website URL */}
+    <div className="space-y-1">
+      <Label htmlFor="website">Website URL</Label>
+      <Input id="website" name="website"  placeholder="websitelink" />
+    </div>
+    
+    {/* Address Fields */}
+    <div className="space-y-1">
+      <Label htmlFor="street">Street Address</Label>
+      <Input id="street" name="street"  placeholder="Enter Street Address" />
+    </div>
+    
+    <div className="space-y-1">
+      <Label htmlFor="city">City</Label>
+      <Input id="city" name="city" placeholder="Enter Your Living City" />
+    </div>
+    
+    <div className="space-y-1">
+      <Label htmlFor="state">State</Label>
+      <Input id="state" name="state" placeholder="Enter Your State" />
+    </div>
+    
+    <div className="space-y-1">
+      <Label htmlFor="postalCode">Postal Code</Label>
+      <Input id="postalCode" name="postalCode" placeholder="Enter Your Postal Code" />
+    </div>
+    
+    <div className="space-y-1">
+      <Label htmlFor="country">Country</Label>
+      <Input id="country" name="country"  placeholder="Enter Your Country" />
+    </div>
+
+    <div>
+      <Label htmlFor="description">Description</Label>
+      <Textarea placeholder="Type your message here."  className="h-60"/>
+  
+    </div>
+    
+    
+    
+  </CardContent>
+  
+  <CardFooter>
+    <Button type="submit" variant="secondary">Save Changes</Button>
+  </CardFooter>
+</form>
+
           </Card>
         </TabsContent>
 

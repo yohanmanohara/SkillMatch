@@ -48,7 +48,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       if (!res.ok) {
         throw new Error('Failed to deactivate user');
       }
-      router.refresh();
+      window.location.reload();
     }
     catch (error) {
       console.error('Error deactivating user:', error);
@@ -70,7 +70,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       if (!res.ok) {
         throw new Error('Failed to activate user');
       }
-      router.refresh();
+      window.location.reload();
     }
     catch (error) {
       console.error('Error activating user:', error);
@@ -94,8 +94,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       if (!res.ok) {
         throw new Error('Failed to delete user');
       }
-      router.refresh();
-
+      
+      window.location.reload();
 
     } catch (error) {
       console.error('Error deleting user:', error);
