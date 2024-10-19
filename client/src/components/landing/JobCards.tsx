@@ -13,6 +13,7 @@ const JobCards = () => {
   ];
 
   return (
+
     <div className="space-y-6 max-w-screen-xl mx-auto p-4">
       {jobData.map((job, index) => (
         <div
@@ -66,6 +67,7 @@ const JobCards = () => {
           </div>
         </div>
       ))}
+
     </div>
   );
 };
