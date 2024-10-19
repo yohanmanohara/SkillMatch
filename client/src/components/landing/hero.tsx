@@ -2,7 +2,8 @@ import React from 'react';
 
 const hero = () => {
   return (
-    <div className="hero bg-white min-h-screen flex justify-evenly space-x-19">
+    <div className='flex align-top items-start' >
+    <div className="hero  min-h-screen flex justify-evenly space-x-19">
       <div className="hero-content flex flex-col  lg:flex-row-reverse min-h-screen w-screen">
       
       
@@ -40,6 +41,7 @@ const hero = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
