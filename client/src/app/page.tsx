@@ -21,7 +21,9 @@ const page = () => {
     </Container>
    
     <Customerfeedback/>
+    <Container>
     <Faq/>
+    </Container>
     <Contactus/>
     <Footer>
       

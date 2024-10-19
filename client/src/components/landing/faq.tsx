@@ -10,7 +10,8 @@ import {
 
 function page() {
   return (
-    <Accordion type="single" collapsible className="w-96">
+    <div className=''>
+    <Accordion type="single" collapsible className="w-full">
     <AccordionItem value="item-1">
       <AccordionTrigger>What credit score do I need to apply for a credit card?</AccordionTrigger>
       <AccordionContent>
@@ -63,7 +64,7 @@ function page() {
       Yes, credit card information is generally secure with encryption and fraud protection measures in place. However, always be cautious when sharing details online or in public.</AccordionContent>
     </AccordionItem>
   </Accordion>
-
+  </div>
   )
 }
 
