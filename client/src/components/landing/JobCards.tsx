@@ -1,25 +1,73 @@
-import React from 'react'
+import React from 'react';
 
 const JobCards = () => {
-  return (
-    <div className=''>
-        
-         <div className="card  text-primary-content w-[311px] h-[350px] flex-shrink-0 rounded-[20px] border-2 border-[#21C452] bg-white">
-         
-    <div className="card-body">
-   <div className='card-top'>
-    <img src='./jobCardIcon.png' alt='job' className="w-[42.668px] h-[42px] flex-shrink-0" />
-   </div>
-      <h2 className="card-title font-encode font-bold text-[20px]">Software Architect</h2>
-      <p className='font-encode text-[10px] font-bold not-italic leading-normal text-[#656565] '>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure </p>
-      <div className="card-actions justify-end">
-        <button className="btn btn-ghostrounded-[15px] border-2 border-[#717174] bg-white text-[12px] font-semibold not-italic leading-[20px] tracking-[0.1px] font-encode">Apply now</button>
-      </div>
-    </div>
-  </div>
-    </div>
-   
-  )
-}
+  const jobData = [
+    {
+      title: 'Cloud Solutions Architect',
+      company: 'Company Name',
+      salary: '$200,000/yr',
+      description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed elit dolor, molestie id rutrum a, sodales ut magna. Vestibulum scelerisque at risus non volutpat. Etiam elit est, placerat id tincidunt a, maximus id sem. Duis ultricies et augue consequat lacinia. Nulla sed tincidunt tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed elit dolor, molestie id rutrum a, sodales ut magna. Vestibulum scelerisque at risus non volutpat. Etiam elit est, placerat id tincidunt a, maximus id sem. Duis ultricies et augue consequat lacinia. Nulla sed tincidunt tellus.`,
+      tags: ['On Site', 'Full Time'],
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg',
+    },
+  ];
 
-export default JobCards
+  return (
+    <div className="space-y-6 max-w-screen-xl mx-auto p-4">
+      {jobData.map((job, index) => (
+        <div
+          key={index}
+          className="bg-green-100 rounded-lg shadow-lg p-6 flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-6"
+          style={{ width: '100%', height: 'auto' }}
+        >
+          <div className="flex flex-col lg:w-1/4 items-center">
+            <div className="bg-blue-500 rounded-full p-3">
+              <img
+                src={job.logo}
+                alt="Company Logo"
+                className="h-12 w-12"
+              />
+            </div>
+
+            <div className="text-center mt-4">
+              <h3 className="text-xl font-bold text-black">{job.title}</h3>
+              <p className="text-black">{job.company}</p>
+              <p className="text-gray-500">{job.salary}</p>
+            </div>
+
+            <div className="mt-6 flex space-x-4 justify-center">
+              <button className="py-2 px-4 bg-black text-white rounded-lg hover:bg-gray-800">
+                Apply Now
+              </button>
+              <button className="flex items-center text-gray-600">
+                <span className="material-icons-outlined">share</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="lg:w-3/4 flex flex-col justify-between items-center text-center">
+            <p className="text-gray-700 mb-4">
+              {job.description}
+            </p>
+
+            <div className="flex space-x-2 justify-center mt-4">
+              {job.tags.map((tag, tagIndex) => (
+                <span
+                  key={tagIndex}
+                  className="text-sm font-semibold bg-green-200 text-green-800 py-1 px-2 rounded-full"
+                >
+                  {tag}
+                </span>
+              ))}
+              <span className="text-sm font-semibold bg-red-200 text-red-800 py-1 px-2 rounded-full">
+                Save Here
+              </span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default JobCards;
