@@ -9,19 +9,12 @@ const hero = () => {
         <div className=' w-full h-full flex justify-evenly gap-6  '>
           <div className=''>
             <img
-            src="./heroLayer1.png"
+            src="./hero_new.png"
             className="w-full h-full object-cover"
             alt="Hero"
           />
           </div>
-          <div className='   w-[155px]  h-auto '>
-            <img
-            src="./heroLayer2.png"
-            className="h-full w-full object-cover"
-            alt="Hero"
-          />
-          </div>
-          
+        
         </div>
         
        
