@@ -9,7 +9,7 @@ const page = () => {
        <div  className='bg-white  '>
       <Navbar />
     </div>
-    <div className='flex align-top'>
+    <div className='flex align-top items-start'>
     <Hero/>
     </div>
     <Buttonfilter />
