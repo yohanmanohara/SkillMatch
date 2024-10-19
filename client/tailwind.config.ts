@@ -23,6 +23,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
         encode: ['Encode Sans', 'sans-serif']
       },
       backgroundImage: {
@@ -89,3 +90,5 @@ module.exports = {
     require('daisyui'),
   ]
 };
+
+
