@@ -2,7 +2,7 @@ import React from 'react';
 
 function buttonfilter() {
   return (
-    <div className="flex flex-col items-center bg-white text-black p-6 rounded-lg shadow-lg">
+    <div className="flex flex-col items-center text-black p-6 rounded-lg ">
       <h2 className="text-2xl font-semibold mb-6">People also searched</h2>
 
       <div className="flex flex-wrap justify-center gap-3 w-full">

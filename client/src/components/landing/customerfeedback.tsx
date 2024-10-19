@@ -37,7 +37,7 @@ const feedbacks = [
 const Client_Feedback = () => {
   return (
     <>
-    <div className='flex flex-col items-center justify-center'>
+    <div className='flex flex-col items-center justify-center pt-12'>
     <div className='font-bold text-xl'>What do we offer?</div>
     <div className='flex flex-row gap-20 my-9'>
         <div className='flex flex-row font-bold gap-6 items-center'>

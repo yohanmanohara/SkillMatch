@@ -3,20 +3,29 @@ import Navbar from '../components/landing/navbar'
 import Hero from '@/components/landing/hero'
 import Footer from '@/components/layout/footer'
 import Buttonfilter from '@/components/landing/buttonfilter';
+import JobCards from '@/components/landing/JobCards';
+import  Container  from '@/components/common/container';
+import Customerfeedback from '@/components/landing/customerfeedback';
+import Contactus from "@/components/landing/Getintouch";
 const page = () => {
   return (
-    <main> 
-       <div  className='bg-white  '>
-      <Navbar />
-    </div>
-    <div className='flex align-top items-start'>
+    <> 
+       
+    <Navbar />
     <Hero/>
-    </div>
     <Buttonfilter />
+    
+    <Container>
+    <JobCards/>
+    </Container>
+   
+    <Customerfeedback/>
+    {/* <Faq/> */}
+    <Contactus/>
     <Footer>
       
     </Footer>
-    </main>
+    </>
    
   )
 }
