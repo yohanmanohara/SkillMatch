@@ -4,7 +4,7 @@ const JobCards = () => {
   return (
     <div className=''>
         
-         <div className="card  text-primary-content w-[311px] h-[350px] flex-shrink-0 rounded-[20px] border-2 border-[#21C452] bg-white">
+         <div className="card  text-primary-content w-[311px] h-[350px] flex-shrink-0 rounded-[20px] border-2 border-[#21C452]">
          
     <div className="card-body">
    <div className='card-top'>
