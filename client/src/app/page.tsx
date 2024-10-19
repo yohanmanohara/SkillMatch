@@ -7,6 +7,7 @@ import JobCards from '@/components/landing/JobCards';
 import  Container  from '@/components/common/container';
 import Customerfeedback from '@/components/landing/customerfeedback';
 import Contactus from "@/components/landing/Getintouch";
+import Faq from "@/components/landing/faq";
 const page = () => {
   return (
     <> 
@@ -20,7 +21,7 @@ const page = () => {
     </Container>
    
     <Customerfeedback/>
-    {/* <Faq/> */}
+    <Faq/>
     <Contactus/>
     <Footer>
       
