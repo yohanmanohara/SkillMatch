@@ -1,23 +1,54 @@
-import React from 'react'
+import React from 'react';
 
 const hero = () => {
   return (
-    <div className="hero bg-white min-h-screen flex align-top justify-evenly">
-  <div className="hero-content flex-col lg:flex-row-reverse justify-start">
-    <img
-      src="./hero.png"
-      className="w-full max-w-[700.233px] h-auto max-h-[594px] flex-shrink-0" />
-    <div className='space-y-20 '>
-      <h1 className="text-6xl font-bold text-black pt-1">Your Gateway to a New Professional Future</h1>
-      {/* <p className="py-6">
-        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
-        quasi. In deleniti eaque aut repudiandae et a id nisi.
-      </p> */}
-      <button className="btn bg-green-600 border-green-600 font-encode font-semibold text-white">Get Started</button>
+    <div className="hero bg-white min-h-screen flex justify-evenly space-x-19">
+      <div className="hero-content flex flex-col  lg:flex-row-reverse min-h-screen w-screen">
+      
+      
+        <div className=' w-full h-full flex justify-evenly gap-6  '>
+          <div className=''>
+            <img
+            src="./heroLayer1.png"
+            className="w-full h-full object-cover"
+            alt="Hero"
+          />
+          </div>
+          <div className='   w-[155px]  h-auto '>
+            <img
+            src="./heroLayer2.png"
+            className="h-full w-full object-cover"
+            alt="Hero"
+          />
+          </div>
+          
+        </div>
+        
+       
+        <div className="flex flex-col gap-9 p-4 lg:p-0">
+          <div>
+            <h1 className="text-4xl lg:text-[70px] font-poppins font-semibold leading-none text-black tracking-tight lg:tracking-[-1.4px]">
+              Signup & Discover your next <span className="text-green-600">job</span>
+            </h1>
+          </div>
+          <div className="backdrop-blur-[2px] bg-green-200 w-full lg:w-[492px] h-auto lg:h-[184px] flex flex-col items-center justify-center rounded-sm gap-2 p-4 lg:p-0">
+         <div className='flex justify-start'>
+         
+            <input
+            
+              type="text"
+              placeholder="Type here"
+              className="input w-full lg:w-[492px] max-w-xs bg-green-200 align-middle text-[#000] font-light font-poppins text-lg lg:text-[20px] leading-normal border-none pb-3"
+            />
+         </div>
+            <button className="btn bg-black text-white font-bold  font-poppins w-full lg:w-[436px] h-10 lg:h-[42px] flex-shrink-0">
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-  )
-}
+  );
+};
 
-export default hero
+export default hero;
