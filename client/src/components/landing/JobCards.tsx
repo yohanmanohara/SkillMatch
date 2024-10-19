@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {Button} from '@/components/ui/button';
 const JobCards = () => {
   const jobData = [
     {
@@ -36,12 +36,10 @@ const JobCards = () => {
             </div>
 
             <div className="mt-6 flex space-x-4 justify-center">
-              <button className="py-2 px-4 bg-black text-white rounded-lg hover:bg-gray-800">
-                Apply Now
-              </button>
-              <button className="flex items-center text-gray-600">
-                <span className="material-icons-outlined">share</span>
-              </button>
+              
+              <Button className=' hover:bg-gray-800'>Apply Now</Button>
+              <Button variant="outline" className=' border-black '>Share</Button>
+             
             </div>
           </div>
 
