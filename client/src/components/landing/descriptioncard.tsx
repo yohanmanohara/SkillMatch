@@ -1,42 +1,50 @@
 import React from 'react';
 
-function DescriptionCard() {
+const DescriptionCard = ({
+  salaryRange = '$100,000 - $120,000',
+  location = 'Dhaka, Bangladesh',
+  postedDate = '14 Jun, 2021',
+  expireDate = '14 Aug, 2021',
+  jobLevel = 'Entry Level',
+  experience = '2-3 years',
+  education = 'Graduation',
+}) => {
   return (
-    <div className="max-w-xl h-112 mx-auto bg-white border border-gray-200 rounded-lg shadow-md p-6 relative">
+    <div className="max-w-xl h-auto mx-auto bg-white border border-gray-200 rounded-lg shadow-md p-6">
       <div className="flex justify-between items-center p-4 border-b border-gray-200">
         <div>
           <p className="text-gray-500">Salary (USD)</p>
-          <p className="text-2xl font-semibold text-green-600">$100,000 - $120,000</p>
+          <p className="text-2xl font-semibold text-green-600">{salaryRange}</p>
           <p className="text-sm text-gray-500">Yearly salary</p>
         </div>
         <div>
           <p className="text-gray-500">Job Location</p>
-          <p className="text-lg font-semibold text-gray-700">Dhaka, Bangladesh</p>
+          <p className="text-lg font-semibold text-gray-700">{location}</p>
         </div>
       </div>
 
-      <div className="mt-6"> 
+      <div className="mt-6">
         <h2 className="text-lg font-semibold text-gray-700 mb-4">Job Overview</h2>
         <div className="grid grid-cols-2 gap-4">
           <div className="flex items-center space-x-2">
             <span className="text-gray-500">Job Posted:</span>
-            <span className="font-medium text-gray-700">14 Jun, 2021</span>
+            <span className="font-medium text-gray-700">{postedDate}</span>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="text-gray-500">Job Expire In:</span>
-            <span className="font-medium text-gray-700">14 Aug, 2021</span>
+            <span className="text-gray-500">Job Expires In:</span>
+            <span className="font-medium text-gray-700">{expireDate}</span>
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-gray-500">Job Level:</span>
-            <span className="font-medium text-gray-700">Entry Level</span>
+            <span className="font-medium text-gray-700">{jobLevel}</span>
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-gray-500">Experience:</span>
-            <span className="font-medium text-gray-700">$50k-80k/month</span>
+            <span className="font-medium text-gray-700">{experience}</span>
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-gray-500">Education:</span>
-            <span className="font-medium text-gray-700">Graduation</span>
+            <span className="font-medium text-gray-700">{education}</span>
           </div>
         </div>
       </div>
@@ -53,6 +61,6 @@ function DescriptionCard() {
       </div>
     </div>
   );
-}
+};
 
 export default DescriptionCard;
