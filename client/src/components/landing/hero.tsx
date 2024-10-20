@@ -21,7 +21,7 @@ const hero = () => {
        
         <div className="flex flex-col gap-9 p-4 lg:p-0">
           <div>
-            <h1 className="text-4xl lg:text-[70px] font-poppins font-semibold leading-none text-black tracking-tight lg:tracking-[-1.4px]">
+            <h1 className="text-4xl lg:text-[70px] font-poppins font-semibold leading-none tracking-tight lg:tracking-[-1.4px]">
               Signup & Discover your next <span className="text-green-600">job</span>
             </h1>
           </div>
