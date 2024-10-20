@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+   scroll-behavior: smooth;
+   scrollbar-shadow-color: antiquewhite; 
+  scrollbar-face-color: antiquewhite;
+}
 
 
 @layer base {

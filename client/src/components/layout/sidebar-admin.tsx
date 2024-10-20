@@ -7,13 +7,14 @@ import { ChevronLeft } from 'lucide-react';
 import { useSidebar } from '@/hooks/useSidebar';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 type SidebarProps = {
   className?: string;
 };
 
 export default function Sidebar({ className }: SidebarProps) {
   const { isMinimized, toggle } = useSidebar();
-
+  const router = useRouter();
   const handleToggle = () => {
     toggle();
   };
@@ -27,9 +28,9 @@ export default function Sidebar({ className }: SidebarProps) {
 
       )}
     >
-      <div className="hidden pl-5 pt-10 lg:flex items-center">
-     <Image src="/favicon.png" width={20} height={30} alt="Logo" />
-     <p className="ml-2 font-open-sans font-extrabold">SkillMatch</p> {/* Replace 'Your Text Here' with the actual text you want */}
+      <div className="hidden pl-5 pt-10 lg:flex items-center cursor-pointer">
+      <Image src="/favicon.png" width={20} height={30} alt="Logo" onClick={() => router.push("/")} />
+      <p className="ml-2 font-open-sans font-extrabold">SkillMatch</p> {/* Replace 'Your Text Here' with the actual text you want */}
   </div>
  
       <div className="space-y-4 py-4 ">

@@ -5,7 +5,7 @@ import comma_icon from '@/../public/Frame.png';
 import Security from '@/../public/security.png'
 import Invest from '@/../public/investing.png'
 import Multiple from '@/../public/multiple.png'
-
+import Faq from '@/components/landing/faq'
 const feedbacks = [
   {
     id: 1,
@@ -37,8 +37,10 @@ const feedbacks = [
 const Client_Feedback = () => {
   return (
     <>
+    <div className='h-screen' id='faq'>
     <div className='flex flex-col items-center justify-center pt-12'>
-    <div className='font-bold text-xl'>What do we offer?</div>
+       
+    <div className='font-bold text-3xl'>What do we offer?</div>
     <div className='flex flex-row gap-20 my-9'>
         <div className='flex flex-row font-bold gap-6 items-center'>
         <Image
@@ -90,7 +92,9 @@ const Client_Feedback = () => {
         </div>
       ))}
     </div>
-    
+
+    <Faq/>
+    </div>
     </>
   );
 };
