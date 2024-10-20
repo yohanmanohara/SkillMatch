@@ -1,67 +1,143 @@
-'use client'
-import React, { useState } from 'react'
-import Link from 'next/link'
-import { Button } from '../ui/button'
+"use client";
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { User } from '@/constants/data';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 
-const Navbar = () => {
-  const [loggedIn, setLoggedIn] = useState(true);
 
-  // Toggle Login function to log the user in and out
-  const handleLogin = (): void => {
-    setLoggedIn(!loggedIn);
+
+const NavigationBar = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [roled, setRoled] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedUserId = sessionStorage.getItem('poop');
+      const roled = sessionStorage.getItem('role') ? JSON.parse(sessionStorage.getItem('role') as string).role : null;
+      setUserId(storedUserId);
+      if (roled === 'admin') {
+        setRoled(roled);
+      } 
+      
+    
+      
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      if (userId) {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/getsingleuser/?id=${userId}`, {
+          cache: 'no-store',
+        });
+        const data = await res.json();
+        setUser(data);
+      }
+    };
+
+    fetchUsers();
+  }, [userId]);
+
+  const haddle = () => {
+    if (user?.role === 'Employer') {
+      window.location.href = '/employer/overview';
+    } else if (user?.role === 'Employee') {
+      window.location.href = '/employee/overview';
+    } 
   };
-  
-
+  const router = useRouter();
 
   return (
-    <div className="navbar text-black font-sans font-semibold">
-      <div className="navbar-start">
-      <div className="dropdown">
-        <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M4 6h16M4 12h8m-8 6h16" />
-        </svg>
+    <div className="bg-opacity-85 backdrop-blur-lg bg-blend-darken h-20 w-full flex justify-center px-4 fixed z-50 text-primary-0 text-stroke-1">
+      <div className="w-full max-w-[1206px] h-full flex justify-between items-center">
+        <div className='cursor-pointer' onClick={() => router.push("/")}>
+          <Image src="/favicon.png" width={30} height={30} alt="logo" />
         </div>
-        <ul
-        tabIndex={0}
-        className="menu dropdown-content w-screen h-screen z-[9999] ">
-        <li><a>Home</a></li>
-        <li><Link href='./jobs'>Jobs</Link></li>
-        <li><a>About Us</a></li>
-        </ul>
-      </div>
-        <div className='flex justify-evenly space-x-2 px-5'>
-          <img src='/favicon.png' alt='logo' className="w-6 h-10" />
-          <div className="text-2xl font-extrabold text-[20px] leading-[160%] cursor-pointer sm:text-xl">SkillMatch</div>
+        <div className='hidden lg:block'>
+          <ul className="flex justify-center items-center space-x-8">
+            <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/jobsearch'}>+ Post a Job</Link></li>
+            <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/jobsearch'}>Jobs</Link></li>
+            <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/#contact'}>Contact US</Link></li>
+            <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/#faq'}>FAQ</Link></li>
+            
+          
+            <li>
+            {roled ? (
+                <div>
+                <Button onClick={()=>{window.location.href = '/admin/overview'}}>Admin View</Button>
+              </div>
+              ) : (
+                <>
+                 {user ? (
+              <>
+                <div className='flex flex-row gap-9'>
+                  <div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                          <Avatar>
+                            <AvatarImage
+                              src="/avatadefault.jpg"
+                              alt="User Avatar"
+                              width={24}
+                              height={24}
+                            />
+                          </Avatar>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-56" align="end" forceMount>
+                        <DropdownMenuItem>
+                          {user?.username}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            sessionStorage.removeItem('poop');
+                            sessionStorage.removeItem('user');
+                            sessionStorage.removeItem('role');
+                            localStorage.removeItem('token');
+                            sessionStorage.removeItem('token');
+                            sessionStorage.removeItem('Email');
+                            window.location.reload();
+                          }}>
+                          Log out
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  <div>
+                    <Button onClick={haddle}>Dashboard</Button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+           
+                <Button variant="secondary" size="default" onClick={() => router.push("/login")}>Login</Button>
+           
+              </>
+             
+            )}</>
+              )
+            }
+           
+          </li>
+        
+
+            
+          </ul>
         </div>
-      </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 space-x-10 text-lg">
-          <li><a>Home</a></li>
-          <li><Link href={"./jobs"}>Jobs</Link></li>
-          <li><a>About Us</a></li>
-        </ul>
-      </div>
-      <div className="navbar-end flex space-x-5 px-5">
-        {loggedIn ? (
-          // Login button
-          <Button variant="secondary" className='w-[107px] h-12 rounded-m font-sans font-bold'>Log in</Button>
-        ) : (
-          // Profile picture
-          <img src='./Guy4.png' alt='user' className="w-6 h-10 rounded-full cursor-pointer" />
-        )}
       </div>
     </div>
   );
-}
+};
 
-export default Navbar;
+export default NavigationBar;

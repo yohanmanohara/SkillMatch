@@ -2,7 +2,8 @@ import React from 'react';
 
 const hero = () => {
   return (
-    <div className="hero bg-white min-h-screen flex justify-evenly space-x-19">
+    <div className='flex align-top items-start' >
+    <div className="hero  min-h-screen flex justify-evenly space-x-19">
       <div className="hero-content flex flex-col  lg:flex-row-reverse min-h-screen w-screen">
       
       
@@ -20,7 +21,7 @@ const hero = () => {
        
         <div className="flex flex-col gap-9 p-4 lg:p-0">
           <div>
-            <h1 className="text-4xl lg:text-[70px] font-poppins font-semibold leading-none text-black tracking-tight lg:tracking-[-1.4px]">
+            <h1 className="text-4xl lg:text-[70px] font-poppins font-semibold leading-none tracking-tight lg:tracking-[-1.4px]">
               Signup & Discover your next <span className="text-green-600">job</span>
             </h1>
           </div>
@@ -40,6 +41,7 @@ const hero = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
