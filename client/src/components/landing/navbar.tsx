@@ -22,7 +22,16 @@ import {
 
 const NavigationBar = () => {
   const [user, setUser] = useState<User | null>(null);
-  const userId = sessionStorage.getItem('poop'); 
+  const [userId, setUserId] = useState<string | null>(null);
+
+
+  useEffect(() => {
+    
+    if (typeof window !== 'undefined') {
+      const storedUserId = sessionStorage.getItem('poop');
+      setUserId(storedUserId);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -52,8 +61,8 @@ const NavigationBar = () => {
         <ul className="flex justify-center items-center space-x-8">
           <li className=" text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/jobsearch'}>+ Post a Job</Link></li>
           <li className=" text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/jobsearch'}>Jobs</Link></li>
-          <li className=" text-primary-0 hover:text-gray-300 cursor-pointer"><Link href="#contact">Contact US</Link></li>
-          <li className=" text-primary-0 hover:text-gray-300 cursor-pointer"><Link href="#faq">FAQ</Link></li>
+          <li className=" text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/#contact'}>Contact US</Link></li>
+          <li className=" text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/#faq'}>FAQ</Link></li>
 
        <li> {user ? (
           <>
