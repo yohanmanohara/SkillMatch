@@ -12,7 +12,9 @@ const page = () => {
   return (
     <> 
        
-    <Navbar />
+      
+       <Navbar />
+       
     <Hero/>
     <Buttonfilter />
     

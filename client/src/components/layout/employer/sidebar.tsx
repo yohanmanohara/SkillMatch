@@ -39,8 +39,8 @@ export default function Sidebar({ className }: SidebarProps) {
       )}
     >
 
-  <div className="hidden pl-5 pt-10 lg:flex items-center">
-     <Image src="/favicon.png" width={20} height={30} alt="Logo" />
+  <div className="hidden pl-5 pt-10 lg:flex items-center cursor-pointer">
+  <Image src="/favicon.png" width={20} height={30} alt="Logo" onClick={() => router.push("/")} />
      <p className="ml-2 font-open-sans font-extrabold">SkillMatch</p> {/* Replace 'Your Text Here' with the actual text you want */}
   </div>
  
