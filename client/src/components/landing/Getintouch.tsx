@@ -33,7 +33,7 @@ const contactDetails = [
 function GetInTouch() {
   return (
     <>
-    <div className='flex flex-row bg-green-200 rounded-md w-auto h-96 p-24 m-10 gap-48 items-center justify-between'>
+    <div className='flex flex-row bg-green-200 rounded-md w-auto h-96 p-24 m-10 gap-48 items-center justify-between' id='contact'>
 
     <div>
       {contactDetails.map(({ id, icon, label, value }) => (

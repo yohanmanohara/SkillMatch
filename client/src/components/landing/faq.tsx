@@ -10,8 +10,8 @@ import {
 
 function page() {
   return (
-    <div className=''>
-    <Accordion type="single" collapsible className="w-full">
+    <div >
+    <Accordion type="single" collapsible className="w-full pt-16 ">
     <AccordionItem value="item-1">
       <AccordionTrigger>What credit score do I need to apply for a credit card?</AccordionTrigger>
       <AccordionContent>

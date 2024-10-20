@@ -7,7 +7,7 @@ import JobCards from '@/components/landing/JobCards';
 import  Container  from '@/components/common/container';
 import Customerfeedback from '@/components/landing/customerfeedback';
 import Contactus from "@/components/landing/Getintouch";
-import Faq from "@/components/landing/faq";
+
 const page = () => {
   return (
     <> 
@@ -20,11 +20,15 @@ const page = () => {
     <JobCards/>
     </Container>
    
-    <Customerfeedback/>
+    
     <Container>
-    <Faq/>
+    <Customerfeedback/>
+    
     </Container>
+
+    <Container>
     <Contactus/>
+    </Container>
     <Footer>
       
     </Footer>
