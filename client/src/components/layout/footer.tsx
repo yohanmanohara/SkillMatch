@@ -11,7 +11,7 @@ const Footer = () => {
       
         {/* Audience Section */}
         <div className="mb-4 md:mb-0 pl-12">
-          <h5 className="font-bold mb-4">Audience</h5>
+          <h5 className="font-bold mb-2">Audience</h5>
           <ul>
             <li><a href="#" className="text-gray-600 hover:text-black text-lg">Employers</a></li>
             <li><a href="#" className="text-gray-600 hover:text-black text-lg">Hiring Managers</a></li>
