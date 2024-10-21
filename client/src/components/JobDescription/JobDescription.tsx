@@ -35,11 +35,11 @@ const JobDescription = () => {
     {jobData.map((job, index) => (
 
     <div key={index} style={{ width: '100%', height: 'auto' }}  
-    className=' flex flex-col justify-center   h-auto gap-5 items-center mt-20 pt-10 '>
+     className=' flex flex-col justify-center   h-auto gap-5 items-center mt-20 pt-10 '>
         <div className=' top flex flex-col gap-3 items-center w-full  sm:flex-row sm:justify-between'>
             <div className='top-left flex justify-start gap-2 w-full '>
                 <img src={job.logo} alt='company logo'  className='w-24 h-24 rounded-[100px] '/>
-            
+                
                 <div className='pt-3 flex flex-col justify-center pl-3 gap-2'>
                     <h1 className='font-sans text-2xl font-medium leading-[32px] '>{job.title}</h1>
                     <div className='flex justify-between gap-2 font-sans text-base font-normal leading-[28px]'>
