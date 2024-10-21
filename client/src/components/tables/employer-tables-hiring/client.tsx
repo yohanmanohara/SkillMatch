@@ -9,18 +9,16 @@ import { useRouter } from 'next/navigation';
 import { columns } from './columns';
 import Cards  from '@/components/layout/employer/cards-job';
 import AlertDialogDemo from '@/components/layout/employer/alert-dialog-but';
-interface ProductsClientProps {
-  data: User[];
-}
 
-export const UserClient: React.FC<ProductsClientProps> = ({ data }) => {
+
+export const UserClient = () => {
   const router = useRouter();
 
   return (
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Total Jobs (${data.length})`}
+          title={`Total Jobs `}
           description="Manage users "
         />
         {/* <Button

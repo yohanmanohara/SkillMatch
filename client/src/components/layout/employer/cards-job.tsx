@@ -25,14 +25,11 @@ export default function CardWithForm() {
       name: "Sample Project 1",
       framework: "Next.js",
     },
-    {
-      name: "Sample Project 2",
-      framework: "Nuxt.js",
-    },
+   
   ]); // Initial example data
 
   const handleDeploy = () => {
-    // Example data to be added on button click
+    
     const exampleData = {
       name: "New Project",
       framework: "SvelteKit",
@@ -43,9 +40,7 @@ export default function CardWithForm() {
 
   return (
     <div className="w-full">
-   
-
-      {/* Render Deployed Cards */}
+  
       <div className="mt-4">
         {cards.map((card, index) => (
           <Card key={index} className="w-full shadow-lg mt-4">

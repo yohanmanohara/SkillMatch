@@ -11,86 +11,126 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider"
 import { useState } from "react";
 
 export default function SignUpDialog() {
+  const [values, setValues] = useState([15000, 100000]);
+
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
+    title: "",
+    salary: "",
+    employmentTypes: [],
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, type, checked } = e.target;
+    if (type === "checkbox") {
+     
+    
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Add sign-up logic here, e.g., send formData to an API
+   
     console.log("Sign-up form submitted", formData);
   };
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="secondary" className="w-40 ">Add job</Button>
+        <Button variant="secondary" className="w-40">Add Job</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <form onSubmit={handleSubmit}>
           <AlertDialogHeader>
-            <AlertDialogTitle>Add jobs Here</AlertDialogTitle>
+            <AlertDialogTitle>Add Jobs Here</AlertDialogTitle>
             <AlertDialogDescription>
-              Please fill out the form to add your jobs.
+              Please fill out the form to add your job details.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
           <div className="flex flex-col gap-4 p-4">
-            <label htmlFor="name" className="text-sm">
-              Name
+            <label htmlFor="title" className="text-sm">
+              Job Title
             </label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={formData.name}
+              id="title"
+              name="title"
+              value={formData.title}
               onChange={handleChange}
               required
               className="border p-2 rounded"
             />
 
-            <label htmlFor="email" className="text-sm">
-              Email
+            <label htmlFor="employmentTypes" className="text-sm">
+              Type of Employment
             </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="border p-2 rounded"
-            />
+            <div className="flex flex-col gap-2">
+              {["Full-Time", "Part-Time", "Remote", "Internship", "Contract"].map((type) => (
+                <label key={type}>
+                  <input
+                    type="checkbox"
+                    name="employmentTypes"
+                    value={type}
+                    onChange={handleChange}
+                  />
+                  {type}
+                </label>
+              ))}
+            </div>
+            <div>
 
-            <label htmlFor="password" className="text-sm">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="border p-2 rounded"
-            />
+
+
+      <label htmlFor="salary" className="text-sm">
+        Salary
+      </label>
+
+      <div style={{ width: '300px', margin: '20px auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+          <input
+            type="text"
+            value={`Rs. ${values[0].toLocaleString()}`}
+            readOnly
+            style={{ border: 'none', width: '80px', textAlign: 'center', background: 'transparent' }}
+          />
+          <span>to</span>
+          <input
+            type="text"
+            value={`Rs. ${values[1].toLocaleString()}`}
+            readOnly
+            style={{ border: 'none', width: '80px', textAlign: 'center', background: 'transparent' }}
+          />
+        </div>
+        <Slider
+          value={values}
+          onValueChange={(newValue: number[]) => setValues(newValue)}
+          min={15000}
+          max={700000}
+          
+          
+          style={{ color: '#5F3FF3' }} 
+        />
+      </div>
+    </div>
+
+<div>
+
+</div>
+           
           </div>
 
           <AlertDialogFooter>
-            <AlertDialogCancel type="button" >Cancel</AlertDialogCancel>
-            <AlertDialogAction type="submit">Submit</AlertDialogAction>
+            <AlertDialogCancel type="button">Cancel</AlertDialogCancel>
+            <AlertDialogAction type="submit">Next</AlertDialogAction>
           </AlertDialogFooter>
         </form>
       </AlertDialogContent>
