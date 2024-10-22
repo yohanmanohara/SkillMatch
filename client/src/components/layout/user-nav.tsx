@@ -96,15 +96,30 @@ export  function UserNav() {
           </DropdownMenuItem>
 
 
+          <DropdownMenuItem 
+                 onClick={() => {
+                   window.location.href = '/employee/resum';
+                 }
+                 }
+                 >
+                   Resume CV
+          </DropdownMenuItem>
+
+
                {showButton ? (
-                 <DropdownMenuItem 
+                <>
+                <DropdownMenuItem 
                  onClick={() => {
                    window.location.href = '/employer/profile';
                  }
-               }
+                 }
                  >
                    Profile
                  </DropdownMenuItem>
+                
+               </>
+                
+                 
                
                ):(<DropdownMenuItem 
                  onClick={() => {
