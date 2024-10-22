@@ -5,32 +5,41 @@ import { Button } from '@/components/ui/button';
 const hero = () => {
   return (
     <div className='flex align-top items-start' >
-    <div className="hero min-h-screen flex flex-col justify-evenly ">
-      <div className="hero-content flex flex-col  lg:flex-row-reverse min-h-screen w-screen">
+    <div className="hero min-h-screen flex flex-col justify-evenly items-center">
+      <div className="hero-content flex flex-col items-center justify-center lg:flex-row-reverse min-h-screen w-screen">
       
       
-        <div className=' w-full h-full flex justify-evenly gap-6  '>
-          <div className=''>
-            <img
-            src="./hero_new.png"
-            className="w-full h-full object-cover"
-            alt="Hero"
-          />
+        <div className=' w-full h-full flex justify-start  '>
+          <div className='flex items-center justify-start'>
+          <Image
+    src="/hero_new.png"
+    alt="Hero"
+    layout="responsive"
+    objectFit="cover"
+    width={800}
+    height={800}
+  
+  />
           </div>
         
         </div>
         
        
-        <div className="flex flex-col gap-9 p-4 lg:p-0">
-          <div>
+        <div className="flex flex-col  items-center justify-center gap-3  lg:p-0 w-full ">
+          <div className=' flex  flex-col items-end  '>
             <h1 className="text-4xl lg:text-[70px] font-poppins font-semibold leading-none tracking-tight lg:tracking-[-1.4px]">
-              Signup & Discover your next <span className="text-green-600">job</span>
+               Signup & Discover your next <span className="text-green-600">job</span>
             </h1>
           </div>
           <div className="backdrop-blur-[2px] bg-green-200 w-full lg:w-[492px] h-auto lg:h-[184px] flex flex-col items-center justify-center rounded-sm gap-2 p-4 lg:p-0">
          <div className='flex flex-col justify-evenly'>
-        <div className='flex justify-start'>
-        <img src='./searchIcon.png' alt='searchIcon' className='w-6 h-6'/>
+        <div className='flex justify-start space-x-2'>
+        <Image 
+  src="/searchIcon.png" 
+  alt="searchIcon" 
+  width={20} 
+  height={20} 
+/>
             <input
             
               type="text"
@@ -38,8 +47,13 @@ const hero = () => {
               className="input w-full lg:w-[492px] max-w-xs bg-green-200 align-middle text-[#000] font-light font-poppins text-lg lg:text-[20px] leading-normal border-none pb-3"
             />
         </div>
-        <div className='flex justify-start'>
-        <img src='./location.png' alt='searchIcon' className='w-6 h-8'/>
+        <div className='flex justify-start space-x-2'>
+        <Image 
+  src="/location.png" 
+  alt="locatioIcon" 
+  width={24} 
+  height={32} 
+/>
             <input
             
               type="text"
