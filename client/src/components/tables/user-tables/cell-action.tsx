@@ -40,7 +40,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const ondeactivate = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/putinactive/`+ data._id, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/putinactive/`+ data._id, {
         method: 'PUT',   
        
       });
@@ -62,7 +62,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onactivate = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/putactive/`+ data._id, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/putactive/`+ data._id, {
         method: 'PUT',   
        
       });
@@ -85,7 +85,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onConfirm = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/deleteuser/`+ data._id, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/deleteuser/`+ data._id, {
         method: 'DELETE',   
        
         
