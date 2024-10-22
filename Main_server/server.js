@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const JobRoutes = require('./routes/JobRoutes');
-const JobSearch = require('./routes/JobRoutes');
-const OrganizationRoutes = require("./routes/OrganizationRoutes")
+// const JobSearch = require('./routes/JobRoutes');
+// const OrganizationRoutes = require("./routes/OrganizationRoutes")
 // const MeeitngRoutes = require('./routes/MeetingRoutes')
 
 dotenv.config();
@@ -18,9 +18,9 @@ app.use(cors());
 
 // Routes
 app.use('/api/jobs', JobRoutes);
-app.use('/api/organization',OrganizationRoutes);
+// app.use('/api/organization',OrganizationRoutes);
 // app.use('/api/meetings', MeeitngRoutes);
-app.use('/api/jobsearch', JobSearch);
+// app.use('/api/jobsearch', JobSearch);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
