@@ -13,10 +13,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
+import { set } from "zod";
 
 export default function SignUpDialog() {
   const [values, setValues] = useState([15000, 100000]);
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -26,7 +27,19 @@ export default function SignUpDialog() {
     location: "",
     company: "",
   });
+  const clearinputs = () => {
 
+    setFormData({
+      title: "",
+      salary: "",
+      employmentTypes: [],
+      description: "",
+      location: "",
+      company: "",
+    });
+
+    setStep(1);
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
@@ -191,7 +204,7 @@ export default function SignUpDialog() {
           </div>
 
           <AlertDialogFooter>
-            <AlertDialogCancel type="button">Cancel</AlertDialogCancel>
+            <AlertDialogCancel type="button" onClick={clearinputs}>Cancel</AlertDialogCancel>
             {step > 1 && <Button onClick={handlePrevious}>Previous</Button>}
             <AlertDialogAction onClick={handleNext } >{step < 3  ? "Next" : "Submit"}</AlertDialogAction>
             
