@@ -25,6 +25,11 @@ export default function CardWithForm() {
       name: "Sample Project 1",
       framework: "Next.js",
     },
+    {
+      name: "Sample Project 1",
+      framework: "Next.js",
+    },
+   
    
   ]); // Initial example data
 
@@ -39,11 +44,11 @@ export default function CardWithForm() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full pl-3 pr-3 lg:pl-32 lg:pr-32">
   
       <div className="mt-4">
         {cards.map((card, index) => (
-          <Card key={index} className="w-full shadow-lg mt-4">
+          <Card key={index} className="w-full shadow-lg mt-4 bg-[#DCFCE0] text-black">
             <CardHeader>
               <CardTitle>{card.name}</CardTitle>
               <CardDescription>Framework: {card.framework}</CardDescription>
