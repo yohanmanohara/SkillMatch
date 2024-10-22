@@ -5,8 +5,8 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Configuration of the services
-const api_gateway = 'http://localhost:3001';
 const client = 'http://localhost:3001';
+const api_gateway = 'http://localhost:3001';
 const main_server = 'http://localhost:3002';
 const meeting_server = 'http://localhost:3003';
 const headhunting_server = 'http://localhost:5000';
