@@ -60,7 +60,7 @@ const haddlesubmit = async (e:any) => {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/resetpassword`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/resetpassword`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

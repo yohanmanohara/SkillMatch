@@ -45,7 +45,7 @@ async function onSubmitLogin(data: z.infer<typeof FormSchema>) {
 
 setLoading(true);
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/login`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
