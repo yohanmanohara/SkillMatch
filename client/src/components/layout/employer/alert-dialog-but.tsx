@@ -16,7 +16,7 @@ import { useState } from "react";
 
 export default function SignUpDialog() {
   const [values, setValues] = useState([15000, 100000]);
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
     title: "",
