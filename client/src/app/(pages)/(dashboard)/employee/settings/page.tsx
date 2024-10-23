@@ -35,7 +35,7 @@ export default function TabsDemo() {
   
       console.log(updateVehicle);
   
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/vehicle/addvehicle/?id=${userId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/main_server/api/vehicle/addvehicle/?id=${userId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

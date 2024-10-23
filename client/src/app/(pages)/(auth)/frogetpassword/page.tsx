@@ -47,7 +47,7 @@ async function onSubmitSignup(data: z.infer<typeof FormSchema>) {
   
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/otpfroget`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/otpfroget`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

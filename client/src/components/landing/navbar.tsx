@@ -36,7 +36,7 @@ const NavigationBar = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       if (userId) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/getsingleuser/?id=${userId}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getsingleuser/?id=${userId}`, {
           cache: 'no-store',
         });
         const data = await res.json();

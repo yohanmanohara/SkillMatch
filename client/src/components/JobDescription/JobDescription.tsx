@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 
 const JobDescription = () => {
@@ -9,7 +10,7 @@ const JobDescription = () => {
           company: 'Company Name',
           jobType: 'Full Time',
           tags: ['On Site', 'Full Time'],
-          logo: './JobIcon.png',
+          logo: '/JobIcon.png',
           salary: '$100,000 - $120,000',
           location: 'Dhaka, Bangladesh',
           posted: '14 Jun, 2021',
@@ -38,7 +39,7 @@ const JobDescription = () => {
      className=' flex flex-col justify-center   h-auto gap-5 items-center mt-20 pt-10 '>
         <div className=' top flex flex-col gap-3 items-center w-full  sm:flex-row sm:justify-between'>
             <div className='top-left flex justify-start gap-2 w-full '>
-                <img src={job.logo} alt='company logo'  className='w-24 h-24 rounded-[100px] '/>
+            <Image src={job.logo} alt="company logo" width={96} height={96} className="rounded-[100px]" />
                 
                 <div className='pt-3 flex flex-col justify-center pl-3 gap-2'>
                     <h1 className='font-sans text-2xl font-medium leading-[32px] '>{job.title}</h1>
@@ -116,7 +117,7 @@ const JobDescription = () => {
             <div className='right-cards flex flex-col items-center'>
                 <div className='top-card flex w-[300]  p-8 justify-center items-center gap-10 rounded-lg border-2 border-primary-50 sm:w-[536px] '>
                     <div className='top-card-left'>
-                        <div className='self-stretch text-gray-900 text-center font-sans text-base font-medium leading-6'>Salary (USD)</div>
+                        <div className='self-stretch text-center font-sans text-base font-medium leading-6'>Salary (USD)</div>
                         <div className='text-green-500 text-center font-sans text-md font-medium leading-6 sm:text-lg'>{job.salary}</div>
                         <div className='self-stretch text-gray-500 text-center font-sans text-sm font-normal leading-5'>Yearly salary</div>
                     </div>
@@ -134,19 +135,19 @@ const JobDescription = () => {
                         <div className='flex justify-start gap-20 '>
 
                             <div className='flex flex-col items-center '>
-                                <div> <img src='./Calendar.png' className='w-[32px] h-[32px] flex-shrink-0'/></div>
+                                <div> <Image src="/Calendar.png" alt="Calendar" width={32} height={32} className="flex-shrink-0" /></div>
                                 <div className='self-stretch text-gray-500 font-sans text-xs font-normal leading-5 uppercase'>Job Posted:</div>
                                 <div className='font-sans text-sm font-medium leading-5 self-stretch'>{job.posted}</div>
                             </div>
 
                             <div className='flex flex-col items-center'>
-                                <div> <img src='./Timer.png' className='w-[32px] h-[32px] flex-shrink-0'/></div>
+                                <div> <Image src="/Timer.png" alt="Timer" width={32} height={32} className="flex-shrink-0" /></div>
                                 <div className='self-stretch text-gray-500 font-sans text-xs font-normal leading-5 uppercase'>Job expire in:</div>
                                 <div className='font-sans text-sm font-medium leading-5 self-stretch'>{job.expire}</div>
                             </div>
 
                             <div className='flex flex-col items-center'>
-                                <div> <img src='./Stack.png' className='w-[32px] h-[32px] flex-shrink-0'/></div>
+                                <div>  <Image src="/Stack.png" alt="Stack" width={32} height={32} className="flex-shrink-0" /></div>
                                 <div className='self-stretch text-gray-500 font-sans text-xs font-normal leading-5 uppercase'>Job Level:</div>
                                 <div className='font-sans text-sm font-medium leading-5 self-stretch'>{job.level}</div>
                             </div>
@@ -154,13 +155,13 @@ const JobDescription = () => {
 
                             <div className='flex justify-start gap-20 pb-9'>
                                 <div className='flex flex-col items-center'>
-                                    <div> <img src='./Wallet.png' className='w-[32px] h-[32px] flex-shrink-0'/></div>
+                                    <div> <Image src="/Wallet.png" alt="Wallet" width={32} height={32} className="flex-shrink-0" /></div>
                                     <div className='self-stretch text-gray-500 font-sans text-xs font-normal leading-5 uppercase'>Experience</div>
                                     <div className='font-sans text-sm font-medium leading-5 self-stretch'>{job.experience}</div>
                                 </div>
 
                                 <div className='flex flex-col items-center'>
-                                    <div> <img src='./briefcase.png' className='w-[32px] h-[32px] flex-shrink-0'/></div>
+                                    <div> <Image src="/briefcase.png" alt="Briefcase" width={32} height={32} className="flex-shrink-0" /></div>
                                     <div className='self-stretch text-gray-500 font-sans text-xs font-normal leading-5 uppercase'>Education</div>
                                     <div className='font-sans text-sm font-medium leading-5 self-stretch'>{job.education}</div>
                                 </div>
@@ -171,11 +172,11 @@ const JobDescription = () => {
                     <div className='flex flex-col gap-3'>
                         <div className='flex justify-start font-sans text-lg font-medium leading-7'>Share this job</div>
                         <div className=' flex gap-1 pb-9  sm:flex sm:justify-evenly'>
-                        <Button variant={'outline'}><img src='./LinkSimple.png'className='w-6 h-6'/> Copy Link</Button>
-                        <Button variant={'outline'}><img src='./LinkedIn.png'className=' w-4 h-4 sm:w-5 h-5'/></Button>
-                        <Button variant={'outline'}><img src='./FB.png'className='w-5 h-5'/></Button>
-                        <Button variant={'outline'}><img src='./twitter.png'className='w-5 h-5'/></Button>
-                        <Button variant={'outline'}><img src='./envelop.png'className='w-5 h-5'/></Button>
+                            <Button variant={'outline'}><Image src="/LinkSimple.png" alt="Copy Link" width={24} height={24} />Copy Link</Button>
+                            <Button variant={'outline'}><Image src="/LinkedIn.png" alt="LinkedIn" width={20} height={20} className="sm:w-5 sm:h-5" /></Button>
+                            <Button variant={'outline'}><Image src="/FB.png" alt="Facebook" width={20} height={20} /></Button>
+                            <Button variant={'outline'}><Image src="/twitter.png" alt="Twitter" width={20} height={20} /></Button>
+                            <Button variant={'outline'}><Image src="/envelop.png" alt="Envelope" width={20} height={20} /></Button>
 
                         </div>
                         

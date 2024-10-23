@@ -24,7 +24,7 @@
         }
     
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/protected`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/protected`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${token}`,

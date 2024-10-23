@@ -55,5 +55,4 @@ app.use('/job_suggestion_server', createProxyMiddleware({
 
 // Start the API Gateway
 app.listen(PORT, () => {
-  console.log(`API Gateway is running on port ${PORT}`);
 });

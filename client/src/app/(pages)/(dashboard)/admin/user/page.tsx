@@ -14,7 +14,7 @@ export default function UserPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/getusers`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getusers`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -33,6 +33,10 @@ const page = () => {
     <Contactus/>
     </Container>
 
+    <Container>
+    <JobDescription/>
+    </Container>
+
    
       
     <Footer/> 

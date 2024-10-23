@@ -61,7 +61,7 @@ const haddlesubmit = async (e:any) => {
         setLoading(false);
      }  
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/verifyotp`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/verifyotp`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
