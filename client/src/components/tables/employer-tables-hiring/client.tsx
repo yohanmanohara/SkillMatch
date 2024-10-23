@@ -21,12 +21,7 @@ export const UserClient = () => {
           title={`Total Jobs `}
           description="Manage users "
         />
-        {/* <Button
-          className="text-xs md:text-sm"
-          onClick={() => router.push(`/employer/job/addnew`)}
-        >
-          <Plus className="mr-2 h-4 w-4" /> Add New
-        </Button> */}
+       
         <AlertDialogDemo/>
       </div>
       <Separator />

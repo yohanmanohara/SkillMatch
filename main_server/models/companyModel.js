@@ -5,36 +5,36 @@ const organizationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-  
+    jobid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        required: true
+    },
     orgType: {
         type: String,
         enum: ['Corporation', 'Non-Profit', 'Government Agency']
     },
-    
-    orgaddress: {
+    industry: String,
+    address: {
         street: String,
         city: String,
         state: String,
         postalCode: String,
         country: String
     },
-    orgEmail: {
+    contactEmail: {
         type: String,
         required: true
     },
-    orgPhone: {
+    contactPhone: {
         type: String,
-        required: true
-    },
-    jobid: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
         required: true
     },
     website: String,
     description: String,
+    logo: String, // Assuming you store the path or URL of the uploaded logo
     establishedDate: Date,
-    
+    socialMedia: String,
 });
 
 const Organization = mongoose.model('Organization', organizationSchema);
