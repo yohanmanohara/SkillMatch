@@ -1,79 +1,50 @@
-// 
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const jobSchema = new Schema({
-    logo:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Organization',
-        required: true
+const JobSchema = new mongoose.Schema({
+  jobTitle: {
+    type: String,
+    required: true,
+  },
+  typeOfEmployment: {
+    type: String, // e.g., "Full-time", "Part-time", "Contract"
+    required: true,
+  },
+  salary: {
+    type: String, // Can be adjusted to a Number if it's a fixed value
+  },
+  jobDescriptionShort: {
+    type: String,
+  },
+  jobDescriptionLong: {
+    experience: {
+      type: String, // Experience requirements (e.g., "2-4 years")
     },
-    title: {
-        type: String,
-        required: true
+    requirements: {
+      type: [String], // List of key requirements
     },
-    department: {
-        type: String,
-        required: true
+    desirable: {
+      type: [String], // List of desirable skills/traits
     },
-    employmentType: {
-        type: String,
-        enum: ['Full-Time', 'Part-Time', 'Contract', 'Temporary', 'Internship'],
-        required: true
+    benefits: {
+      type: [String], // List of benefits provided
     },
-    modality: {
-        type: String,
-        enum: ['Remote', 'On-Site', 'Hybrid'],
-        required: true
+    qualifications: {
+      type: [String], // List of qualifications needed
     },
-    skills: {
-        type: [String]
-    },
-    location: {
-        type: String,
-        required: true
-    },
-    jobDescription: {
-        type: String,
-        required: true
-    },
-    includeSalary: {
-        type: Boolean,
-        default: true 
-    },
-    currency: {
-        type: String,
-        required: true
-    },
-    paidEvery: {
-        type: String,
-        required: true
-    },
-    minSalary: {
-        type: Number,
-        required: true
-    },
-    maxSalary: {
-        type: Number,
-        required: true
-    },
-    experienceLevel: {
-        type: String,
-        required: true
-    },
-    status: {
-        type: String,
-        enum: ['open', 'closed', 'filled'],
-        default: 'open'
-    },
-    timeStamp:{
-        type: Date,
-        default: Date.now
-    }
+  },
+  location: {
+    type: String,
+  },
+  expireInDays: {
+    type: Number, // Number of days until the job expires
+  },
+  fromOrganization: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Organization', // Reference to an Organization collection
+  },
+  jobLevel: {
+    type: String, // e.g., "Entry Level", "Mid Level", "Senior Level"
+  },
 });
 
-
-const Job = mongoose.model('Job', jobSchema);
-
-module.exports = Job;
- 
+module.exports = mongoose.model('Job', JobSchema);
