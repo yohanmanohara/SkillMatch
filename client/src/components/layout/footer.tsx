@@ -20,7 +20,7 @@ const Footer = () => {
         </div>
 
         {/* Help Section */}
-        <div className="mb-4 md:mb-0">
+        <div className="mb-4 md:mb-0 pl-12">
         <h5 className="font-bold mb-2">Help</h5>
           <ul>
             <li><a href="#" className="text-gray-600 hover:text-black text-lg">Customer Support</a></li>
@@ -30,7 +30,7 @@ const Footer = () => {
         </div>
 
         {/* Legal Section */}
-        <div className="mb-4 md:mb-0">
+        <div className="mb-4 md:mb-0 pl-12">
         <h5 className="font-bold mb-2">Legal</h5>
           <ul>
             <li><a href="#" className="text-gray-600 hover:text-black text-lg">Terms of service</a></li>
