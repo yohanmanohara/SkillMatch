@@ -58,7 +58,7 @@ const userSchema = new Schema({
   },
   savedjobs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Job' ,required: false}],
 
-  company: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Company' ,required: true}], 
+  compan: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Company' ,required: true}], 
 
 
 
