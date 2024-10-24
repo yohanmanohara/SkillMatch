@@ -23,7 +23,7 @@ const page = () => {
     <JobCards/>
     </Container>
    
-    
+  
     <Container>
     <Customerfeedback/>
     
