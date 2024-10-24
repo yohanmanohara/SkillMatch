@@ -6,11 +6,11 @@ const JobSchema = new mongoose.Schema({
     required: true,
   },
   typeOfEmployment: {
-    type: String, // e.g., "Full-time", "Part-time", "Contract"
+    type: String, 
     required: true,
   },
   salary: {
-    type: String, // Can be adjusted to a Number if it's a fixed value
+    type: String, 
   },
   jobDescriptionShort: {
     type: String,
