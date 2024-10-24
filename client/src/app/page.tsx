@@ -23,7 +23,7 @@ const page = () => {
     <JobCards/>
     </Container>
    
-   <img src="" alt="" />
+  
     <Container>
     <Customerfeedback/>
     
