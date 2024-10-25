@@ -23,12 +23,12 @@ function page() {
       <AccordionContent>
       To apply for a credit card online:
 
-        1. Go to the bank's website or app.
+        1. Go to the bank&apos;s website or app.
         2. Choose a credit card.
         3. Fill out the application with your details.
         4. Submit and wait for approval.
 
-        It’s quick and convenient!
+        It&apo;s quick and convenient!
       </AccordionContent>
     </AccordionItem>
     <AccordionItem value="item-3">
@@ -48,7 +48,7 @@ function page() {
     <AccordionItem value="item-5">
       <AccordionTrigger> How can I check my credit card balance and transactions?</AccordionTrigger>
       <AccordionContent>
-      You can check your credit card balance and transactions through your bank's mobile app, online banking portal, or by contacting customer service.
+      You can check your credit card balance and transactions through your bank&apos;s mobile app, online banking portal, or by contacting customer service.
       </AccordionContent>
     </AccordionItem>
 

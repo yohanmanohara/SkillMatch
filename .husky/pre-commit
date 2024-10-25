@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running pre-commit hook"
+
+# Change to client directory
+cd client || { echo "Client directory not found!" >&2; exit 1; }
+echo "Changed to client directory"
+# Run ESLint
+npm run lint
+
+# Check if ESLint was successful
+if [ $? -eq 0 ]; then
+    echo "ESLint check passed!"
+    exit 0  # Exit with success
+else
+    echo "ESLint check failed!" >&2
+    exit 1  # Exit with failure
+fi
