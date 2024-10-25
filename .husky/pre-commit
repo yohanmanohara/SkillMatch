@@ -1,0 +1,25 @@
+# #!/bin/sh
+# "$(dirname "$0")/husky.sh"
+echo "Pre-commit hook is running..."
+cd client
+# Check if the client directory exists
+if [ -d"client" ]; then
+    echo "Building the client..."
+    npm run build
+    BUILD_STATUS=$?
+    
+else
+    echo "Client directory not found!"
+    exit 1
+fi
+
+if [ $BUILD_STATUS -ne 0 ]; then
+    echo "Client build failed! Commit aborted."
+    exit 1  # Ensure you exit with a non-zero status
+else
+    echo "Client built successfully."
+    exit 0
+fi
+
+echo "Client build succeeded. Proceeding with the commit."
+
