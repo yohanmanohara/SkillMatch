@@ -179,7 +179,7 @@ if (loading) {
 
               <div className="w-full flex items-center justify-center flex-col">
                 <p>
-                  Don't have an account?{" "}
+                  Don&apos;t have an account?{" "}
                   <a href="/signup" className="text-blue-700 cursor-pointer">
                     Click here
                   </a>

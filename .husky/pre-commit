@@ -2,26 +2,18 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 echo "Running pre-commit hook"
-echo "Pre-commit hook is running..."
-cd client
-# Check if the client directory exists
-if [ -d"client" ]; then
-    echo "Building the client..."
-    npm run build
-    BUILD_STATUS=$?
-    
+
+# Change to client directory
+cd client || { echo "Client directory not found!" >&2; exit 1; }
+
+# Run ESLint
+npm run lint
+
+# Check if ESLint was successful
+if [ $? -eq 0 ]; then
+    echo "ESLint check passed!"
+    exit 0  # Exit with success
 else
-    echo "Client directory not found!"
-    exit 1
+    echo "ESLint check failed!" >&2
+    exit 1  # Exit with failure
 fi
-
-if [ $BUILD_STATUS -ne 0 ]; then
-    echo "Client build failed! Commit aborted."
-    exit 1  # Ensure you exit with a non-zero status
-else
-    echo "Client built successfully."
-    exit 0
-fi
-
-echo "Client build succeeded. Proceeding with the commit."
-

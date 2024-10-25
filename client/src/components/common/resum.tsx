@@ -7,6 +7,7 @@ import Dropzone, { DropzoneState } from 'shadcn-dropzone';
 import { useRouter } from 'next/navigation';
 import { useRef } from "react";
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 const Resume = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -108,7 +109,7 @@ const Resume = () => {
                                                 {uploadedFiles.map((file, index) => (
                                                     file.type.startsWith('image/') && (
                                                         <div key={index} className="w-16 h-16 overflow-hidden rounded-md">
-                                                            <img
+                                                            <Image
                                                                 src={URL.createObjectURL(file)}
                                                                 alt={file.name}
                                                                 className="object-cover w-full h-full"

@@ -63,7 +63,7 @@ const JobDescription = () => {
             
             
             <div className='top-right flex justify-end gap-1  w-full pr-3  '>
-                <Button variant={'outline'} ><img src='./BookmarkSimple.png'/></Button>
+                <Button variant={'outline'} ><Image src='./BookmarkSimple.png' alt={''}/></Button>
                 <Button variant={'secondary'} className='w-auto'>Apply Now</Button>
             </div>
 
@@ -122,7 +122,7 @@ const JobDescription = () => {
                         <div className='self-stretch text-gray-500 text-center font-sans text-sm font-normal leading-5'>Yearly salary</div>
                     </div>
                     <div className='top-card-right flex flex-col items-center'>
-                        <div className=''> <img src='./Map.png' className='w-[38px] h-[38px] flex-shrink-0'/></div>
+                        <div className=''> <Image src='./Map.png' className='w-[38px] h-[38px] flex-shrink-0' alt={''}/></div>
                         <div className='text-green-500 text-center font-sans text-md font-medium leading-6 sm:text-lg'>Job Location</div>
                         <div className='self-stretch text-gray-500 text-center font-sans text-sm font-normal leading-5'>{job.location}</div>
                     </div>
