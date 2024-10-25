@@ -4,11 +4,14 @@
 echo "Running pre-push hook"
 
 # Run the npm build command
+
+cd client || { echo "Client directory not found!" >&2; exit 1; }
 npm run build
+echo "Changed to client directory"
 
 # Check if the build command was successful
 if [ $? -eq 0 ]; then
-    echo "Build successful!"
+    echo "Build successful! pushing to remote"
     exit 0  # Exit with success
 else
     echo "Build failed!" >&2
