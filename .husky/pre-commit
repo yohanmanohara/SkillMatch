@@ -1,5 +1,7 @@
-# #!/bin/sh
-# "$(dirname "$0")/husky.sh"
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running pre-commit hook"
 echo "Pre-commit hook is running..."
 cd client
 # Check if the client directory exists
