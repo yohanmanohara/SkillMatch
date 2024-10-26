@@ -14,7 +14,7 @@ const page = () => {
     <> 
        
       
-       <Navbar />
+    <Navbar />
        
     <Hero/>
     <Buttonfilter />

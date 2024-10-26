@@ -3,9 +3,9 @@
 
 echo "Running pre-push hook"
 
-# Run the npm build command
 
 cd client || { echo "Client directory not found!" >&2; exit 1; }
+echo "in client directory"
 npm run build
 echo "Changed to client directory"
 
