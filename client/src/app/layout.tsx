@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import "../styles/spiner.css"
 import localFont from "next/font/local";
-import { ThemeProvider } from "next-themes";
+import  {ThemeProvider}  from "@/components/layout/ThemeToggle/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 
 
@@ -37,16 +37,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system" // Ensure the system theme is the default
+          defaultTheme="system"
           enableSystem
         >
-         
           {children}
           <Toaster />
         </ThemeProvider>
