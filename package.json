@@ -1,13 +1,12 @@
 {
  "devDependencies": {
-  
- 
+  "@commitlint/cli": "^19.5.0",
+  "@commitlint/config-conventional": "^19.5.0",
   "globals": "^15.11.0",
   "husky": "^8.0.0",
   "typescript-eslint": "^8.11.0"
  },
  "scripts": {
   "prepare": "husky install"
-   
  }
 }
