@@ -21,7 +21,7 @@ const Container: React.FC<ContainerfProps> = ({
         md:px-10
         sm:px-10
         px-2
-        pt-32
+        pt-3
         
         ${fullHeight ? 'h-full' : ''}
         ${fullScreen ? 'h-screen' : ''}

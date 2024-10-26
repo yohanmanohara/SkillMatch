@@ -7,13 +7,14 @@ import JobCards from '@/components/landing/JobCards';
 import  Container  from '@/components/common/container';
 import Customerfeedback from '@/components/landing/customerfeedback';
 import Contactus from "@/components/landing/Getintouch";
+import JobDescription from '@/components/JobDescription/JobDescription';
 
 const page = () => {
   return (
     <> 
        
       
-       <Navbar />
+    <Navbar />
        
     <Hero/>
     <Buttonfilter />
@@ -22,7 +23,7 @@ const page = () => {
     <JobCards/>
     </Container>
    
-    
+  
     <Container>
     <Customerfeedback/>
     
@@ -31,9 +32,14 @@ const page = () => {
     <Container>
     <Contactus/>
     </Container>
-    <Footer>
+
+    <Container>
+    <JobDescription/>
+    </Container>
+
+   
       
-    </Footer>
+    <Footer/> 
     </>
    
   )

@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,10 +22,25 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "components/*": ["./src/app/components/*"],
-    }
+      "@/*": [
+        "./src/*"
+      ],
+      "components/*": [
+        "./src/app/components/*"
+      ]
+    },
+    "target": "ES2017"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/data/jobtitles.js", "src/components/layouts/cards/SearchComponent.tsx", ".next/types/app/(pages)/(dashboard)/employer/settings/profile/page.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/data/jobtitles.js",
+    "src/components/layouts/cards/SearchComponent.tsx",
+    ".next/types/app/(pages)/(dashboard)/employer/settings/profile/page.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

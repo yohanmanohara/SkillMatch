@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button} from '@/components/ui/button';
+import Image from 'next/image';
 const JobCards = () => {
   const jobData = [
     {
@@ -22,10 +23,12 @@ const JobCards = () => {
         >
           <div className="flex flex-col lg:w-1/4 items-center">
             <div className="bg-blue-500 rounded-full p-3">
-              <img
+              <Image
                 src={job.logo}
                 alt="Company Logo"
                 className="h-12 w-12"
+                width={48}
+                height={48}
               />
             </div>
 

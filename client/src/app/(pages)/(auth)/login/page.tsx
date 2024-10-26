@@ -45,7 +45,7 @@ async function onSubmitLogin(data: z.infer<typeof FormSchema>) {
 
 setLoading(true);
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/login`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -179,7 +179,7 @@ if (loading) {
 
               <div className="w-full flex items-center justify-center flex-col">
                 <p>
-                  Don't have an account?{" "}
+                  Don&apos;t have an account?{" "}
                   <a href="/signup" className="text-blue-700 cursor-pointer">
                     Click here
                   </a>
