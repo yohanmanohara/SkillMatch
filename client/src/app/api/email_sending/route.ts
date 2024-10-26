@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 import { NextResponse } from 'next/server';
 
 // Handle POST requests
-export async function POST(req) {
+export async function POST(req:any) {
   const { firstName, lastName, email, companyName, source, needs } = await req.json();
 
   if (!firstName || !lastName || !email || !companyName || !source || !needs) {
@@ -45,6 +45,6 @@ export async function POST(req) {
 }
 
 // Optionally handle other methods
-export async function GET(req) {
+export async function GET(req:any) {
   return NextResponse.json({ message: 'This endpoint only accepts POST requests.' });
 }
