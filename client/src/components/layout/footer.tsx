@@ -5,13 +5,13 @@ const Footer = () => {
     <footer className="bg-[#92EDAD] text-black pb-8">
       <div className='md:flex md:justify-between sm:px-12 px-4 md:items-center py-2'></div>
 
-    {/* Top Section with SkillMatch */}
+    {/* Top SkillMatch logo section */}
       <div className="text-2xl font-bold text-left pl-16 mb-4">SkillMatch</div>
       <div className='md:flex md:justify-between sm:px-12 px-4 md:items-center py-2'>
       
         {/* Audience Section */}
         <div className="mb-4 md:mb-0 pl-12">
-          <h5 className="font-bold mb-4">Audience</h5>
+          <h5 className="font-bold mb-2">Audience</h5>
           <ul>
             <li><a href="#" className="text-gray-600 hover:text-black text-lg">Employers</a></li>
             <li><a href="#" className="text-gray-600 hover:text-black text-lg">Hiring Managers</a></li>
@@ -20,7 +20,7 @@ const Footer = () => {
         </div>
 
         {/* Help Section */}
-        <div className="mb-4 md:mb-0">
+        <div className="mb-4 md:mb-0 pl-12">
         <h5 className="font-bold mb-2">Help</h5>
           <ul>
             <li><a href="#" className="text-gray-600 hover:text-black text-lg">Customer Support</a></li>
@@ -30,7 +30,7 @@ const Footer = () => {
         </div>
 
         {/* Legal Section */}
-        <div className="mb-4 md:mb-0">
+        <div className="mb-4 md:mb-0 pl-12">
         <h5 className="font-bold mb-2">Legal</h5>
           <ul>
             <li><a href="#" className="text-gray-600 hover:text-black text-lg">Terms of service</a></li>
@@ -41,12 +41,12 @@ const Footer = () => {
 
         <div className="flex flex-col items-end">
           {/* Social Media Icons */}
-          <div className="flex space-x-2 mb-4">
+          <div className="flex space-x-6 mb-8">
           <Image src="/socialmediaIcons/mdi_github.png" width={20} height={30} alt="Logo" />
           <Image src="/socialmediaIcons/linkedinlg.png" width={20} height={30} alt="Logo" />
-          <Image src="/socialmediaIcons/mdi_github.png" width={20} height={30} alt="Logo" />
-          <Image src="/socialmediaIcons/mdi_github.png" width={20} height={30} alt="Logo" />
-          <Image src="/socialmediaIcons/mdi_github.png" width={20} height={30} alt="Logo" />
+          <Image src="/socialmediaIcons/uil_facebook.png" width={20} height={30} alt="Logo" />
+          <Image src="/socialmediaIcons/ri_instagram-fill.png" width={20} height={30} alt="Logo" />
+          <Image src="/socialmediaIcons/mdi_youtube.png" width={20} height={30} alt="Logo" />
             
           </div>
 
@@ -57,7 +57,7 @@ const Footer = () => {
               placeholder=" Enter your email"
               className="bg-white py-2 px-4"
             />
-            <button className="text-white font-bold py-2 py-4 font-mono">Subscribe</button>
+            <button className="bg-black text-white font-bold py-2 px-4 font-mono">Subscribe</button>
           </div>
         </div>
 
