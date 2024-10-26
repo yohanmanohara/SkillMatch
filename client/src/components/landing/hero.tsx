@@ -12,14 +12,12 @@ const hero = () => {
         <div className=' w-full h-full flex justify-start  '>
           <div className='flex items-center justify-start'>
           <Image
-    src="/hero_new.png"
-    alt="Hero"
-    layout="responsive"
-    objectFit="cover"
-    width={800}
-    height={800}
-  
-  />
+               src="/hero_new.png"
+               alt="Hero"
+               width={800}
+               height={800}
+             
+             />
           </div>
         
         </div>
@@ -78,7 +76,7 @@ const hero = () => {
         ].map((item, index) => (
           <div key={index} className='card p-5 items-center gap-5 rounded-lg bg-gray-50 shadow-[0_12px_48px_0_rgba(0,44,109,0.1)] flex flex-row  sm:flex justify-center w-full sm:w-auto'>
         <Image
-          src='/OverviewIcon.png'
+          src='/address.png'
           alt={`icon${index + 1}`}
           width={40}
           height={40}
