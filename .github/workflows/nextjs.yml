@@ -27,21 +27,18 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      - name: Change to client directory
-        run: cd client
-
       - name: Install dependencies
         run: npm install
         working-directory: client
 
-      - name: Build with Next.js
+      - name: Build and export static site
         run: npm run build
         working-directory: client
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: client/.next
+          path: client/out  # Ensure this path matches the exported directory
 
   deploy:
     runs-on: ubuntu-latest
