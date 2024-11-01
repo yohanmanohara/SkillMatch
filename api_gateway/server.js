@@ -7,9 +7,9 @@ const PORT = process.env.PORT || 3001;
 
 // Configuration of the services within Docker's network
 const client = 'http://localhost:3000';
-const api_gateway = 'http://localhost:3001';
-const main_server = 'http://localhost:3002';
-const meeting_server = 'http://localhost:3003';
+const api_gateway = 'http://api_gateway:3001';
+const main_server = 'http://main_server:3002';
+const meeting_server = 'http://meeting_server:3003';
 const headhunting_server = 'http://localhost:5000';
 const job_suggestion_server = 'http://localhost:5001';
 
@@ -66,4 +66,4 @@ const server = app.listen(process.env.PORT || 3001, () => {
 //   console.log(`API Gateway running on port ${PORT}`);
 // });
 
-server.timeout = 600000; // 
+server.timeout = 6000000000; // 
