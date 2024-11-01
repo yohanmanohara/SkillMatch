@@ -1,0 +1,44 @@
+services:
+  main_server:
+    build: ./main_server
+    container_name: main_server
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./main_server:/app
+      - /app/node_modules
+    environment:
+      - PORT=3002
+      - MONGO_URI=mongodb+srv://Recruitwise:groupproject@recruitwise.us4pdz2.mongodb.net/
+      - JWT_SECRET=secret
+      - EMAIL=warushayohan80@gmail.com
+      - EMAIL_PASSWORD=wlasedetnswsefnc
+
+  api_gateway:
+    build: ./api_gateway
+    container_name: api_gateway
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./api_gateway:/app
+      - /app/node_modules
+    environment:
+      - PORT=3001
+
+  client:
+    build: ./client
+    container_name: client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_SERVER_URL="http://localhost:3001"
+      - MONGO_URI=mongodb+srv://Recruitwise:groupproject@recruitwise.us4pdz2.mongodb.net/
+      - JWT_SECRET=secret
+      - EMAIL=warushayohan80@gmail.com
+      - EMAIL_PASSWORD=wlasedetnswsefnc
+
+volumes:
+  app:
