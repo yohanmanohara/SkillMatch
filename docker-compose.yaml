@@ -37,7 +37,8 @@ services:
       - ./client:/app
       - client_node_modules:/app/node_modules
     environment:
-      - NEXT_PUBLIC_SERVER_URL=http://api_gateway:3001
+      - NEXT_PUBLIC_SERVER_URL=http://localhost:3001
+      
     depends_on:
       - api_gateway
 

@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3002;
 
-// Middleware
+// Middlewares
 app.use(express.json());
 app.use(cors());
 

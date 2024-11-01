@@ -5,11 +5,15 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Configuration of the services within Docker's network
-const client = 'http://client:3000';
-const main_server = 'http://main_server:3002';
-const meeting_server = 'http://meeting_server:3003';
-const headhunting_server = 'http://headhunting_server:5000';
-const job_suggestion_server = 'http://job_suggestion_server:5001';
+const client = 'http://localhost:3000';
+const api_gateway = 'http://localhost:3001';
+const main_server = 'http://localhost:3002';
+const meeting_server = 'http://localhost:3003';
+const headhunting_server = 'http://localhost:5000';
+const job_suggestion_server = 'http://localhost:5001';
+
+
+
 
 // Proxy routes
 app.use('/client', createProxyMiddleware({
