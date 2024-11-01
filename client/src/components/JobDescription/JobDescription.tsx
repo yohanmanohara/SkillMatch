@@ -8,7 +8,7 @@ const JobDescription = () => {
         {
           title: 'Cloud Solutions Architect',
           company: 'Company Name',
-          jobType: 'Full Time',
+          jobType: 'Full-Time',
           tags: ['On Site', 'Full Time'],
           logo: '/JobIcon.png',
           salary: '$100,000 - $120,000',
@@ -37,20 +37,20 @@ const JobDescription = () => {
 
     <div key={index} style={{ width: '100%', height: 'auto' }}  
      className=' flex flex-col justify-center   h-auto gap-5 items-center mt-20 pt-10 '>
-        <div className=' top flex flex-col gap-3 items-center w-full  sm:flex-row sm:justify-between'>
+        <div className=' top flex flex-col gap-3 items-center w-full md:flex-row md:justify-between  sm:flex-row sm:justify-between'>
             <div className='top-left flex justify-start gap-2 w-full '>
             <Image src={job.logo} alt="company logo" width={96} height={96} className="rounded-[100px]" />
                 
                 <div className='pt-3 flex flex-col justify-center pl-3 gap-2'>
-                    <h1 className='font-sans text-2xl font-medium leading-[32px] '>{job.title}</h1>
-                    <div className='flex justify-between gap-2 font-sans text-base font-normal leading-[28px]'>
-                        <p>{job.company}</p>
-                        <div className='flex items-center gap-2 px-1 py-0 rounded-full bg-green-500 text-white font-inter text-xs w-auto sm:text-sm sm:px-1'>
-                        <p>{job.jobType}</p>
+                    <div className='font-sans text-2xl font-medium leading-[32px] '>{job.title}</div>
+                    <div className='flex justify-evenly gap-2 font-sans text-base font-normal leading-[28px] w-auto'>
+                        <div>{job.company}</div>
+                        <div className='flex items-center justify-center gap-2 px-2 rounded-full bg-green-500 text-xs min-w-fit max-h-fit  sm:text-sm sm:justify-center'>
+                            <div>{job.jobType}</div>
                         </div>
                        
-                        <div className='flex p-[2px] px-2 items-center  gap-2 rounded-full bg-red-300 text-red-600 text-xs w-auto sm:text-sm sm:px-1'>
-                        <p>Featured</p>
+                        <div className='flex items-center justify-center gap-2 px-2 rounded-full bg-red-300 text-red-600 text-xs min-w-fit max-h-fit sm:text-sm sm:justify-center'>
+                            <div>Featured</div>
                         </div>
                        
                     
@@ -70,20 +70,20 @@ const JobDescription = () => {
 
         </div>
 
-        <div className='bottom flex flex-col gap-7 sm:flex sm:flex-row'>
+        <div className='bottom flex flex-col gap-7 sm:flex sm:flex-row md:flex md:flex-row'>
            
             <div className='left-description flex flex-col gap-5 pb-5'>
                 <div>
                     <h1 className='font-medium text-18'>Job Description</h1>
                     <div className='text-base font-normal leading-6  flex flex-col gap-2 '>
                     {job.description.map((paragraph, index) => (
-        <p key={index}>{paragraph}</p>
+        <div key={index}>{paragraph}</div>
       ))}
                     </div>
                 
                 </div>
                 <div>
-                    <h1 className='font-medium text-18'>Requirements</h1>
+                    <div className='font-medium text-18'>Requirements</div>
                     <ul className='list-disc list-inside'>
                         {job.requirements.split(',').map((requirement, index) => (
                         <li key={index}>{requirement.trim()}</li>
@@ -92,7 +92,7 @@ const JobDescription = () => {
                 
                 </div>
                 <div>
-                    <h1 className='font-medium text-18'>Desirable</h1>
+                    <div className='font-medium text-18'>Desirable</div>
                     <ul className='list-disc list-inside'>
                         {job.desirable.split(',').map((desirable, index) => (
                         <li key={index}>{desirable.trim()}</li>
@@ -102,7 +102,7 @@ const JobDescription = () => {
                 
                 </div>
                 <div>
-                    <h1 className='font-medium text-18'>Benifits</h1>
+                    <div className='font-medium text-18'>Benifits</div>
                     <ul className='list-disc list-inside'>
                         {job.benifits.split(',').map((benifit, index) => (
                         <li key={index}>{benifit.trim()}</li>

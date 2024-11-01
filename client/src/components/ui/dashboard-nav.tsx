@@ -23,7 +23,7 @@ interface DashboardNavProps {
   isMobileNav?: boolean;
 }
 
-export function DashboardNav({
+export function   DashboardNav({
   items,
   setOpen,
   isMobileNav = false

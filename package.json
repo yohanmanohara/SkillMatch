@@ -8,5 +8,9 @@
  },
  "scripts": {
   "prepare": "husky install"
+  
+ },
+ "dependencies": {
+  "nodemon": "^3.1.7"
  }
 }

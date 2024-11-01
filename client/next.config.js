@@ -3,6 +3,12 @@ module.exports = {
   images: {
     domains: ['lh3.googleusercontent.com'],
   },
-  output: 'export', 
-  basePath: '/SkillMatch/client',// Enables static exports
+  webpackDevMiddleware: (config) => {
+    config.watchOptions = {
+      poll: 1000,
+      aggregateTimeout: 300,
+    };
+    return config;
+  },
+  
 };
