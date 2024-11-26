@@ -6,7 +6,7 @@ function page() {
   return (
     <div className=' flex flex-col justify-evenly gap-10'>
       <div className='top'>
-        <div className='font-semibold text-[40px] leading-[normal]'>Need help? We’ve got your back</div>
+        <div className='font-semibold text-[40px] leading-[normal]'>Need help? We&apos;ve got your back</div>
       </div>
 
       <div className='bottom flex flex-col justify-evenly gap-10 '>
