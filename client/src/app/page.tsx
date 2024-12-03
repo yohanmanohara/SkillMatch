@@ -8,7 +8,7 @@ import  Container  from '@/components/common/container';
 import Customerfeedback from '@/components/landing/customerfeedback';
 import Contactus from "@/components/landing/Getintouch";
 import JobDescription from '@/components/JobDescription/JobDescription';
-
+import Cards from '@/components/cards/job_card';
 const page = () => {
   return (
     <> 
@@ -37,7 +37,7 @@ const page = () => {
     <JobDescription/>
     </Container>
 
-   
+
       
     <Footer/> 
     </>
