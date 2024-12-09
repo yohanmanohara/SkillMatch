@@ -1,8 +1,8 @@
 trigger:
-- development
+  - development
 
 resources:
-- repo: self
+  - repo: self
 
 variables:
   dockerRegistryServiceConnection: '5e2bcc53-3632-4788-b75f-9726ec204fc3'
@@ -17,40 +17,40 @@ variables:
     client: '$(Build.SourcesDirectory)/client/Dockerfile'
 
 stages:
-- stage: Build
-  displayName: Build and push stage
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - task: Docker@2
-      displayName: Build and push api_gateway image
-      inputs:
-        command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePaths.api_gateway)
-        containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+  - stage: Build
+    displayName: Build and push stage
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: $(vmImageName)
+        steps:
+          - task: Docker@2
+            displayName: Build and push api_gateway image
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepository)
+              dockerfile: $(dockerfilePaths.api_gateway)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)
 
-    - task: Docker@2
-      displayName: Build and push main_server image
-      inputs:
-        command: buildAndPush
-        repository: $(imageRepository)/main_server
-        dockerfile: $(dockerfilePaths.main_server)
-        containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+          - task: Docker@2
+            displayName: Build and push main_server image
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepository)/main_server
+              dockerfile: $(dockerfilePaths.main_server)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)
 
-    - task: Docker@2
-      displayName: Build and push client image
-      inputs:
-        command: buildAndPush
-        repository: $(imageRepository)/client
-        dockerfile: $(dockerfilePaths.client)
-        containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tag)
+          - task: Docker@2
+            displayName: Build and push client image
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepository)/client
+              dockerfile: $(dockerfilePaths.client)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)
