@@ -57,13 +57,8 @@ app.use('/job_suggestion_server', createProxyMiddleware({
   },
 }));
 
-const server = app.listen(process.env.PORT || 3001, () => {
-  console.log(`API Gateway is running on port ${process.env.PORT || 3001}`);
+
+app.listen(PORT, () => {
+  console.log(`API Gateway running on port ${PORT}`);
 });
 
-// Start the API Gateway
-// app.listen(PORT, () => {
-//   console.log(`API Gateway running on port ${PORT}`);
-// });
-
-server.timeout = 6000000000; // 

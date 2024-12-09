@@ -1,0 +1,61 @@
+trigger:
+  - development
+
+resources:
+  - repo: self
+
+variables:
+  dockerRegistryServiceConnection: '5e2bcc53-3632-4788-b75f-9726ec204fc3'
+  imageRepository: 'yohanmanoharaskillmatch'
+  containerRegistry: 'skillmatch.azurecr.io'
+  tag: '$(Build.BuildId)'
+  vmImageName: 'ubuntu-latest'
+
+  api_gateway_dockerfile: '$(Build.SourcesDirectory)/api_gateway/Dockerfile'
+  main_server_dockerfile: '$(Build.SourcesDirectory)/main_server/Dockerfile'
+  client_dockerfile: '$(Build.SourcesDirectory)/client/Dockerfile'
+
+stages:
+  - stage: Build
+    displayName: Build and push stage
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          name: Default
+        steps:
+          # Debug step to list files and confirm directory structure
+          - script: |
+              echo "Current working directory: $(Build.SourcesDirectory)"
+              ls -R $(Build.SourcesDirectory)
+            displayName: 'List files'
+
+          - task: Docker@2
+            displayName: Build and push api_gateway image
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepository)
+              dockerfile: $(api_gateway_dockerfile)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)
+
+          - task: Docker@2
+            displayName: Build and push main_server image
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepository)/main_server
+              dockerfile: $(main_server_dockerfile)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)
+
+          - task: Docker@2
+            displayName: Build and push client image
+            inputs:
+              command: buildAndPush
+              repository: $(imageRepository)/client
+              dockerfile: $(client_dockerfile)
+              containerRegistry: $(dockerRegistryServiceConnection)
+              tags: |
+                $(tag)
