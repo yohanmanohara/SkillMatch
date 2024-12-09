@@ -22,8 +22,14 @@ stages:
       - job: Build
         displayName: Build
         pool:
-          name: Default  # Ensure you're using the 'Default' pool for the self-hosted agent
+          name: Default
         steps:
+          # Debug step to list files and confirm directory structure
+          - script: |
+              echo "Current working directory: $(Build.SourcesDirectory)"
+              ls -R $(Build.SourcesDirectory)
+            displayName: 'List files'
+
           - task: Docker@2
             displayName: Build and push api_gateway image
             inputs:
