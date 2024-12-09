@@ -11,7 +11,6 @@ variables:
   tag: '$(Build.BuildId)'
   vmImageName: 'ubuntu-latest'
 
-  # Separate variables for each Dockerfile path
   api_gateway_dockerfile: '$(Build.SourcesDirectory)/api_gateway/Dockerfile'
   main_server_dockerfile: '$(Build.SourcesDirectory)/main_server/Dockerfile'
   client_dockerfile: '$(Build.SourcesDirectory)/client/Dockerfile'
@@ -23,7 +22,7 @@ stages:
       - job: Build
         displayName: Build
         pool:
-          vmImage: $(vmImageName)
+          name: Default  # Ensure you're using the 'Default' pool for the self-hosted agent
         steps:
           - task: Docker@2
             displayName: Build and push api_gateway image
