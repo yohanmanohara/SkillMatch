@@ -11,10 +11,10 @@ variables:
   tag: '$(Build.BuildId)'
   vmImageName: 'ubuntu-latest'
 
-  dockerfilePaths:
-    api_gateway: '$(Build.SourcesDirectory)/api_gateway/Dockerfile'
-    main_server: '$(Build.SourcesDirectory)/main_server/Dockerfile'
-    client: '$(Build.SourcesDirectory)/client/Dockerfile'
+  # Separate variables for each Dockerfile path
+  api_gateway_dockerfile: '$(Build.SourcesDirectory)/api_gateway/Dockerfile'
+  main_server_dockerfile: '$(Build.SourcesDirectory)/main_server/Dockerfile'
+  client_dockerfile: '$(Build.SourcesDirectory)/client/Dockerfile'
 
 stages:
   - stage: Build
@@ -30,7 +30,7 @@ stages:
             inputs:
               command: buildAndPush
               repository: $(imageRepository)
-              dockerfile: $(dockerfilePaths.api_gateway)
+              dockerfile: $(api_gateway_dockerfile)
               containerRegistry: $(dockerRegistryServiceConnection)
               tags: |
                 $(tag)
@@ -40,7 +40,7 @@ stages:
             inputs:
               command: buildAndPush
               repository: $(imageRepository)/main_server
-              dockerfile: $(dockerfilePaths.main_server)
+              dockerfile: $(main_server_dockerfile)
               containerRegistry: $(dockerRegistryServiceConnection)
               tags: |
                 $(tag)
@@ -50,7 +50,7 @@ stages:
             inputs:
               command: buildAndPush
               repository: $(imageRepository)/client
-              dockerfile: $(dockerfilePaths.client)
+              dockerfile: $(client_dockerfile)
               containerRegistry: $(dockerRegistryServiceConnection)
               tags: |
                 $(tag)
