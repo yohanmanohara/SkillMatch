@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: main-server
+  namespace: skillmatch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: main-server
+  template:
+    metadata:
+      labels:
+        app: main-server
+    spec:
+      containers:
+        - name: main-server
+          image: skillmatch.azurecr.io/main_server
+          ports:
+            - containerPort: 3002
+          env:
+            - name: PORT
+              value: "3002"
+            - name: MONGO_URI
+              value: "mongodb+srv://Recruitwise:recruitwise@recruitwise.us4pdz2.mongodb.net/"
+            - name: JWT_SECRET
+              value: "secret"
+            - name: EMAIL
+              value: "warushayohan80@gmail.com"
+            - name: EMAIL_PASSWORD
+              value: "wlasedetnswsefnc"
+      imagePullSecrets:
+        - name: acr-secret  # Correct placement for imagePullSecrets
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-server-service
+  namespace: skillmatch
+spec:
+  selector:
+    app: main-server
+  ports:
+    - protocol: TCP
+      port: 3002
+      targetPort: 3002
+  type: ClusterIP
