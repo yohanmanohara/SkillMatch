@@ -1,4 +1,3 @@
-import React from 'react'
 import Navbar from '../components/landing/navbar'
 import Hero from '@/components/landing/hero'
 import Footer from '@/components/layout/footer'
