@@ -6,7 +6,7 @@ interface ContainerfProps {
   fullScreen?: boolean
 }
 
-const Container: React.FC<ContainerfProps> = ({
+const   Container: React.FC<ContainerfProps> = ({
   children,
   fullHeight,
   fullScreen,
