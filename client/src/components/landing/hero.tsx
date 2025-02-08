@@ -1,10 +1,12 @@
 import React from 'react';
-import Image from 'next/image';
+import Image from 'next/image'; 
+import Container from '../common/container';
 import { Button } from '@/components/ui/button';
 import {Input} from "@/components/ui/input";
 
 const hero = () => {
   return (
+    <Container>
     <div className='flex align-top items-start justify-center' >
     <div className="hero min-h-screen flex flex-col justify-evenly items-center">
       <div className='flex flex-col-reverse p-10 sm:flex-row md:flex-row'>
@@ -16,17 +18,17 @@ const hero = () => {
           </div>
           <div className='flex justify-center items-start h-full'>
               <div className='w-full h-auto flex-shrink-0 bg-[#E9FBEF] backdrop-blur-sm p-10 rounded-md justify-between sm:w-auto mt-5'>
-                <div>
+                <div className='flex flex-col gap-5 '>
                   <div className='flex font-poppins'>
                     <div className='flex items-center'><Image src="/searchIcon.png"  alt="searchIcon"   width={25} height={25} /></div>
                     <div className='w-full'> <Input type='text' placeholder='Type here' className='w-full border-none'/></div>
                   </div>
                   <div className='flex  font-poppins'>
-                    <div className='flex items-center'><Image src="/location.png"  alt="searchIcon"   width={20} height={15} /></div>
+                    <div className='flex items-center'><Image src="/location.png"  alt="searchIcon"   width={17} height={10} /></div>
                     <div className='w-full'> <Input type='text' placeholder='Country/City' className='w-full border-none'/></div>
                   </div>
                   <div>
-                    <Button variant={'default'}  className=" w-full lg:w-[436px] h-10 lg:h-[42px] flex-shrink-0">
+                    <Button variant={'default'}  className=" w-full lg:w-[436px] h-10 lg:h-[42px] flex-shrink-0  bg-[#3BDE6C]">
                       Search
                     </Button>
                   </div>
@@ -89,6 +91,8 @@ const hero = () => {
    
 
     </div>
+    </Container>
+
   );
 };
 
