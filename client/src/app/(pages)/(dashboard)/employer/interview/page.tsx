@@ -1,253 +1,72 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { toast } from "@/components/ui/use-toast";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-export default function TabsDemo() {
+import Container from '@/components/common/container'
+import React from 'react'
+import {Button} from '@/components/ui/button';
+import Image from 'next/image';
 
-  // User interface for type-checking
-  interface User {
-    username: string;
-    email: string;
-    firstname: string;
-    lastname: string;
-    contactnumber: string;
-    country: string;
-    city: string;
-    status: string;
-  }
-
-  const [user, setUser] = useState<User | null>(null);
-  const userId = sessionStorage.getItem('poop'); // Replace 'poop' with the correct session key.
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (userId) {
-        try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/main_server/api/user/getsingleuser/?id=${userId}`, {
-            cache: 'no-store',
-          });
-          const data = await res.json();
-          setUser(data);
-        } catch (error) {
-          console.error("Failed to fetch user:", error);
-        }
-      }
-    };
-    fetchUser();
-  }, [userId]);
-  const router = useRouter();  
-
-  const handleProfile = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-  
-    try {
-      const formData = new FormData(e.currentTarget);
-  
-      const updatedUser = {
-        username: formData.get('username'),
-        email: formData.get('email'),
-        firstname: formData.get('firstname'),
-        lastname: formData.get('lastname'),
-        contactnumber: formData.get('contactnumber'),
-        country: formData.get('country'),
-        city: formData.get('city'),
-        status: formData.get('status'),
-      };
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/main_server/api/user/updateuser/?id=${userId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedUser),
-      });
-  
-    
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast({
-          title: "Faild to update user",
-          description:errorData.error || "Failed to update user. Please try again..",
-        });
-      }
-  
-  
-      router.refresh();
-      window.location.reload();
-      toast({
-        title: "updated successfully",
-        description: "User updated successfully",
-      });
-      
-      
-    } catch (error) {
-     
-      console.error("An error occurred while updating the profile:", error);
-      
+function page() {
+  const jobData = [
+    {
+      title: 'Cloud Solutions Architect',
+      company: 'Facebook',
+      name: 'John Doe',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg',
+    },
+    {
+      title: 'Software Engineer',
+      company: 'Google',
+      name: 'Jane Doe',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
+    },
+    {
+      title: 'Product Manager',
+      company: 'Microsoft',
+      name: 'John Doe',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg',
+    },
+    {
+      title: 'Data Scientist',
+      company: 'Amazon',
+      name: 'Jane Doe',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg',
     }
-  };
-
-
-
-
-  const haddlepasswordupdate = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  
-    try {
-      const formData = new FormData(e.currentTarget);
-  
-      const updatedPassword = {
-        currentPassword: formData.get('currentPassword') as string,
-        newPassword: formData.get('newPassword') as string,
-        confirmPassword: formData.get('confirmPassword') as string,
-      };
-  
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/main_server/api/user/updatpassword/?id=${userId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedPassword),
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast({
-          title: "Failed to change password",
-          description: errorData.error || "Please try again.",
-        });
-        return; // Exit early on error
-      }
-  
-      toast({
-        title: "Password changed successfully",
-        description: "Your password has been updated.",
-      });
-  
-      window.location.reload();
-    } catch (error) {
-      console.error("An error occurred while changing password:", error);
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
-      });
-    }
-  };
-  
+  ];
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-      <Tabs defaultValue="account" className="w-[300px] md:w-[800px]">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="password">Password</TabsTrigger>
-        </TabsList>
+    <>
+      
+       <Container>
 
         
-        <TabsContent value="account">
-          <Card>
-            <CardHeader>
-              <CardTitle>Edit Your User Details</CardTitle>
-              <Avatar className="rounded-full h-[100px] w-[100px] overflow-hidden">
-                <AvatarImage src="/avatadefault.jpg" alt="User Avatar" />
-              </Avatar>
-              <CardDescription>
-                Make changes to your account here. Click save when you&apos;re done.
-              </CardDescription>
-            </CardHeader>
+        <div className='flex flex-col justify-evenly gap-10'>
+            <div className='font-semibold text-[40px] leading-[normal]'>Interviews</div>
 
-            <form onSubmit={handleProfile}>
-              <CardContent className="space-y-2">
-                <div className="space-y-1">
-                  <Label htmlFor="name">Username</Label>
-                  <Input id="username" name="username" defaultValue={user?.username} placeholder="Enter Username" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" name="email" defaultValue={user?.email} readOnly />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="firstname">First Name</Label>
-                  <Input id="firstname" name="firstname" defaultValue={user?.firstname } placeholder="Enter First Name" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="lastname">Last Name</Label>
-                  <Input id="lastname" name="lastname" defaultValue={user?.lastname} placeholder="Enter Last Name"  />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="contactnumber">Contact Number</Label>
-                  <Input id="contactnumber" name="contactnumber" defaultValue={user?.contactnumber} placeholder="0772243631"/>
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="country">Country</Label>
-                  <Input id="country" name="country" defaultValue={user?.country} placeholder="Enter Your Living Country" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="city">City</Label>
-                  <Input id="city" name="city" defaultValue={user?.city } placeholder="Enter Your Living City" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="status">Status</Label>
-                  <Input id="status" name="status" defaultValue={user?.status} readOnly />
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button type="submit">Save Changes</Button>
-              </CardFooter>
-            </form>
-          </Card>
-        </TabsContent>
+                {jobData.map((job, index) => (
+                  <div key={index} className='flex items-center gap-4 p-4 border-b'>
+                    <div className='flex justify-between w-full'>
+                      <div className='flex items-center gap-4'>
+                        <img src={job.logo} alt={`${job.company} logo`} className='w-12 h-12' />
+                        <div>
+                          <div className='font-bold'>{job.title}</div>
+                          <div>{job.company}</div>
+                          <div>{job.name}</div>
+                        </div>
+                      </div>
+                      
+                    <div>
+                    <Button variant={'default'} className='bg-[#3BDE6C]'>Start Meeting</Button>
+                    </div>
+                   
+                    
+                  </div>
+                  </div>
+                ))}
 
-
-        <form onSubmit={haddlepasswordupdate}>
-        <TabsContent value="password">
-          <Card>
-            <CardHeader>
-              <CardTitle>Password</CardTitle>
-              <CardDescription>
-                Change your password here. After saving, you&apos;ll be logged out.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="current-password">Current Password</Label>
-                <Input id="currentPassword" name="currentPassword" type="password" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="new-password">New Password</Label>
-                <Input id="newPassword" name="newPassword" type="password" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="confirm-password">Confirm Password</Label>
-                <Input id="confirmPassword" name="confirmPassword" type="password" />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button type="submit">Save Password</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-        </form>
-      </Tabs>
-    </div>
-  );
+            
+        </div>
+         
+       </Container>
+    </>
+  )
 }
+
+export default page

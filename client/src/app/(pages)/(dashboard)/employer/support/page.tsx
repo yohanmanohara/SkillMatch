@@ -11,8 +11,8 @@ function page() {
       <div className='bottom flex flex-col justify-evenly gap-7'>
         <div className=' flex flex-wrap gap-7   justify-evenly  '>
           {[
-        { href: '#', src: '/puzzle.png', alt: 'support', title: 'Getting Started', description: 'Start off the right foot!' },
-        { href: '#', src: '/vector.png', alt: 'support', title: 'Account', description: 'Start off the right foot' },
+        { href: './profile', src: '/puzzle.png', alt: 'support', title: 'Getting Started', description: 'Start off the right foot!' },
+        { href: './profile', src: '/vector.png', alt: 'support', title: 'Account', description: 'Start off the right foot' },
         { href: '#', src: '/message.png', alt: 'support', title: 'F.A.Q', description: 'Start off the right foot' },
         
           ].map((item, index) => (
