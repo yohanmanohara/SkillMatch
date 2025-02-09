@@ -43,14 +43,14 @@ function page() {
                 {jobData.map((job, index) => (
                   <div key={index} className='flex items-center gap-4 p-4 border-b'>
                     <div className='flex justify-between w-full'>
-                      <div className='flex items-center gap-4'>
-                        <img src={job.logo} alt={`${job.company} logo`} className='w-12 h-12' />
+                        <div className='flex items-center gap-4'>
+                        <Image src={job.logo} alt={`${job.company} logo`} width={48} height={48} className='w-12 h-12' />
                         <div>
                           <div className='font-bold'>{job.title}</div>
                           <div>{job.company}</div>
                           <div>{job.name}</div>
                         </div>
-                      </div>
+                        </div>
                       
                     <div>
                     <Button variant={'default'} className='bg-[#3BDE6C]'>Start Meeting</Button>
