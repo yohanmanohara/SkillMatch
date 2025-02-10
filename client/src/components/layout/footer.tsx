@@ -34,7 +34,7 @@ const Footer = () => {
       
       {/* Top SkillMatch logo section */}
       <div className="flex items-center pl-16 mb-4">
-        <Image src="/skillmatchlogo.png" width={40} height={40} alt="SkillMatch Logo" className="mr-2" />
+        <Image src="/skillmatchlogo.png" width={30} height={30} alt="SkillMatch Logo" className="mr-2" />
         <div className="text-2xl font-bold">SkillMatch</div>
       </div>
       
