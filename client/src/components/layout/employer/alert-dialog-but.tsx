@@ -23,6 +23,8 @@ export default function SignUpDialog() {
   const [locations, setLocations] = useState([] as string[]);
   const [logo, setLogo] = useState<string | null>(null);
   const [errorimage, setErrorimage] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -35,7 +37,7 @@ export default function SignUpDialog() {
         return;
       }
 
-      setErrorimage(""); // Clear any previous errors
+      setErrorimage(""); 
       const reader = new FileReader();
       reader.onloadend = () => {
         setLogo(reader.result as string); // Convert image to base64 for preview
@@ -43,11 +45,35 @@ export default function SignUpDialog() {
       reader.readAsDataURL(file);
 
       console.log("Selected file:", file);
-      // You can now upload `file` to your backend or cloud storage.
+      setSelectedFile(file);  
     }
   };
 
 
+  const handleFileUpload = async () => {
+   
+
+    const formData = new FormData();
+    if (selectedFile) {
+      formData.append("file", selectedFile);
+    }
+
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Logo uploaded successfully!");
+      } else {
+        alert("Failed to upload logo.");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Error uploading logo.");
+    }
+  };
 
 
 
@@ -209,20 +235,27 @@ export default function SignUpDialog() {
 
             {logo && (
               <div className="flex flex-row gap-3">
-              <button
+              <Button
                 type="button"
                 className="mt-2 bg-red-500 text-white px-4 py-2 rounded-md"
-                onClick={() => setLogo(null)}
+                onClick={() => {
+                  setLogo(null);
+                  setSelectedFile(null);
+                }}
+                
               >
                 Remove Logo
-              </button>
+              </Button>
 
-              <button
+              <Button
               type="button"
-                className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md"
+              className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md"
+               onClick={handleFileUpload}
+
+            
               >
                 Upload
-              </button>
+              </Button>
               </div>
             )
 
@@ -403,8 +436,5 @@ export default function SignUpDialog() {
       </AlertDialogContent>
     </AlertDialog>
   );
-}
-function setLoading(arg0: boolean) {
-  throw new Error("Function not implemented.");
 }
 
