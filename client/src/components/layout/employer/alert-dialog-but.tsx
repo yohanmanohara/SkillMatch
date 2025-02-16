@@ -84,20 +84,21 @@ export default function SignUpDialog() {
                   Job Title
                 </label>
                 <select
-                    id="title"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    required
-                    className="border p-2 rounded"
-                  >
-                 <option value="">Select Job Title</option>
-                {jobTitles.map((jobTitle, index) => (
-                <option key={`${jobTitle}-${index}`} value={jobTitle}>
-               {jobTitle}
-               </option>
-              ))}
-            </select>
+                 id="title"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                required
+                className="border p-2 rounded bg-transparent dark:text-white dark:bg-gray-700"
+                > 
+  <option className="text-black bg-transparent " value="">Select Job Title</option>
+  {jobTitles.map((jobTitle, index) => (
+    <option className="text-black bg-transparent" key={`${jobTitle}-${index}`} value={jobTitle}>
+      {jobTitle}
+    </option>
+  ))}
+</select>
+
 
 
                 <label htmlFor="employmentTypes" className="text-sm">
