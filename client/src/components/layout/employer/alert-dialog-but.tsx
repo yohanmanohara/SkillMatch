@@ -12,32 +12,70 @@ import {
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
-import  {jobTitles}  from "@/utils/jobTitles";
-
-
+import { jobTitles } from "@/utils/jobTitles";
+import { useEffect } from "react";
 export default function SignUpDialog() {
   const [values, setValues] = useState([15000, 100000]);
   const [step, setStep] = useState(1);
+  const [error, setError] = useState("");
+  const [error2, setError2] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [locations, setLocations] = useState([] as string[]);
+  const [logo, setLogo] = useState<string | null>(null);
+  const [errorimage, setErrorimage] = useState("");
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      const validTypes = ["image/png", "image/jpeg"];
+      
+      if (!validTypes.includes(file.type)) {
+        setErrorimage("Only PNG and JPEG files are allowed.");
+        setLogo(null);
+        return;
+      }
+
+      setErrorimage(""); // Clear any previous errors
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogo(reader.result as string); // Convert image to base64 for preview
+      };
+      reader.readAsDataURL(file);
+
+      console.log("Selected file:", file);
+      // You can now upload `file` to your backend or cloud storage.
+    }
+  };
+
+
+
+
 
   const [formData, setFormData] = useState({
     title: "",
     salary: "",
-    employmentTypes: "",
+    employmentTypes: [] as string[],
     description: "",
     location: "",
     company: "",
   });
 
-  const clearinputs = () => {
+
+
+
+  const clearInputs = () => {
     setFormData({
       title: "",
       salary: "",
-      employmentTypes: "",
+      employmentTypes: [],
       description: "",
       location: "",
       company: "",
     });
+    setValues([15000, 100000]);
     setStep(1);
+    setError("");
+    setError2("");
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -50,17 +88,83 @@ export default function SignUpDialog() {
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
-    if (step < 3) {
-      setStep(step + 1);
+    if (step === 1  ) {
+      if (!formData.title || formData.employmentTypes.length === 0) {
+        setError("Please fill out all fields.");
+        return;
+      }
+
+      
     }
+    if (step === 2) {
+      const wordCount = formData.description.trim().split(/\s+/).length;
+      setError("");
+      setError2("");
+      if (wordCount < 0) {
+        setError("Job description must be at least 200 words.");
+        return;
+    }
+    if (!formData.location ) {
+      setError2("Please fill out all fields.");
+      return;
+    }
+    if (!formData.company ) {
+      setError2("Please fill out all fields.");
+      return;
+    }
+    
+       }
+
+
+  if (!formData.location || !formData.company) {
+    setError2("Please fill out all fields.");
+    
+  }
+    setError("");
+    setError2("");
+    setStep(step + 1);
   };
 
   const handlePrevious = () => {
     if (step > 1) {
       setStep(step - 1);
+      setError("");
+      setError2("");
+    
     }
   };
 
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await fetch(
+          "https://countriesnow.space/api/v0.1/countries/cities",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ country: "Sri Lanka" }),
+          }
+        );
+  
+        const data = await response.json();
+  
+        if (data && data.data) {
+          setLocations(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchLocations();
+  }, []);
+  
+  
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -70,62 +174,111 @@ export default function SignUpDialog() {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <form>
-        <AlertDialogHeader className="flex flex-col items-center text-center">
-       <div>
-          <AlertDialogTitle>Add Jobs Here</AlertDialogTitle>
-       </div>
-         <AlertDialogDescription>
-           Please fill out the form to add your job details.
-         </AlertDialogDescription>
-        </AlertDialogHeader>
-
+          <AlertDialogHeader className="flex flex-col items-center text-center">
+            <div>
+              <AlertDialogTitle>Add Jobs Here</AlertDialogTitle>
+            </div>
+            <AlertDialogDescription>
+              Please fill out the form to add your job details.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
 
           <div className="flex flex-col gap-4 p-4">
             {step === 1 && (
               <>
+              <label htmlFor="companyLogo" className="text-lg font-semibold" >
+                Upload Company Logo
+              </label>
+
+              <div className="flex flex-row gap-2">
+              {logo && (
+          <div >
+          
+            <img src={logo} alt="Company Logo" className="w-16 h-16 object-cover rounded-full border" />
+          </div>
+           )}
+
+              <input
+                type="file"
+                id="companyLogo"
+                accept="image/*"
+                className=" block w-full h-11 border border-green-400 rounded-md shadow-sm p-2"
+                onChange={handleFileChange}
+              />
+              </div>
+
+            {logo && (
+              <div className="flex flex-row gap-3">
+              <button
+                type="button"
+                className="mt-2 bg-red-500 text-white px-4 py-2 rounded-md"
+                onClick={() => setLogo(null)}
+              >
+                Remove Logo
+              </button>
+
+              <button
+              type="button"
+                className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md"
+              >
+                Upload
+              </button>
+              </div>
+            )
+
+
+
+            }
+            {errorimage && <p className="text-red-500 text-sm">{errorimage}</p>}
+
                 <label htmlFor="title" className="text-lg font-semibold">
                   Job Title
                 </label>
                 <select
-                 id="title"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                required
-                className="border p-2 rounded bg-transparent dark:text-white dark:bg-gray-700"
-                > 
-                 <option className="text-black bg-transparent " value="">Select Job Title</option>
+                
+                  id="title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  required
+                  className="border p-2 rounded  border-green-400 bg-transparent dark:text-white dark:bg-gray-700"
+                >
+                  <option className="text-black bg-transparent " value="">
+                    Select Job Title
+                  </option>
                   {jobTitles.map((jobTitle, index) => (
-                    <option className="text-black bg-transparent" key={`${jobTitle}-${index}`} value={jobTitle}>
-                  {jobTitle}
-                 </option>
-                 ))}
+                    <option className="text-black  bg-transparent" key={`${jobTitle}-${index}`} value={jobTitle}>
+                      {jobTitle}
+                    </option>
+                  ))}
                 </select>
-
-
+                
 
                 <label htmlFor="employmentTypes" className="text-lg font-semibold">
                   Type of Employment
                 </label>
                 <div className="flex flex-col gap-2">
                   {["Full-Time", "Part-Time", "Remote", "Internship", "Contract"].map((type) => (
-                    <label key={type}>
+                    <label key={type} className="flex items-center gap-2">
                       <input
                         type="checkbox"
                         name="employmentTypes"
                         value={type}
+
+                        checked={formData.employmentTypes.includes(type)}
                         onChange={handleChange}
                       />
                       {type}
                     </label>
+                    
                   ))}
+                  
                 </div>
 
                 <div>
                   <label htmlFor="salary" className="text-lg font-semibold">
                     Salary
                   </label>
-
                   <div style={{ width: "300px", margin: "20px auto" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
                       <input
@@ -151,6 +304,7 @@ export default function SignUpDialog() {
                     />
                   </div>
                 </div>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
               </>
             )}
 
@@ -160,28 +314,39 @@ export default function SignUpDialog() {
                   Job Description
                 </label>
                 <textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  required
-                  className="border p-2 rounded"
-                  placeholder="Enter job description here 200 words"
-                />
+  id="description"
+  name="description"
+  value={formData.description}
+  onChange={handleChange}
+  required
+  className="border p-2 rounded w-full h-30  border-green-400" // Adjust height here
+  placeholder="Enter job description here (at least 200 words)"
+  rows={10} // Adjust number of rows
+/>
+
+                {error && <p className="text-red-500 text-sm">{error}</p>}
 
                 <label htmlFor="location" className="text-sm">
                   Location
                 </label>
-                <input
-                  type="text"
+               
+                <select
                   id="location"
                   name="location"
                   value={formData.location}
                   onChange={handleChange}
                   required
-                  placeholder="Enter job location"
-                  className="border p-2 rounded"
-                />
+                  className="border p-2  border-green-400 rounded bg-transparent dark:text-white dark:bg-gray-700"
+                  disabled={loading}
+                >
+                  <option className="text-black" value="">Select a Location</option>
+                  {locations.map((location, index) => (
+                    <option className="text-black" key={index} value={location}>
+                      {location}
+                    </option>
+                  ))}
+                </select>
+              
 
                 <label htmlFor="company" className="text-sm">
                   Company Name
@@ -193,20 +358,42 @@ export default function SignUpDialog() {
                   value={formData.company}
                   onChange={handleChange}
                   required
-                  className="border p-2 rounded"
+                  className="border  border-green-400 p-2 rounded"
+                  placeholder="Enter company name with pvt ltd or inc." 
                 />
               </>
             )}
+                            {error2 && <p className="text-red-500 text-sm">{error2}</p>}
 
-            {step === 3 && (
-              <>
-                <p>Final step</p>
+
+            {step === 3 && 
+            
+              (<>
+
+
+
+              
+              
               </>
-            )}
+
+              )
+            
+            
+            }
+
+
+
+
+
+
+
+
           </div>
 
           <AlertDialogFooter>
-            <AlertDialogCancel type="button" onClick={clearinputs}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel type="button" onClick={clearInputs}>
+              Cancel
+            </AlertDialogCancel>
             {step > 1 && <Button onClick={handlePrevious}>Previous</Button>}
             <AlertDialogAction onClick={handleNext}>
               {step < 3 ? "Next" : "Submit"}
@@ -217,3 +404,7 @@ export default function SignUpDialog() {
     </AlertDialog>
   );
 }
+function setLoading(arg0: boolean) {
+  throw new Error("Function not implemented.");
+}
+
