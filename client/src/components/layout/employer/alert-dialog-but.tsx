@@ -1,4 +1,3 @@
-"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,7 +12,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
-import { set } from "zod";
+import  {jobTitles}  from "@/utils/jobTitles";
+
 
 export default function SignUpDialog() {
   const [values, setValues] = useState([15000, 100000]);
@@ -22,34 +22,30 @@ export default function SignUpDialog() {
   const [formData, setFormData] = useState({
     title: "",
     salary: "",
-    employmentTypes: [],
+    employmentTypes: "",
     description: "",
     location: "",
     company: "",
   });
-  const clearinputs = () => {
 
+  const clearinputs = () => {
     setFormData({
       title: "",
       salary: "",
-      employmentTypes: [],
+      employmentTypes: "",
       description: "",
       location: "",
       company: "",
     });
-
     setStep(1);
   };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    if (type === "checkbox") {
-     
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   const handleNext = (e: React.FormEvent) => {
@@ -87,15 +83,22 @@ export default function SignUpDialog() {
                 <label htmlFor="title" className="text-sm">
                   Job Title
                 </label>
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  required
-                  className="border p-2 rounded"
-                />
+                <select
+                    id="title"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleChange}
+                    required
+                    className="border p-2 rounded"
+                  >
+                 <option value="">Select Job Title</option>
+                {jobTitles.map((jobTitle, index) => (
+                <option key={`${jobTitle}-${index}`} value={jobTitle}>
+               {jobTitle}
+               </option>
+              ))}
+            </select>
+
 
                 <label htmlFor="employmentTypes" className="text-sm">
                   Type of Employment
@@ -156,7 +159,7 @@ export default function SignUpDialog() {
                   id="description"
                   name="description"
                   value={formData.description}
-                 
+                  onChange={handleChange}
                   required
                   className="border p-2 rounded"
                 />
@@ -189,26 +192,19 @@ export default function SignUpDialog() {
               </>
             )}
 
-{step === 3 && (
-<>
-
-<p>jkfhwkefhb</p>
-
-
-</>
-
-)}
-
-
-
+            {step === 3 && (
+              <>
+                <p>Final step</p>
+              </>
+            )}
           </div>
 
           <AlertDialogFooter>
             <AlertDialogCancel type="button" onClick={clearinputs}>Cancel</AlertDialogCancel>
             {step > 1 && <Button onClick={handlePrevious}>Previous</Button>}
-            <AlertDialogAction onClick={handleNext } >{step < 3  ? "Next" : "Submit"}</AlertDialogAction>
-            
-            
+            <AlertDialogAction onClick={handleNext}>
+              {step < 3 ? "Next" : "Submit"}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </form>
       </AlertDialogContent>
