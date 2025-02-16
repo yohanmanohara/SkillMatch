@@ -70,17 +70,20 @@ export default function SignUpDialog() {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <form>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Add Jobs Here</AlertDialogTitle>
-            <AlertDialogDescription>
-              Please fill out the form to add your job details.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+        <AlertDialogHeader className="flex flex-col items-center text-center">
+       <div>
+          <AlertDialogTitle>Add Jobs Here</AlertDialogTitle>
+       </div>
+         <AlertDialogDescription>
+           Please fill out the form to add your job details.
+         </AlertDialogDescription>
+        </AlertDialogHeader>
+
 
           <div className="flex flex-col gap-4 p-4">
             {step === 1 && (
               <>
-                <label htmlFor="title" className="text-sm">
+                <label htmlFor="title" className="text-lg font-semibold">
                   Job Title
                 </label>
                 <select
@@ -91,17 +94,17 @@ export default function SignUpDialog() {
                 required
                 className="border p-2 rounded bg-transparent dark:text-white dark:bg-gray-700"
                 > 
-  <option className="text-black bg-transparent " value="">Select Job Title</option>
-  {jobTitles.map((jobTitle, index) => (
-    <option className="text-black bg-transparent" key={`${jobTitle}-${index}`} value={jobTitle}>
-      {jobTitle}
-    </option>
-  ))}
-</select>
+                 <option className="text-black bg-transparent " value="">Select Job Title</option>
+                  {jobTitles.map((jobTitle, index) => (
+                    <option className="text-black bg-transparent" key={`${jobTitle}-${index}`} value={jobTitle}>
+                  {jobTitle}
+                 </option>
+                 ))}
+                </select>
 
 
 
-                <label htmlFor="employmentTypes" className="text-sm">
+                <label htmlFor="employmentTypes" className="text-lg font-semibold">
                   Type of Employment
                 </label>
                 <div className="flex flex-col gap-2">
@@ -119,7 +122,7 @@ export default function SignUpDialog() {
                 </div>
 
                 <div>
-                  <label htmlFor="salary" className="text-sm">
+                  <label htmlFor="salary" className="text-lg font-semibold">
                     Salary
                   </label>
 
@@ -143,7 +146,7 @@ export default function SignUpDialog() {
                       value={values}
                       onValueChange={(newValue: number[]) => setValues(newValue)}
                       min={15000}
-                      max={700000}
+                      max={2000000}
                       style={{ color: "#5F3FF3" }}
                     />
                   </div>
@@ -163,6 +166,7 @@ export default function SignUpDialog() {
                   onChange={handleChange}
                   required
                   className="border p-2 rounded"
+                  placeholder="Enter job description here 200 words"
                 />
 
                 <label htmlFor="location" className="text-sm">
@@ -175,6 +179,7 @@ export default function SignUpDialog() {
                   value={formData.location}
                   onChange={handleChange}
                   required
+                  placeholder="Enter job location"
                   className="border p-2 rounded"
                 />
 
