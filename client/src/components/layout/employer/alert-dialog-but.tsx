@@ -60,13 +60,11 @@ export default function JobForm() {
     console.log("Form submitted", formData);
   };
 
-  const handleRemoveItem = (category: string, index: number) => {
-    if (category === "requirements")
-      setRequirements((prev) => prev.filter((_, i) => i !== index));
-    if (category === "desirable")
-      setDesirable((prev) => prev.filter((_, i) => i !== index));
-    if (category === "benefits")
-      setBenefits((prev) => prev.filter((_, i) => i !== index));
+  const handleRemoveItem = (field: keyof typeof formData, index: number) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: Array.isArray(prevData[field]) ? prevData[field].filter((_, i) => i !== index) : prevData[field],
+    }));
   };
 
   const handleAddItem = (category: string, value: string) => {
@@ -140,23 +138,23 @@ export default function JobForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement; // Assert as HTMLInputElement
   
-    // // Handle change for checkboxes
-    // if (type === "checkbox" && name === "employmentTypes") {
-    //   setFormData((prevData) => {
-    //     let updatedEmploymentTypes = [...prevData.employmentTypes];
+    // Handle change for checkboxes
+    if (type === "checkbox" && name === "employmentTypes") {
+      setFormData((prevData) => {
+        let updatedEmploymentTypes = [...prevData.employmentTypes];
   
-    //     if (checked) {
-    //       // If checked, add the value to the employmentTypes array
-    //       updatedEmploymentTypes.push(value);
-    //     } else {
-    //       // If unchecked, remove the value from the employmentTypes array
-    //       updatedEmploymentTypes = updatedEmploymentTypes.filter((type) => type !== value);
-    //     }
+        if (checked) {
+          // If checked, add the value to the employmentTypes array
+          updatedEmploymentTypes.push(value);
+        } else {
+          // If unchecked, remove the value from the employmentTypes array
+          updatedEmploymentTypes = updatedEmploymentTypes.filter((type) => type !== value);
+        }
   
-    //     return { ...prevData, employmentTypes: updatedEmploymentTypes };
-    //   });
-    // } 
-    //   // Handle other types of inputs (text, select, textarea)
+        return { ...prevData, employmentTypes: updatedEmploymentTypes };
+      });
+    } 
+      // Handle other types of inputs (text, select, textarea)
       setFormData({
         ...formData,
         [name]: value,
