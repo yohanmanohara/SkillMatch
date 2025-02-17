@@ -30,6 +30,8 @@ export default function JobForm() {
   const [requirements, setRequirements] = useState<string[]>([]);
   const [desirable, setDesirable] = useState<string[]>([]);
   const [benefits, setBenefits] = useState<string[]>([]);
+  const [expirienceduration, setExpirienceduration] = useState<string[]>([]);
+  const [educationlevel, setEducationlevel] = useState<string[]>([]);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -112,6 +114,8 @@ export default function JobForm() {
     requirements: [] as string[],  // Requirements (array of strings)
     desirable: [] as string[],     // Desirable skills (array of strings)
     benefits: [] as string[], 
+    expirienceduration: "",
+    educationlevel: "",
 
   });
 
@@ -129,6 +133,8 @@ export default function JobForm() {
       description: "",
       location: "",
       company: "",
+      expirienceduration: "",
+      educationlevel: "",
     });
     setValues([15000, 100000]);
     setStep(1);
@@ -357,8 +363,8 @@ export default function JobForm() {
               type="checkbox"
               name="employmentTypes"
               value={type}
-              checked={formData.employmentTypes.includes(type)} // Check if the type is selected
-              onChange={handleChange} // Call handleChange on checkbox toggle
+              checked={formData.employmentTypes.includes(type)} 
+              onChange={handleChange} 
             />
             {type}
           </label>
@@ -581,6 +587,45 @@ export default function JobForm() {
             
             }
 
+            {step === 4 && (
+             
+             <>
+             
+              <Label>Experience</Label>
+              <input
+                  type="int"
+                  id="experience"
+                  name="expirienceduration"
+                  value={formData.expirienceduration}
+                  onChange={handleChange}
+                  required
+                  className="border  border-green-400 p-2 rounded"
+                  placeholder="Experience in years" 
+                />
+
+              <Label>Education Level</Label>
+              <input
+                  type="int"
+                  id="education"
+                  name="educationlevel"
+                  value={formData.educationlevel}
+                  onChange={handleChange}
+                  required
+                  className="border  border-green-400 p-2 rounded"
+                  placeholder="Graduate or Post Graduate/HND or Diploma" 
+                />
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+
+             </>
+            
+            
+            )}
+
+
+
+
+
+
 
           </div>
 
@@ -596,7 +641,7 @@ export default function JobForm() {
 
           }
             <AlertDialogAction onClick={handleNext}>
-              {step < 4 ? "Next" : "Submit"}
+              {step < 5 ? "Next" : "Submit"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </form>
