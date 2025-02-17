@@ -14,7 +14,10 @@ import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
 import { jobTitles } from "@/utils/jobTitles";
 import { useEffect } from "react";
-export default function SignUpDialog() {
+
+import { Label } from "@radix-ui/react-dropdown-menu";
+import { X } from "lucide-react";
+export default function JobForm() {
   const [values, setValues] = useState([15000, 100000]);
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
@@ -24,7 +27,9 @@ export default function SignUpDialog() {
   const [logo, setLogo] = useState<string | null>(null);
   const [errorimage, setErrorimage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
+  const [requirements, setRequirements] = useState<string[]>([]);
+  const [desirable, setDesirable] = useState<string[]>([]);
+  const [benefits, setBenefits] = useState<string[]>([]);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -49,6 +54,22 @@ export default function SignUpDialog() {
     }
   };
 
+  const handleRemoveItem = (category: string, index: number) => {
+    if (category === "requirements")
+      setRequirements((prev) => prev.filter((_, i) => i !== index));
+    if (category === "desirable")
+      setDesirable((prev) => prev.filter((_, i) => i !== index));
+    if (category === "benefits")
+      setBenefits((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleAddItem = (category: string, value: string) => {
+    if (!value.trim()) return;
+
+    if (category === "requirements") setRequirements([...requirements, value]);
+    if (category === "desirable") setDesirable([...desirable, value]);
+    if (category === "benefits") setBenefits([...benefits, value]);
+  };
 
   const handleFileUpload = async () => {
    
@@ -80,10 +101,14 @@ export default function SignUpDialog() {
   const [formData, setFormData] = useState({
     title: "",
     salary: "",
-    employmentTypes: [] as string[],
+    employmentTypes: [] as string[],  // Store selected employment types
     description: "",
     location: "",
     company: "",
+    setRequirements: [] as string[],  // Requirements (array of strings)
+    setDesirable: [] as string[],     // Desirable skills (array of strings)
+    setBenefits: [] as string[], 
+
   });
 
 
@@ -92,6 +117,9 @@ export default function SignUpDialog() {
   const clearInputs = () => {
     setFormData({
       title: "",
+      setBenefits: [],
+      setRequirements: [],
+      setDesirable: [],
       salary: "",
       employmentTypes: [],
       description: "",
@@ -103,14 +131,33 @@ export default function SignUpDialog() {
     setError("");
     setError2("");
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const { name, value, type, checked } = e.target as HTMLInputElement; // Assert as HTMLInputElement
+  
+    // Handle change for checkboxes
+    if (type === "checkbox" && name === "employmentTypes") {
+      setFormData((prevData) => {
+        let updatedEmploymentTypes = [...prevData.employmentTypes];
+  
+        if (checked) {
+          // If checked, add the value to the employmentTypes array
+          updatedEmploymentTypes.push(value);
+        } else {
+          // If unchecked, remove the value from the employmentTypes array
+          updatedEmploymentTypes = updatedEmploymentTypes.filter((type) => type !== value);
+        }
+  
+        return { ...prevData, employmentTypes: updatedEmploymentTypes };
+      });
+    } else {
+      // Handle other types of inputs (text, select, textarea)
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
+  
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,6 +187,12 @@ export default function SignUpDialog() {
     }
     
        }
+     
+    if (step === 3) {
+     
+        return;
+      
+    }   
 
 
   if (!formData.location || !formData.company) {
@@ -274,6 +327,7 @@ export default function SignUpDialog() {
                   value={formData.title}
                   onChange={handleChange}
                   required
+                 
                   className="border p-2 rounded  border-green-400 bg-transparent dark:text-white dark:bg-gray-700"
                 >
                   <option className="text-black bg-transparent " value="">
@@ -288,25 +342,22 @@ export default function SignUpDialog() {
                 
 
                 <label htmlFor="employmentTypes" className="text-lg font-semibold">
-                  Type of Employment
-                </label>
-                <div className="flex flex-col gap-2">
-                  {["Full-Time", "Part-Time", "Remote", "Internship", "Contract"].map((type) => (
-                    <label key={type} className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        name="employmentTypes"
-                        value={type}
-
-                        checked={formData.employmentTypes.includes(type)}
-                        onChange={handleChange}
-                      />
-                      {type}
-                    </label>
-                    
-                  ))}
-                  
-                </div>
+        Type of Employment
+      </label>
+      <div className="flex flex-col gap-2">
+        {["Full-Time", "Part-Time", "Remote", "Internship", "Contract"].map((type) => (
+          <label key={type} className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="employmentTypes"
+              value={type}
+              checked={formData.employmentTypes.includes(type)} // Check if the type is selected
+              onChange={handleChange} // Call handleChange on checkbox toggle
+            />
+            {type}
+          </label>
+        ))}
+      </div>
 
                 <div>
                   <label htmlFor="salary" className="text-lg font-semibold">
@@ -402,6 +453,112 @@ export default function SignUpDialog() {
             {step === 3 && 
             
               (<>
+              <div className="space-y-4">
+      {/* Requirements */}
+      <div>
+        <Label>Requirements</Label>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            className="border  border-green-400 p-2 rounded w-full"
+            id="requirementsInput"
+            placeholder="Enter a requirement"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleAddItem("requirements", (e.target as HTMLInputElement).value);
+                (e.target as HTMLInputElement).value = "";
+              }
+            }}
+          />
+        </div>
+       
+        <ol className="flex flex-wrap gap-2 list-disc">
+    {requirements.map((req, index) => (
+    <li
+      key={index}
+      className="flex items-center bg-green-500 mt-3 dark:bg-green-800 text-sm dark:text-gray-300 px-2 py-1 rounded-lg gap-2"
+    >
+      {req}<X className="bg-red-600 rounded-full h-3 pl- w-3 cursor-pointer" onClick={() => handleRemoveItem("requirements", index)} />
+      
+    </li>
+    
+
+  ))}
+</ol>
+      </div>
+
+      {/* Desirable */}
+      <div>
+        <Label>Desirable</Label>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            id="desirableInput"
+            placeholder="Enter a desirable skill"
+            className="border  border-green-400 p-2 rounded w-full"
+
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleAddItem("desirable", (e.target as HTMLInputElement).value);
+                (e.target as HTMLInputElement).value = "";
+              }
+            }}
+          />
+        </div>
+        <ol className="flex flex-wrap gap-2 list-disc">
+    {desirable.map((des, index) => (
+    <li
+      key={index}
+      className="flex items-center bg-green-500 mt-3 dark:bg-green-800 text-sm dark:text-gray-300 px-2 py-1 rounded-lg gap-2"
+    >
+      {des}<X className="bg-red-600 rounded-full h-3 pl- w-3 cursor-pointer" onClick={() => handleRemoveItem("desirable", index)} />
+      
+    </li>
+    
+
+  ))}
+</ol>
+        
+      </div>
+
+      {/* Benefits */}
+      <div>
+        <Label>Benefits</Label>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            id="benefitsInput"
+            placeholder="Enter a benefit"
+            className="border  border-green-400 p-2 rounded w-full"
+
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleAddItem("benefits", (e.target as HTMLInputElement).value);
+                (e.target as HTMLInputElement).value = "";
+              }
+            }}
+          />
+        </div>
+        
+        
+        <ol className="flex flex-wrap gap-2 list-disc">
+  {benefits.map((ben, index) => (
+    <li
+      key={index}
+      className="flex items-center bg-green-500 mt-3 dark:bg-green-800 text-sm dark:text-gray-300 px-2 py-1 rounded-lg gap-2"
+    >
+      {ben}<X className="bg-red-600 rounded-full h-3 pl- w-3 cursor-pointer" onClick={() => handleRemoveItem("benefits", index)} />
+      
+    </li>
+    
+
+  ))}
+</ol>
+
+
+
+      </div>
+    </div>
 
 
 
@@ -415,6 +572,21 @@ export default function SignUpDialog() {
             }
 
 
+         {step === 4 && 
+            
+            (<>
+            
+
+
+
+            
+            
+            </>
+
+            )
+          
+          
+          }
 
 
 
@@ -429,7 +601,7 @@ export default function SignUpDialog() {
             </AlertDialogCancel>
             {step > 1 && <Button onClick={handlePrevious}>Previous</Button>}
             <AlertDialogAction onClick={handleNext}>
-              {step < 3 ? "Next" : "Submit"}
+              {step < 4 ? "Next" : "Submit"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </form>
