@@ -54,6 +54,12 @@ export default function JobForm() {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission logic here, like sending data to an API
+    console.log("Form submitted", formData);
+  };
+
   const handleRemoveItem = (category: string, index: number) => {
     if (category === "requirements")
       setRequirements((prev) => prev.filter((_, i) => i !== index));
@@ -66,9 +72,9 @@ export default function JobForm() {
   const handleAddItem = (category: string, value: string) => {
     if (!value.trim()) return;
 
-    if (category === "requirements") setRequirements([...requirements, value]);
-    if (category === "desirable") setDesirable([...desirable, value]);
-    if (category === "benefits") setBenefits([...benefits, value]);
+    if (category === "requirements") setFormData((prevData) => ({ ...prevData, requirements: [...prevData.requirements, value] }));
+    if (category === "desirable") setFormData((prevData) => ({ ...prevData, desirable: [...prevData.desirable, value] }));
+    if (category === "benefits") setFormData((prevData) => ({ ...prevData, benefits: [...prevData.benefits, value] }));
   };
 
   const handleFileUpload = async () => {
@@ -105,9 +111,9 @@ export default function JobForm() {
     description: "",
     location: "",
     company: "",
-    setRequirements: [] as string[],  // Requirements (array of strings)
-    setDesirable: [] as string[],     // Desirable skills (array of strings)
-    setBenefits: [] as string[], 
+    requirements: [] as string[],  // Requirements (array of strings)
+    desirable: [] as string[],     // Desirable skills (array of strings)
+    benefits: [] as string[], 
 
   });
 
@@ -117,9 +123,9 @@ export default function JobForm() {
   const clearInputs = () => {
     setFormData({
       title: "",
-      setBenefits: [],
-      setRequirements: [],
-      setDesirable: [],
+      benefits: [],
+      requirements: [],
+      desirable: [],
       salary: "",
       employmentTypes: [],
       description: "",
@@ -134,28 +140,28 @@ export default function JobForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement; // Assert as HTMLInputElement
   
-    // Handle change for checkboxes
-    if (type === "checkbox" && name === "employmentTypes") {
-      setFormData((prevData) => {
-        let updatedEmploymentTypes = [...prevData.employmentTypes];
+    // // Handle change for checkboxes
+    // if (type === "checkbox" && name === "employmentTypes") {
+    //   setFormData((prevData) => {
+    //     let updatedEmploymentTypes = [...prevData.employmentTypes];
   
-        if (checked) {
-          // If checked, add the value to the employmentTypes array
-          updatedEmploymentTypes.push(value);
-        } else {
-          // If unchecked, remove the value from the employmentTypes array
-          updatedEmploymentTypes = updatedEmploymentTypes.filter((type) => type !== value);
-        }
+    //     if (checked) {
+    //       // If checked, add the value to the employmentTypes array
+    //       updatedEmploymentTypes.push(value);
+    //     } else {
+    //       // If unchecked, remove the value from the employmentTypes array
+    //       updatedEmploymentTypes = updatedEmploymentTypes.filter((type) => type !== value);
+    //     }
   
-        return { ...prevData, employmentTypes: updatedEmploymentTypes };
-      });
-    } else {
-      // Handle other types of inputs (text, select, textarea)
+    //     return { ...prevData, employmentTypes: updatedEmploymentTypes };
+    //   });
+    // } 
+    //   // Handle other types of inputs (text, select, textarea)
       setFormData({
         ...formData,
         [name]: value,
       });
-    }
+    
   };
   
 
@@ -187,30 +193,32 @@ export default function JobForm() {
     }
     
        }
-     
+
     if (step === 3) {
-     
+      setError("");
+      setError2("");
+      if (formData.requirements.length === 0) {
+        setError2("Please add at least one requirement.");
         return;
-      
-    }   
-
-
-  if (!formData.location || !formData.company) {
-    setError2("Please fill out all fields.");
-    
+      }
+      if (formData.desirable.length === 0) {
+        setError2("Please add at least one desirable skill.");
+        return;
+      }
+      if (formData.benefits.length === 0) {
+        setError2("Please add at least one benefit.");
+        return;
+    }
   }
+
+   
     setError("");
     setError2("");
     setStep(step + 1);
   };
 
-  const handlePrevious = () => {
-    if (step > 1) {
-      setStep(step - 1);
-      setError("");
-      setError2("");
-    
-    }
+  const handlePrevious = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setStep(step - 1);
   };
 
 
@@ -252,7 +260,7 @@ export default function JobForm() {
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
-        <form>
+        <form onSubmit={handleSubmit}>
           <AlertDialogHeader className="flex flex-col items-center text-center">
             <div>
               <AlertDialogTitle>Add Jobs Here</AlertDialogTitle>
@@ -342,10 +350,10 @@ export default function JobForm() {
                 
 
                 <label htmlFor="employmentTypes" className="text-lg font-semibold">
-        Type of Employment
-      </label>
-      <div className="flex flex-col gap-2">
-        {["Full-Time", "Part-Time", "Remote", "Internship", "Contract"].map((type) => (
+           Type of Employment
+          </label>
+             <div className="flex flex-col gap-2">
+            {["Full-Time", "Part-Time", "Remote", "Internship", "Contract"].map((type) => (
           <label key={type} className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -391,6 +399,8 @@ export default function JobForm() {
                 {error && <p className="text-red-500 text-sm">{error}</p>}
               </>
             )}
+
+
 
             {step === 2 && (
               <>
@@ -450,6 +460,8 @@ export default function JobForm() {
                             {error2 && <p className="text-red-500 text-sm">{error2}</p>}
 
 
+
+
             {step === 3 && 
             
               (<>
@@ -473,7 +485,7 @@ export default function JobForm() {
         </div>
        
         <ol className="flex flex-wrap gap-2 list-disc">
-    {requirements.map((req, index) => (
+    {formData.requirements.map((req, index) => (
     <li
       key={index}
       className="flex items-center bg-green-500 mt-3 dark:bg-green-800 text-sm dark:text-gray-300 px-2 py-1 rounded-lg gap-2"
@@ -501,12 +513,13 @@ export default function JobForm() {
               if (e.key === "Enter") {
                 handleAddItem("desirable", (e.target as HTMLInputElement).value);
                 (e.target as HTMLInputElement).value = "";
+                
               }
             }}
           />
         </div>
         <ol className="flex flex-wrap gap-2 list-disc">
-    {desirable.map((des, index) => (
+    {formData.desirable.map((des, index) => (
     <li
       key={index}
       className="flex items-center bg-green-500 mt-3 dark:bg-green-800 text-sm dark:text-gray-300 px-2 py-1 rounded-lg gap-2"
@@ -528,13 +541,13 @@ export default function JobForm() {
           <input
             type="text"
             id="benefitsInput"
-            placeholder="Enter a benefit"
+            placeholder="Enter a benefit" 
             className="border  border-green-400 p-2 rounded w-full"
-
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 handleAddItem("benefits", (e.target as HTMLInputElement).value);
                 (e.target as HTMLInputElement).value = "";
+                
               }
             }}
           />
@@ -542,7 +555,7 @@ export default function JobForm() {
         
         
         <ol className="flex flex-wrap gap-2 list-disc">
-  {benefits.map((ben, index) => (
+  {formData.benefits.map((ben, index) => (
     <li
       key={index}
       className="flex items-center bg-green-500 mt-3 dark:bg-green-800 text-sm dark:text-gray-300 px-2 py-1 rounded-lg gap-2"
@@ -557,12 +570,11 @@ export default function JobForm() {
 
 
 
+
+
       </div>
     </div>
 
-
-
-              
               
               </>
 
@@ -572,39 +584,25 @@ export default function JobForm() {
             }
 
 
-         {step === 4 && 
-            
-            (<>
-            
-
-
-
-            
-            
-            </>
-
-            )
-          
-          
-          }
-
-
-
-
-
-
           </div>
 
           <AlertDialogFooter>
             <AlertDialogCancel type="button" onClick={clearInputs}>
               Cancel
             </AlertDialogCancel>
-            {step > 1 && <Button onClick={handlePrevious}>Previous</Button>}
+            
+          {step > 1 &&
+            <Button type="button" onClick={handlePrevious}>
+             Privew
+           </Button>
+
+          }
             <AlertDialogAction onClick={handleNext}>
               {step < 4 ? "Next" : "Submit"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </form>
+      
       </AlertDialogContent>
     </AlertDialog>
   );
