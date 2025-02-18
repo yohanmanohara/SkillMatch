@@ -28,6 +28,8 @@ export default function JobForm() {
   const [logo, setLogo] = useState<string | null>(null);
   const [errorimage, setErrorimage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploaded, setuploaded] = useState(false);
+  
   const userId = sessionStorage.getItem('poop')
 
   
@@ -50,7 +52,7 @@ export default function JobForm() {
       };
       reader.readAsDataURL(file);
       setSelectedFile(file);  
-      
+      setError("");
 
     }
   };
@@ -104,6 +106,7 @@ export default function JobForm() {
           
           alert(`File uploaded successfully: ${data.url}`);
           setFormData((prevData) => ({ ...prevData, logoId: data.url }));
+          setuploaded(true);
             
         } else {
           setError(data.error || "Failed to upload file.");
@@ -156,6 +159,7 @@ export default function JobForm() {
     setError("");
     setError2("");
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement; // Assert as HTMLInputElement
     if (!selectedFile) {
@@ -189,14 +193,15 @@ export default function JobForm() {
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
-    if (step === 1  ) {
-      if (!formData.title || formData.employmentTypes.length === 0) {
-        setError("Please fill out all fields.");
+    if (step === 1) {
+      // Check if job title or employment types are missing
+      if (!formData.title || formData.employmentTypes.length === 0|| uploaded === false) {
+        setError("Please fill out all fields. and upload the logo");
         return;
       }
-
-      
+    
     }
+    
     if (step === 2) {
       const wordCount = formData.description.trim().split(/\s+/).length;
       setError("");
