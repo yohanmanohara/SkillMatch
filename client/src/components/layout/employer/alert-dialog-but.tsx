@@ -17,6 +17,7 @@ import { useEffect } from "react";
 
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { X } from "lucide-react";
+import { set } from "zod";
 export default function JobForm() {
   const [values, setValues] = useState([15000, 100000]);
   const [step, setStep] = useState(1);
@@ -27,11 +28,9 @@ export default function JobForm() {
   const [logo, setLogo] = useState<string | null>(null);
   const [errorimage, setErrorimage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [requirements, setRequirements] = useState<string[]>([]);
-  const [desirable, setDesirable] = useState<string[]>([]);
-  const [benefits, setBenefits] = useState<string[]>([]);
-  const [expirienceduration, setExpirienceduration] = useState<string[]>([]);
-  const [educationlevel, setEducationlevel] = useState<string[]>([]);
+  const userId = sessionStorage.getItem('poop')
+
+  
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -47,20 +46,22 @@ export default function JobForm() {
       setErrorimage(""); 
       const reader = new FileReader();
       reader.onloadend = () => {
-        setLogo(reader.result as string); // Convert image to base64 for preview
+        setLogo(reader.result as string); 
       };
       reader.readAsDataURL(file);
-
-      console.log("Selected file:", file);
       setSelectedFile(file);  
+      
+
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here, like sending data to an API
     console.log("Form submitted", formData);
   };
+
+
+
 
   const handleRemoveItem = (field: keyof typeof formData, index: number) => {
     setFormData((prevData) => ({
@@ -77,33 +78,43 @@ export default function JobForm() {
     if (category === "benefits") setFormData((prevData) => ({ ...prevData, benefits: [...prevData.benefits, value] }));
   };
 
-  const handleFileUpload = async () => {
-   
+    const handleFileUpload = async () => {
+      
 
-    const formData = new FormData();
-    if (selectedFile) {
-      formData.append("file", selectedFile);
-    }
-
-    try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        alert("Logo uploaded successfully!");
-      } else {
-        alert("Failed to upload logo.");
+      if (!selectedFile) {
+        setError("Please select a file to upload.");
+        return;
       }
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert("Error uploading logo.");
-    }
-  };
-
-
-
+      const allowedTypes = ["image/jpeg", "image/png"];
+      if (!allowedTypes.includes(selectedFile.type)) {
+        setError("Only JPG and PNG files are allowed.");
+        return;
+      }
+    
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', selectedFile);
+    
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/jobs/fileupload/?id=${userId}`, {
+          method: "POST",
+          body: formDataUpload,
+        });
+        const data = await response.json();
+        if (response.ok) {
+          
+          alert(`File uploaded successfully: ${data.url}`);
+          setFormData((prevData) => ({ ...prevData, logoId: data.url }));
+            
+        } else {
+          setError(data.error || "Failed to upload file.");
+        }
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        setError("Failed to upload file.");
+      }
+    };
+  
+  
   const [formData, setFormData] = useState({
     title: "",
     salary: "",
@@ -116,6 +127,8 @@ export default function JobForm() {
     benefits: [] as string[], 
     expirienceduration: "",
     educationlevel: "",
+    logo: "",
+    logoId: "",
 
   });
 
@@ -135,6 +148,8 @@ export default function JobForm() {
       company: "",
       expirienceduration: "",
       educationlevel: "",
+      logo: "",
+      logoId: "",
     });
     setValues([15000, 100000]);
     setStep(1);
@@ -143,7 +158,10 @@ export default function JobForm() {
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement; // Assert as HTMLInputElement
-  
+    if (!selectedFile) {
+      setError("Please select a file to upload.");
+      return;
+    }
     // Handle change for checkboxes
     if (type === "checkbox" && name === "employmentTypes") {
       setFormData((prevData) => {
@@ -215,6 +233,22 @@ export default function JobForm() {
     }
   }
 
+      if(step === 4) {
+          setError("");
+          setError2("");
+          if (!formData.expirienceduration ) {
+            setError2("Please fill out all fields.");
+            return;
+          } 
+          if (!formData.educationlevel ) {
+            setError2("Please fill out all fields.");
+            return;
+          }
+
+      }
+
+
+
    
     setError("");
     setError2("");
@@ -239,7 +273,7 @@ export default function JobForm() {
             body: JSON.stringify({ country: "Sri Lanka" }),
           }
         );
-  
+        
         const data = await response.json();
   
         if (data && data.data) {
@@ -251,6 +285,8 @@ export default function JobForm() {
         setLoading(false);
       }
     };
+
+
   
     fetchLocations();
   }, []);
@@ -323,10 +359,9 @@ export default function JobForm() {
               </Button>
               </div>
             )
-
-
-
             }
+
+
             {errorimage && <p className="text-red-500 text-sm">{errorimage}</p>}
 
                 <label htmlFor="title" className="text-lg font-semibold">
@@ -591,7 +626,7 @@ export default function JobForm() {
              
              <>
              
-              <Label>Experience</Label>
+              <Label>Experience In Years</Label>
               <input
                   type="int"
                   id="experience"
@@ -603,7 +638,7 @@ export default function JobForm() {
                   placeholder="Experience in years" 
                 />
 
-              <Label>Education Level</Label>
+              <Label>Education Level Degree or HND </Label>
               <input
                   type="int"
                   id="education"
@@ -620,6 +655,8 @@ export default function JobForm() {
             
             
             )}
+
+          
 
 
 

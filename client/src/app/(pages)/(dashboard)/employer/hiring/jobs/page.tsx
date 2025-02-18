@@ -9,8 +9,6 @@ const breadcrumbItems = [
 
 
 export default  async function UserPage() {
-    
-   
   return (
 
       <div className="space-y-2">
