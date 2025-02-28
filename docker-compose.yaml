@@ -27,6 +27,8 @@ services:
       - JWT_SECRET=secret
       - EMAIL=warushayohan80@gmail.com
       - EMAIL_PASSWORD=wlasedetnswsefnc
+      - AZURE_STORAGE_CONNECTION_STRING=DefaultEndpointsProtocol=https;AccountName=skillmatchassests;AccountKey=Mf6KmDSB79WLPy6wV2Xk3TkgxU3Ixpkm/Nt561L1fphpMMKDz/3fiyeFradMZAjg9wLEnx3gE1jv+ASt5Z1o0A==;EndpointSuffix=core.windows.net
+      - AZURE_CONTAINER_NAME=skill
     # networks:
     #   - skillmatch-network
     depends_on:

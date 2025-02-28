@@ -20,8 +20,14 @@ module.exports = {
   	},
   	extend: {
   		fontFamily: {
-  			poppins: ['Poppins', 'sans-serif'],
-  			encode: ['Encode Sans', 'sans-serif']
+  			poppins: [
+  				'Poppins',
+  				'sans-serif'
+  			],
+  			encode: [
+  				'Encode Sans',
+  				'sans-serif'
+  			]
   		},
   		backgroundImage: {
   			'custom-gradient': 'linear-gradient(180deg, #FFF 0%, #E1F7E4 100%)'
