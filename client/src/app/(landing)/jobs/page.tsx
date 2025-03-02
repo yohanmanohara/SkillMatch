@@ -1,22 +1,46 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import JobCard from "@/components/landing/JobCard2";
 
-const jobListings = [
-    { id: 1, title: "Frontend Developer", company: "Google", location: "Remote", logo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" },
-    { id: 2, title: "Backend Developer", company: "Amazon", location: "London, UK", logo: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" },
-    { id: 3, title: "Full Stack Engineer", company: "Meta", location: "San Francisco, CA", logo: "/meta.jpeg" },
-    { id: 4, title: "UI/UX Designer", company: "Apple", location: "New York, USA", logo: "/applelogo.png" },
-];
-
 export default function JobListingPage() {
   const [search, setSearch] = useState("");
+  const [jobListings, setJobListings] = useState<{ _id: string; title: string; company: string; location: string; logo: string; }[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredJobs = jobListings.filter((job) =>
-    job.title.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/jobs`, {
+          method: "GET", // Use "GET" method explicitly
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log(response);  
+        if (!response.ok) {
+          throw new Error(`Failed to fetch jobs: ${response.status} ${response.statusText}`);
+        }
+  
+        const data = await response.json();
+        setJobListings(data);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchJobs();
+  }, []);
+  
+
+  const filteredJobs = Array.isArray(jobListings)
+  ? jobListings.filter((job) =>
+      job.title.toLowerCase().includes(search.toLowerCase())
+    )
+  : [];
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -33,21 +57,25 @@ export default function JobListingPage() {
         <Button>Search</Button>
       </div>
 
-      <div className="grid gap-4">
-        {filteredJobs.length > 0 ? (
-          filteredJobs.map((job) => (
-            <JobCard 
-              key={job.id} 
-              title={job.title} 
-              company={job.company} 
-              location={job.location} 
-              logo={job.logo} 
-            />
-          ))
-        ) : (
-          <p className="text-gray-500 text-center">No jobs found.</p>
-        )}
-      </div>
+      {loading ? (
+        <p className="text-gray-500 text-center">Loading jobs...</p>
+      ) : (
+        <div className="grid gap-4">
+          {filteredJobs.length > 0 ? (
+            filteredJobs.map((job) => (
+              <JobCard 
+                key={job._id} 
+                title={job.title} 
+                company={job.company} 
+                location={job.location} 
+                logo={job.logo} 
+              />
+            ))
+          ) : (
+            <p className="text-gray-500 text-center">No jobs found.</p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

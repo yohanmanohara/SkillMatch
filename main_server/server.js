@@ -17,6 +17,7 @@ app.use(cors());
 
 app.use('/api/jobs', upload.single('file'), JobRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/jobs', userRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {

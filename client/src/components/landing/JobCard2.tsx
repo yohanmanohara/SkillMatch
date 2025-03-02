@@ -1,6 +1,8 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { use } from "react";
 
 interface JobCardProps {
   title: string;
@@ -19,8 +21,8 @@ export default function JobCard({ title, company, location, logo }: JobCardProps
         {/* Job Details */}
         <div>
           <CardTitle className="text-lg">{title}</CardTitle>
-          <p className="text-gray-600 font-medium">{company}</p>
-          <p className="text-gray-500 text-sm">{location}</p>
+          <div className="text-gray-600 font-medium">{company}</div>
+          <div className="text-gray-500 text-sm">{location}</div>
         </div>
       </div>
 
