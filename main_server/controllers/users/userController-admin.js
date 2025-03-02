@@ -43,6 +43,52 @@ const deleteUser = async (req, res) => {
 
 
 
+const putEmployee = async (req, res) => {
+  const { id } = req.params
+  
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'cluster id is not valid'})
+  }
+
+  const user = await userModel.findOneAndUpdate(
+    { _id: id }, 
+    { role: "Employee" }, 
+    { new: true } 
+  );
+
+
+  if (!user) {
+    return res.status(400).json({error: 'notto update'})
+  }
+ 
+  res.status(200).json(user)
+}
+
+
+const putEmployer = async (req, res) => {
+  const { id } = req.params
+  
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'cluster id is not valid'})
+  }
+
+  const user = await userModel.findOneAndUpdate(
+    { _id: id }, 
+    { role: "Employer" }, 
+    { new: true } 
+  );
+
+
+  if (!user) {
+    return res.status(400).json({error: 'notto update'})
+  }
+ 
+  res.status(200).json(user)
+}
+
+
 
 
 
@@ -102,7 +148,8 @@ const putInactive = async (req, res) => {
 
 module.exports = {
   getUsers,
-  
+  putEmployee,
+  putEmployer,
   putInactive,
   putActive,
   deleteUser,

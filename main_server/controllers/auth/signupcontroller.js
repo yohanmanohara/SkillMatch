@@ -23,7 +23,6 @@ async function getUserCount() {
       const currentId = latestUser.length > 0 ? latestUser[0].id : 0;
       console.log(`Current highest user id: ${currentId}`);
       if(latestUser.length > 0){
-        currentId=999;
         return currentId;
       }else{
         
