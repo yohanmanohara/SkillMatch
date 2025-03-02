@@ -1,38 +1,56 @@
 const mongoose = require('mongoose');
 
 const OrganizationSchema = new mongoose.Schema({
-  organizationName: {
+
+
+  companuPicUrl: {
+    type: String,
+    required: true  
+  },
+
+  comapnyName: {
     type: String,
     required: true,
+  },
+  companyType: {
+    type: String,
+    required: true  
   },
   companyEmail: {
     type: String,
     required: true,
   },
-  companyNo: {
+  ContactNumber: {
+    type: Number,
+    required: true,
+  },
+  websiteUrl: {
+    type: String,
+  },
+
+  streetAddress: {
     type: String,
     required: true,
   },
-  website: {
+  city: {
     type: String,
+    required: true,
   },
-  socialMediaLinks: {
-    facebook: {
-      type: String,
-    },
-    linkedin: {
-      type: String,
-    },
-  },
-  
-  location: {
+  state: {
     type: String,
+    required: true,
   },
-  profilePic: {
-    type: String, 
-  },
-  industry: {
+  postalCode: {
     type: String,
+    required: true,
+  },
+  country: {
+    type: String,
+    required
+  },
+  companyDescription: {
+    type: String,
+    required: true
   },
 });
 
