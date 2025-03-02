@@ -106,6 +106,59 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     }
   };
 
+
+
+  const makeemployee = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/putemployee/`+ data._id, {
+        method: 'PUT',   
+       
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to make employee');
+      }
+      window.location.reload();
+    }
+    catch (error) {
+      console.error('Error making employee:', error);
+      // Optionally show an error message to the user
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
+  }
+
+
+
+ const makeemployeer = async () => {
+
+  setLoading(true);
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/putemployer/`+ data._id, {
+      method: 'PUT',   
+     
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to make employeer');
+    }
+    window.location.reload();
+  }
+  catch (error) {
+    console.error('Error making employeer:', error);
+  } finally {
+    setLoading(false);
+    setOpen(false);
+  }
+
+
+ }
+
+
+
+
   return (
     <>
       <AlertModal
@@ -136,6 +189,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
           <DropdownMenuItem onClick={onactivate}>
             <Trash className="mr-2 h-4 w-4" /> Activate User
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={makeemployee}>
+            <Trash className="mr-2 h-4 w-4" /> Make As Employee
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={makeemployeer}>
+            <Trash className="mr-2 h-4 w-4" /> Make As Employer
           </DropdownMenuItem>
 
         </DropdownMenuContent>

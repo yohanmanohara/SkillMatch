@@ -6,6 +6,8 @@ const {  getUsers } = require('../controllers/users/userController-admin')
 const {deleteUser} = require('../controllers/users/userController-admin')
 const {updateUser} = require('../controllers/users/userController-customer')
 const {putActive} = require('../controllers/users/userController-admin')
+const {putEmployer} = require('../controllers/users/userController-admin')
+const {putEmployee} = require('../controllers/users/userController-admin')
 const {putInactive} = require('../controllers/users/userController-admin')
 const {verifyToken} = require('../controllers/auth/protected-route')
 const {verifyTokenadmin} = require('../controllers/auth/protected-route')
@@ -28,6 +30,13 @@ router.delete('/deleteuser/:id', deleteUser)
 router.patch('/updateuser', updateUser)
 
 router.put('/putactive/:id', putActive)
+
+router.put('/putemployer/:id', putEmployer)
+
+router.put('/putemployee/:id', putEmployee)
+
+
+router.put('/putinactive/:id', putInactive)
 
 router.put('/putinactive/:id', putInactive)
 
