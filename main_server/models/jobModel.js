@@ -1,50 +1,78 @@
 const mongoose = require('mongoose');
 
 const JobSchema = new mongoose.Schema({
-  jobTitle: {
+   title: {
     type: String,
-    required: true,
-  },
-  typeOfEmployment: {
-    type: String, 
     required: true,
   },
   salary: {
     type: String, 
+    required: true,
   },
-  jobDescriptionShort: {
+  employmentTypes: {
+    type: [String],
+    required: true,
+    default: [],
+  },
+  description: {
     type: String,
+    required: true,
   },
-  jobDescriptionLong: {
-    experience: {
-      type: String, // Experience requirements (e.g., "2-4 years")
-    },
-    requirements: {
-      type: [String], // List of key requirements
-    },
-    desirable: {
-      type: [String], // List of desirable skills/traits
-    },
-    benefits: {
-      type: [String], // List of benefits provided
-    },
-    qualifications: {
-      type: [String], // List of qualifications needed
-    },
-  },
+ 
   location: {
     type: String,
+    required: true,
   },
-  expireInDays: {
-    type: Number, // Number of days until the job expires
+
+  company: {
+    type: String,
+    required: true,
   },
-  fromOrganization: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Organization', // Reference to an Organization collection
+  requirements: {
+    type: [String],
+    required: true,
+    default: [],
   },
-  jobLevel: {
-    type: String, // e.g., "Entry Level", "Mid Level", "Senior Level"
+
+  desirable: {
+    type: [String],
+    required: true,
+    default: [],
   },
+
+  benifits: {
+    type: [String],
+    required: true,
+    default: [],
+  },
+  
+  expirienceduration: {
+    type: Number,
+    required: true,
+  },
+
+  educationlevel: {
+    type: String,
+    required: true,
+  },
+  
+  logoId :{
+    type: String,
+    required: true,
+  },
+
+  expiredate: {
+    type: Date,
+    required: true,
+  },
+
+
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+
+
 });
 
 module.exports = mongoose.model('Job', JobSchema);

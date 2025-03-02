@@ -14,7 +14,7 @@ import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
 import { jobTitles } from "@/utils/jobTitles";
 import { useEffect } from "react";
-
+import { Loader2 } from "lucide-react"; 
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { X } from "lucide-react";
 import { set } from "zod";
@@ -82,14 +82,16 @@ export default function JobForm() {
 
     const handleFileUpload = async () => {
       
-
+      setLoading(true);
       if (!selectedFile) {
         setError("Please select a file to upload.");
+        setLoading(false);
         return;
       }
       const allowedTypes = ["image/jpeg", "image/png"];
       if (!allowedTypes.includes(selectedFile.type)) {
         setError("Only JPG and PNG files are allowed.");
+        setLoading(false);
         return;
       }
     
@@ -103,17 +105,17 @@ export default function JobForm() {
         });
         const data = await response.json();
         if (response.ok) {
-          
-          alert(`File uploaded successfully: ${data.url}`);
           setFormData((prevData) => ({ ...prevData, logoId: data.url }));
           setuploaded(true);
-            
+          setLoading(false);
         } else {
           setError(data.error || "Failed to upload file.");
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error uploading file:", error);
         setError("Failed to upload file.");
+        setLoading(false);
       }
     };
   
@@ -121,17 +123,17 @@ export default function JobForm() {
   const [formData, setFormData] = useState({
     title: "",
     salary: "",
-    employmentTypes: [] as string[],  // Store selected employment types
+    employmentTypes: [] as string[], 
     description: "",
     location: "",
     company: "",
-    requirements: [] as string[],  // Requirements (array of strings)
-    desirable: [] as string[],     // Desirable skills (array of strings)
+    requirements: [] as string[],  
+    desirable: [] as string[],     
     benefits: [] as string[], 
-    expirienceduration: "",
+    expirienceduration: 0,
     educationlevel: "",
-    logo: "",
     logoId: "",
+    expiredate: "",
 
   });
 
@@ -149,15 +151,18 @@ export default function JobForm() {
       description: "",
       location: "",
       company: "",
-      expirienceduration: "",
+      expirienceduration: 0,
       educationlevel: "",
-      logo: "",
       logoId: "",
+      expiredate: "",
+
     });
     setValues([15000, 100000]);
     setStep(1);
     setError("");
     setError2("");
+    setuploaded(false);
+    setLogo(null);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -166,16 +171,13 @@ export default function JobForm() {
       setError("Please select a file to upload.");
       return;
     }
-    // Handle change for checkboxes
     if (type === "checkbox" && name === "employmentTypes") {
       setFormData((prevData) => {
         let updatedEmploymentTypes = [...prevData.employmentTypes];
   
         if (checked) {
-          // If checked, add the value to the employmentTypes array
           updatedEmploymentTypes.push(value);
         } else {
-          // If unchecked, remove the value from the employmentTypes array
           updatedEmploymentTypes = updatedEmploymentTypes.filter((type) => type !== value);
         }
   
@@ -249,9 +251,14 @@ export default function JobForm() {
             setError2("Please fill out all fields.");
             return;
           }
+          if (!formData.expiredate ) {
+            setError2("Please fill out all fields.");
+            return;
 
-      }
 
+           }
+          }
+ 
 
 
    
@@ -354,14 +361,21 @@ export default function JobForm() {
               </Button>
 
               <Button
-              type="button"
-              className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md"
-               onClick={handleFileUpload}
-
-            
-              >
-                Upload
-              </Button>
+      type="button"
+      className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md flex items-center gap-2"
+      onClick={handleFileUpload}
+      disabled={loading}
+      
+      
+    >
+     {loading ? (
+        <Loader2 className="animate-spin w-5 h-5" />
+      ) : uploaded ? (
+        "Uploaded"
+      ) : (
+        "Upload"
+      )}
+    </Button>
               </div>
             )
             }
@@ -633,7 +647,7 @@ export default function JobForm() {
              
               <Label>Experience In Years</Label>
               <input
-                  type="int"
+                  type="number"
                   id="experience"
                   name="expirienceduration"
                   value={formData.expirienceduration}
@@ -645,7 +659,7 @@ export default function JobForm() {
 
               <Label>Education Level Degree or HND </Label>
               <input
-                  type="int"
+                  type="text"
                   id="education"
                   name="educationlevel"
                   value={formData.educationlevel}
@@ -655,6 +669,23 @@ export default function JobForm() {
                   placeholder="Graduate or Post Graduate/HND or Diploma" 
                 />
                 {error && <p className="text-red-500 text-sm">{error}</p>}
+
+                <Label> Job Expire Date </Label>
+              <input
+                  type="Date"
+                  id="date"
+                  name="expiredate"
+                  value={formData.expiredate}
+                  onChange={handleChange}
+                  required
+                  className="border  border-green-400 p-2 rounded"
+                  placeholder="Graduate or Post Graduate/HND or Diploma" 
+                />
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+
+
+
+
 
              </>
             
@@ -691,5 +722,5 @@ export default function JobForm() {
       </AlertDialogContent>
     </AlertDialog>
   );
-}
 
+}
