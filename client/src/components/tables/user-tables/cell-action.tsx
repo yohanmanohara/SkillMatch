@@ -123,7 +123,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     }
     catch (error) {
       console.error('Error making employee:', error);
-      // Optionally show an error message to the user
     } finally {
       setLoading(false);
       setOpen(false);
