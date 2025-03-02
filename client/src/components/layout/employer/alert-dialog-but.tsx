@@ -132,7 +132,6 @@ export default function JobForm() {
     benefits: [] as string[], 
     expirienceduration: 0,
     educationlevel: "",
-    logo: "",
     logoId: "",
     expiredate: "",
 
@@ -154,7 +153,6 @@ export default function JobForm() {
       company: "",
       expirienceduration: 0,
       educationlevel: "",
-      logo: "",
       logoId: "",
       expiredate: "",
 
