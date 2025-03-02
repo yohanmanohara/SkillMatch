@@ -8,9 +8,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import  state  from "@/data/state";
+import companyTypes from "@/data/companytypes";
+
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+  
 import {
   Tabs,
   TabsContent,
@@ -39,6 +50,8 @@ export default function TabsDemo() {
 
   }
 
+  const [locations, setLocations] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const userId = sessionStorage.getItem('poop'); // Replace 'poop' with the correct session key.
 
@@ -103,6 +116,38 @@ export default function TabsDemo() {
 
 
 
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await fetch(
+          "https://countriesnow.space/api/v0.1/countries/cities",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ country: "Sri Lanka" }),
+          }
+        );
+        
+        const data = await response.json();
+  
+        if (data && data.data) {
+          setLocations(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+
+  
+    fetchLocations();
+  }, []);
+
+
 
   
 
@@ -138,12 +183,27 @@ export default function TabsDemo() {
     
     <div className="space-y-1">
       <Label htmlFor="companyType">Company Type</Label>
-      <Input id="companyType" name="companyType"  required />
+
+      <Select>
+  <SelectTrigger className="w-full">
+    <SelectValue placeholder="Company Types" />
+  </SelectTrigger>
+  <SelectContent className="max-h-60 overflow-y-auto">
+
+
+{companyTypes.map((companyTypes, index) => (
+      <SelectItem className="dark:text-white" key={index} value={companyTypes.label}>
+        {companyTypes.label}
+      </SelectItem>
+    ))}
+
+  </SelectContent>
+</Select>
     </div>
 
     <div className="space-y-1">
       <Label htmlFor="companyEmail">Company Email</Label>
-      <Input id="companyEmail" name="companyEmail"  required />
+      <Input id="companyEmail" name="companyEmail" type="email" placeholder="index@gmail.com" required />
     </div>
     
     <div className="space-y-1">
@@ -163,31 +223,52 @@ export default function TabsDemo() {
     
     <div className="space-y-1">
       <Label htmlFor="city">City</Label>
-      <Input id="city" name="city" placeholder="Enter Your Living City" />
+      
+      <Select>
+  <SelectTrigger className="w-full">
+    <SelectValue placeholder="City" />
+  </SelectTrigger>
+  <SelectContent className="max-h-60 overflow-y-auto">
+    {locations.map((location, index) => (
+      <SelectItem className="dark:text-white" key={index} value={location}>
+        {location}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
+
     </div>
     
     <div className="space-y-1">
       <Label htmlFor="state">State</Label>
-      <Input id="state" name="state" placeholder="Enter Your State" />
+         <Select>
+  <SelectTrigger className="w-full">
+    <SelectValue placeholder="State" />
+  </SelectTrigger>
+  <SelectContent className="max-h-60 overflow-y-auto">
+    {state.map((state, index) => (
+      <SelectItem className="dark:text-white" key={index} value={state.label}>
+        {state.label}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
     </div>
+
+
     
     <div className="space-y-1">
       <Label htmlFor="postalCode">Postal Code</Label>
       <Input id="postalCode" name="postalCode" placeholder="Enter Your Postal Code" />
     </div>
     
-    <div className="space-y-1">
-      <Label htmlFor="country">Country</Label>
-      <Input id="country" name="country"  placeholder="Enter Your Country" />
-    </div>
+    
 
     <div>
       <Label htmlFor="companyDescription">Description</Label>
       <Textarea id="companyDescription" name="companyDescription" placeholder="Type your message here."  className="h-60"/>
   
     </div>
-    
-    
     
   </CardContent>
   
@@ -198,11 +279,6 @@ export default function TabsDemo() {
 
           </Card>
         </TabsContent>
-
-
-
-
-
 
       </Tabs>
     </div>
