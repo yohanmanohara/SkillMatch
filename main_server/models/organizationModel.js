@@ -1,7 +1,15 @@
 const mongoose = require('mongoose');
 
-const OrganizationSchema = new mongoose.Schema({
-    companuPicUrl: {
+const Schema = mongoose.Schema
+
+const OrganizationSchema = new Schema({
+
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  companyPicUrl: {
     type: String,
     required: true,
   },
@@ -51,6 +59,8 @@ const OrganizationSchema = new mongoose.Schema({
         type: String,
         required: true,
   },
+    addedjobs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Job', required: false }], 
+  
 
     date: {
         type: Date,
@@ -58,4 +68,10 @@ const OrganizationSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Organization', OrganizationSchema);
+
+
+const Organization = mongoose.model('Organization', OrganizationSchema);
+
+
+
+module.exports = Organization;

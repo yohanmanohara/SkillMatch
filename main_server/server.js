@@ -15,7 +15,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 app.use(express.json());
 app.use(cors());
 
-app.use('/api/jobs', upload.single('file'), JobRoutes);
+app.use('/api/file', upload.single('file'), JobRoutes);
 app.use('/api/user', userRoutes);
 
 mongoose.connect(process.env.MONGO_URI)

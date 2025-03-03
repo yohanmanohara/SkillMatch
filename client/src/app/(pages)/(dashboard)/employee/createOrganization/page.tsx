@@ -54,6 +54,7 @@ export default function TabsDemo() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const userId = sessionStorage.getItem('poop'); 
+
   const [companyType,setcompanyType]=useState("");
   const [states,setStates]=useState("");
   const [cityies,setCityies]=useState("");
@@ -104,7 +105,7 @@ export default function TabsDemo() {
   
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/jobs/fileupload/?id=${userId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/file/fileupload/?id=${userId}`,
         {
           method: "POST",
           body: formDataUpload,
@@ -244,9 +245,9 @@ export default function TabsDemo() {
     try {
       const formData = new FormData(e.currentTarget);
   
-      const createOrganization = {
+      const organizationData = {
         
-        companuPicUrl: picture,
+        companyPicUrl: picture,
         comapnyName: formData.get('companyName'),
         companyType: companyType,
         companyEmail: formData.get('companyEmail'),
@@ -260,40 +261,46 @@ export default function TabsDemo() {
 
       };
 
-        console.log(createOrganization);
+        console.log(organizationData);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/createOrganization/?id=${userId}`, {
-        method: "PATCH",
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/createorganizations/?id=${userId}`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(createOrganization),   
+        body: JSON.stringify(organizationData),
       });
   
     
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast({
-          title: "Faild to Create  Organization",
-          description:errorData.error || "Failed  Please try again..",
-        });
-      }
+      const responseData = await response.json(); // Parse the response body as JSON
 
-  
-  
-      // router.refresh();
-      // window.location.reload();
-
+    if (!response.ok) {
       toast({
-        title: "updated successfully",
-        description: "Organization updated successfully",
+        title: "Failed to Create Organization",
+        description: responseData.message || "Something went wrong. Please try again.",
       });
 
+
+      return;
+    }
+      else{
+
+  
+  
       
+      toast({
+        title: "updated successfully",
+        description: "Organization updated successfully Ans Plz log Again",
+      });}
+      sessionStorage.removeItem('token');
+
+      window.location.reload();
+
       
     } catch (error) {
      
       console.error("An error occurred while creating the organization:", error);
+      toast({ title: "Error", description: "Something went wrong. Please try again." });
       
     }
   };
