@@ -1,13 +1,18 @@
-//jobs page
-
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import JobCards from "@/components/landing/ExpandableCard";
 
 export default function JobListingPage() {
-  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const initialSearch = searchParams.get("search") || "";
+  const initialLocation = searchParams.get("location") || "";
+
+  const [search, setSearch] = useState(initialSearch);
+  const [location, setLocation] = useState(initialLocation);
+  const [filteredJobs, setFilteredJobs] = useState<typeof jobData>([]);
 
   const jobData = [
     {
@@ -31,7 +36,6 @@ export default function JobListingPage() {
         "Velstar is a Shopify Plus agency, and we partner with brands to help them grow, we also do the same with our people!",
         "Here at Velstar, we don't just make websites, we create exceptional digital experiences that consumers love.",
         "Our team of designers, developers, strategists, and creators work together to push brands to the next level.",
-        "The role will involve translating project specifications into clean, test-driven, easily maintainable code.",
       ],
       tags: ["On Site", "Full Time"],
       logo: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
@@ -56,57 +60,51 @@ export default function JobListingPage() {
       description: [
         "Tech Innovators is a leading tech company focused on developing cutting-edge web applications.",
         "We are looking for a talented Frontend Developer to join our team and help us build amazing user experiences.",
-        "You will work closely with our design and backend teams to create responsive and performant web applications.",
       ],
       tags: ["Remote", "Full Time"],
       logo: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
     },
-    {
-      id: 3,
-      title: "Backend Developer",
-      company: "Data Solutions",
-      salary: "$150,000/yr",
-      location: "New York, USA",
-      posted: "10 Aug, 2021",
-      experience: "4 years",
-      education: "Master's Degree",
-      expire: "10 Oct, 2021",
-      level: "Senior level",
-      requirements:
-        "4+ years of experience in backend development, Proficiency in Node.js, Express, and MongoDB",
-      benefits:
-        "Health insurance, 401(k) matching, Paid time off",
-      desirable:
-        "Experience with microservices architecture, Familiarity with Docker and Kubernetes, Knowledge of cloud platforms",
-      description: [
-        "Data Solutions is a data-driven company that provides innovative solutions to our clients.",
-        "We are seeking a skilled Backend Developer to join our team and help us build scalable and efficient backend systems.",
-        "You will be responsible for designing, developing, and maintaining our backend services and APIs.",
-      ],
-      tags: ["On Site", "Full Time"],
-      logo: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
-    },
   ];
 
-  const filteredJobs = jobData.filter((job) =>
-    job.title.toLowerCase().includes(search.toLowerCase())
-  );
+  // Function to filter jobs based on search input & location
+  const handleSearch = () => {
+    const filtered = jobData.filter(
+      (job) =>
+        (search === "" || job.title.toLowerCase().includes(search.toLowerCase())) &&
+        (location === "" || job.location.toLowerCase().includes(location.toLowerCase()))
+    );
+    setFilteredJobs(filtered);
+  };
+
+  // Run the search filter initially
+  useEffect(() => {
+    handleSearch();
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-3xl font-bold mb-6 text-center">Find Your Dream Job</div>
 
+      {/* Search Inputs */}
       <div className="flex gap-3 mb-6">
         <Input
           type="text"
-          placeholder="Search jobs..."
+          placeholder="Search job title..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1"
         />
-        <Button>Search</Button>
+        <Input
+          type="text"
+          placeholder="Enter location..."
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          className="flex-1"
+        />
+        <Button onClick={handleSearch}>Search</Button>
       </div>
 
+      {/* Job Listings */}
       <div className="grid gap-4">
         {filteredJobs.length > 0 ? (
           filteredJobs.map((job) => <JobCards key={job.id} job={job} />)
