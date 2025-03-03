@@ -55,28 +55,55 @@ export default function TabsDemo() {
   const [user, setUser] = useState<User | null>(null);
   const userId = sessionStorage.getItem('poop'); // Replace 'poop' with the correct session key.
   const [companyType,setcompanyType]=useState("");
+  const [states,setStates]=useState("");
+  const [cityies,setCityies]=useState("");
   const router = useRouter();  
 
   const craeteCompany= async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
+    if(!companyType)
+    {
+      toast({
+        title: "Please Select Company Type",
+        description: "Please Select Company Type",
+      });
+      return;
+    }
+    if(!states)
+    {
+      toast({
+        title: "Please Select State",
+        description: "Please Select State",
+      });
+      return;
+    }
+
+    if(!cityies)
+    {
+      toast({
+        title: "Please Select City",
+        description: "Please Select City",
+      });
+      return;
+    }
+
   
     try {
       const formData = new FormData(e.currentTarget);
   
       const createOrganization = {
         
-        companuPicUrl: formData.get('companuPicUrl') as string,
+        companuPicUrl: formData.get('companyPicUrl') as string,
         comapnyName: formData.get('companyName'),
-        companyType: formData.get('companyTypes'),
+        companyType: companyType,
         companyEmail: formData.get('companyEmail'),
         contactnumber: formData.get('contactNumber'),
         websiteUrl: formData.get('websiteUrl'),
         streetAddress: formData.get('streetAddress'),
-        city: formData.get('city'),
-        state: formData.get('state'),
+        city: cityies,
+        state: states,
         postalCode: formData.get('postalCode'),
-        country: formData.get('country'),
         companyDescription: formData.get('companyDescription'),
 
       };
@@ -186,18 +213,18 @@ export default function TabsDemo() {
     <div className="space-y-1">
       <Label htmlFor="companyType">Company Type</Label>
       
-      <Select>
+      <Select name="companyType" onValueChange={(value) => setcompanyType(value)}>
   <SelectTrigger className="w-full">
     <SelectValue placeholder="Company Types" />
   </SelectTrigger>
   <SelectContent className="max-h-60 overflow-y-auto">
-    {companyTypes.map((companyTypes, index) => (
-      <SelectItem className="dark:text-white" key={index} value={companyTypes.label}  >
-        {companyTypes.label}
+    {companyTypes.map((type, index) => (
+      <SelectItem className="dark:text-white" key={index} value={type.label}>
+        {type.label}
       </SelectItem>
     ))}
-    </SelectContent>
-   </Select>
+  </SelectContent>
+</Select>
 
     </div>
 
@@ -210,7 +237,7 @@ export default function TabsDemo() {
     
     <div className="space-y-1">
       <Label htmlFor="ContactNumber">Contact Number</Label>
-      <Input id="contactNumber" name="contactNumber"  placeholder="+94 772143651" required />
+      <Input id="contactNumber" name="contactNumber" type="number" placeholder="+94 772143651" required />
     </div>
     
     <div className="space-y-1">
@@ -226,7 +253,7 @@ export default function TabsDemo() {
     <div className="space-y-1">
       <Label htmlFor="city">City</Label>
       
-      <Select>
+      <Select  name="cityies" onValueChange={(value) => setCityies(value)}>
   <SelectTrigger className="w-full">
     <SelectValue placeholder="City" />
   </SelectTrigger>
@@ -244,7 +271,7 @@ export default function TabsDemo() {
     <div className="space-y-1">
       <Label htmlFor="state">State</Label>
 
-  <Select>
+  <Select  name="state" onValueChange={(value) => setStates(value)}>
   <SelectTrigger className="w-full">
     <SelectValue placeholder="State" />
   </SelectTrigger>
