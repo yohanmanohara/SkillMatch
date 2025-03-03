@@ -247,7 +247,7 @@ export default function TabsDemo() {
   
       const organizationData = {
         
-        companuPicUrl: picture,
+        companyPicUrl: picture,
         comapnyName: formData.get('companyName'),
         companyType: companyType,
         companyEmail: formData.get('companyEmail'),
@@ -272,29 +272,35 @@ export default function TabsDemo() {
       });
   
     
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast({
-          title: "Faild to Create  Organization",
-          description:errorData.error || "Failed  Please try again..",
-        });
-      }
+      const responseData = await response.json(); // Parse the response body as JSON
 
-  
-  
-      // router.refresh();
-      // window.location.reload();
-
+    if (!response.ok) {
       toast({
-        title: "updated successfully",
-        description: "Organization updated successfully",
+        title: "Failed to Create Organization",
+        description: responseData.message || "Something went wrong. Please try again.",
       });
 
+
+      return;
+    }
+      else{
+
+  
+  
       
+      toast({
+        title: "updated successfully",
+        description: "Organization updated successfully Ans Plz log Again",
+      });}
+      sessionStorage.removeItem('token');
+
+      window.location.reload();
+
       
     } catch (error) {
      
       console.error("An error occurred while creating the organization:", error);
+      toast({ title: "Error", description: "Something went wrong. Please try again." });
       
     }
   };

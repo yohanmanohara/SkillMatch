@@ -15,11 +15,11 @@ const {getsingleuser} = require('../controllers/users/userController-customer')
 const {updatePassword} = require('../controllers/users/userController-customer')
 const {otpfroget} = require('../controllers/users/userController-customer')
 const {resetpassword} = require('../controllers/users/userController-customer')
-const { createOrganization } = require('../controllers/organization/organizationControllers')
+const {createOrganization} = require('../controllers/organization/organizationControllers')
 const router = express.Router()
 
 
-router.post('/createorganizations/:id', createOrganization)
+router.post('/createorganizations', createOrganization)
 
 router.post('/login', loginUser)
 
