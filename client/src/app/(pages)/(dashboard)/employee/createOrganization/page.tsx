@@ -263,30 +263,30 @@ export default function TabsDemo() {
       };
 
         console.log(createOrganization);
-      // const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updateusser/?id=${userId}`, {
-      //   method: "PATCH",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(createOrganization),   
-      // });
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/createOrganization/?id=${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(createOrganization),   
+      });
   
     
-      // if (!response.ok) {
-      //   const errorData = await response.json();
-      //   toast({
-      //     title: "Faild to Create  Organization",
-      //     description:errorData.error || "Failed  Please try again..",
-      //   });
-      // }
+      if (!response.ok) {
+        const errorData = await response.json();
+        toast({
+          title: "Faild to Create  Organization",
+          description:errorData.error || "Failed  Please try again..",
+        });
+      }
   
   
       // router.refresh();
       // window.location.reload();
-      // toast({
-      //   title: "updated successfully",
-      //   description: "Organization updated successfully",
-      // });
+      toast({
+        title: "updated successfully",
+        description: "Organization updated successfully",
+      });
       
       
     } catch (error) {
@@ -407,7 +407,7 @@ export default function TabsDemo() {
     
     <div className="space-y-1">
       <Label htmlFor="ContactNumber">Contact Number</Label>
-      <Input id="contactNumber" name="contactNumber" type="number" placeholder="+94 772143651" required />
+      <Input id="contactNumber" name="contactNumber" type="tel" placeholder="+94 772143651" required />
     </div>
     
     <div className="space-y-1">
