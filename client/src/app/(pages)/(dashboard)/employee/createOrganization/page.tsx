@@ -51,13 +51,13 @@ export default function TabsDemo() {
   }
 
   const [locations, setLocations] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const userId = sessionStorage.getItem('poop'); // Replace 'poop' with the correct session key.
-
+  const [companyType,setcompanyType]=useState("");
   const router = useRouter();  
 
-  const handleProfile = async (e: React.FormEvent<HTMLFormElement>) => {
+  const craeteCompany= async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
   
@@ -65,12 +65,12 @@ export default function TabsDemo() {
       const formData = new FormData(e.currentTarget);
   
       const createOrganization = {
+        
         companuPicUrl: formData.get('companuPicUrl') as string,
-        comapnyName: formData.get('comapnyName'),
-        companyType: formData.get('companyType'),
+        comapnyName: formData.get('companyName'),
+        companyType: formData.get('companyTypes'),
         companyEmail: formData.get('companyEmail'),
-        ContactNumber: formData.get('ContactNumber'),
-        contactnumber: formData.get('contactnumber'),
+        contactnumber: formData.get('contactNumber'),
         websiteUrl: formData.get('websiteUrl'),
         streetAddress: formData.get('streetAddress'),
         city: formData.get('city'),
@@ -81,30 +81,31 @@ export default function TabsDemo() {
 
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updateusser/?id=${userId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(createOrganization),   
-      });
+        console.log(createOrganization);
+    //   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updateusser/?id=${userId}`, {
+    //     method: "PATCH",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(createOrganization),   
+    //   });
   
     
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast({
-          title: "Faild to Create  Organization",
-          description:errorData.error || "Failed  Please try again..",
-        });
-      }
+    //   if (!response.ok) {
+    //     const errorData = await response.json();
+    //     toast({
+    //       title: "Faild to Create  Organization",
+    //       description:errorData.error || "Failed  Please try again..",
+    //     });
+    //   }
   
   
-      router.refresh();
-      window.location.reload();
-      toast({
-        title: "updated successfully",
-        description: "Organization updated successfully",
-      });
+    //   router.refresh();
+    //   window.location.reload();
+    //   toast({
+    //     title: "updated successfully",
+    //     description: "Organization updated successfully",
+    //   });
       
       
     } catch (error) {
@@ -173,7 +174,7 @@ export default function TabsDemo() {
               </CardDescription>
             </CardHeader>
 
-            <form onSubmit={handleProfile}>
+            <form onSubmit={craeteCompany}>
   <CardContent className="space-y-5">
 
     <div className="space-y-1">
@@ -181,25 +182,26 @@ export default function TabsDemo() {
       <Input id="companyName" name="companyName" placeholder="Enter Company Name" required />
     </div>
     
+
     <div className="space-y-1">
       <Label htmlFor="companyType">Company Type</Label>
-
+      
       <Select>
   <SelectTrigger className="w-full">
     <SelectValue placeholder="Company Types" />
   </SelectTrigger>
   <SelectContent className="max-h-60 overflow-y-auto">
-
-
-{companyTypes.map((companyTypes, index) => (
-      <SelectItem className="dark:text-white" key={index} value={companyTypes.label}>
+    {companyTypes.map((companyTypes, index) => (
+      <SelectItem className="dark:text-white" key={index} value={companyTypes.label}  >
         {companyTypes.label}
       </SelectItem>
     ))}
+    </SelectContent>
+   </Select>
 
-  </SelectContent>
-</Select>
     </div>
+
+
 
     <div className="space-y-1">
       <Label htmlFor="companyEmail">Company Email</Label>
@@ -208,12 +210,12 @@ export default function TabsDemo() {
     
     <div className="space-y-1">
       <Label htmlFor="ContactNumber">Contact Number</Label>
-      <Input id="ContactNumber" name="ContactNumber"  placeholder="+94 772143651" required />
+      <Input id="contactNumber" name="contactNumber"  placeholder="+94 772143651" required />
     </div>
     
     <div className="space-y-1">
       <Label htmlFor="websiteUrl">Website URL</Label>
-      <Input id="websiteUrl" name="websiteUrl"  placeholder="websitelink" />
+      <Input id="websiteUrl" name="websiteUrl"  placeholder="websitelink" required/>
     </div>
     
     <div className="space-y-1">
@@ -241,39 +243,42 @@ export default function TabsDemo() {
     
     <div className="space-y-1">
       <Label htmlFor="state">State</Label>
-         <Select>
+
+  <Select>
   <SelectTrigger className="w-full">
     <SelectValue placeholder="State" />
   </SelectTrigger>
-  <SelectContent className="max-h-60 overflow-y-auto">
+  <SelectContent className="max-h-60 overflow-y-auto"  >
     {state.map((state, index) => (
-      <SelectItem className="dark:text-white" key={index} value={state.label}>
+      <SelectItem className="dark:text-white" id="state" key={index} value={state.label}>
         {state.label}
       </SelectItem>
     ))}
   </SelectContent>
-</Select>
+  </Select>
+
+
     </div>
 
 
     
     <div className="space-y-1">
       <Label htmlFor="postalCode">Postal Code</Label>
-      <Input id="postalCode" name="postalCode" placeholder="Enter Your Postal Code" />
+      <Input id="postalCode" name="postalCode" placeholder="Enter Your Postal Code" required/>
     </div>
     
     
 
     <div>
       <Label htmlFor="companyDescription">Description</Label>
-      <Textarea id="companyDescription" name="companyDescription" placeholder="Type your message here."  className="h-60"/>
+      <Textarea id="companyDescription" name="companyDescription" placeholder="Type your message here."  className="h-60"required/>
   
     </div>
     
   </CardContent>
   
   <CardFooter>
-    <Button type="submit" variant="secondary">Save Changes</Button>
+    <Button type="submit" variant="secondary">Create Organization</Button>
   </CardFooter>
 </form>
 
