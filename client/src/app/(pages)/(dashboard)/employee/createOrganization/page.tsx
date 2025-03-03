@@ -64,8 +64,10 @@ export default function TabsDemo() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [uploaded, setuploaded] = useState(false);
   const [picture, setPicture] = useState("");
+
   const [role, setRole] = useState<string | null>(null); 
   
+
 
   const handleFileUpload = async () => {
     setLoading(true);
