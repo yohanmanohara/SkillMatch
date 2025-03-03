@@ -53,12 +53,106 @@ export default function TabsDemo() {
   const [locations, setLocations] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const userId = sessionStorage.getItem('poop'); // Replace 'poop' with the correct session key.
+  const userId = sessionStorage.getItem('poop'); 
   const [companyType,setcompanyType]=useState("");
   const [states,setStates]=useState("");
   const [cityies,setCityies]=useState("");
   const router = useRouter();  
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [error, setError] = useState("");
+  const [uploaded, setuploaded] = useState(false);
+  const [picture, setPicture] = useState("");
 
+
+  const handleFileUpload = async () => {
+      
+    setLoading(true);
+    if (!selectedFile) {
+      setError("Please select a file to upload.");
+      setLoading(false);
+      return;
+    }
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(selectedFile.type)) {
+      setError("Only JPG and PNG files are allowed.");
+      setLoading(false);
+      return;
+    }
+  
+    const formDataUpload = new FormData();
+    formDataUpload.append('file', selectedFile);
+  
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/jobs/fileupload/?id=${userId}`, {
+        method: "POST",
+        body: formDataUpload,
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setPicture(data.url);
+        setuploaded(true);
+        setLoading(false);
+
+        toast({
+          title: "File uploaded",
+          description: "File uploaded successfully.",
+        });
+      } else {
+        
+        toast({
+          title: "Error",
+          description: data.error || "Failed to upload file.",
+        });
+    
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast({
+        title: "Error",
+        description:  "Failed to upload file.",
+      });
+      setLoading(false);
+    }
+  };
+
+  const handleClear = () => { 
+
+    setPicture("");
+    setSelectedFile(null);
+  }
+
+
+
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      const validTypes = ["image/png", "image/jpeg"];
+      
+      if (!validTypes.includes(file.type)) {
+        toast({
+              title: "Error",
+              description: "Only PNG and JPEG files are allowed.",
+            });
+        
+            setSelectedFile(null);
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // setLogo(reader.result as string); 
+      };
+      reader.readAsDataURL(file);
+      setSelectedFile(file);  
+      
+
+    }
+  };
+
+
+  
   const craeteCompany= async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
@@ -94,7 +188,7 @@ export default function TabsDemo() {
   
       const createOrganization = {
         
-        companuPicUrl: formData.get('companyPicUrl') as string,
+        companuPicUrl: picture,
         comapnyName: formData.get('companyName'),
         companyType: companyType,
         companyEmail: formData.get('companyEmail'),
@@ -191,16 +285,21 @@ export default function TabsDemo() {
           <Card>
             <CardHeader>
               <CardTitle>Fill the Form to Create A organiztion</CardTitle>
-              {/* Avatar Preview */}
+             
       <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
-        <AvatarImage src={previewUrl } alt="User Avatar" />
+      <AvatarImage src={picture ? picture : previewUrl} alt="User Avatar" />
       </Avatar>
 
       <Input type="file" accept="image/*" onChange={handleFileChange} />
-      <Button onClick={handleUpload} disabled={!selectedFile}>
+      <div className="flex gap-5"> 
+        <Button variant="secondary" onClick={handleFileUpload} >
         Upload
       </Button> 
-
+      <Button onClick={handleClear} variant="outline">
+          Clear
+        </Button>
+      </div>
+     
       
               <CardDescription>
                 Make changes to your account here. Click save when you&apos;re done.
