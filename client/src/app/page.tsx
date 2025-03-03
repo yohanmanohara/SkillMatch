@@ -22,6 +22,17 @@ const page = () => {
     <JobCards/>
     </Container>
    
+    <Container>
+    <JobCards/>
+    </Container>
+    
+    <Container>
+    <JobCards/>
+    </Container>
+
+    <Container>
+    <JobCards/>
+    </Container>
   
     <Container>
     <Customerfeedback/>
@@ -31,12 +42,6 @@ const page = () => {
     <Container>
     <Contactus/>
     </Container>
-
-    <Container>
-    <JobDescription/>
-    </Container>
-
-   
       
     <Footer/> 
     </>
