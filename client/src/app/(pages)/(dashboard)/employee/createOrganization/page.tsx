@@ -160,8 +160,6 @@ export default function TabsDemo() {
   }
 
 
-
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const file = e.target.files?.[0];
 
@@ -263,6 +261,7 @@ export default function TabsDemo() {
       };
 
         console.log(createOrganization);
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/createOrganization/?id=${userId}`, {
         method: "PATCH",
         headers: {
@@ -279,14 +278,17 @@ export default function TabsDemo() {
           description:errorData.error || "Failed  Please try again..",
         });
       }
+
   
   
       // router.refresh();
       // window.location.reload();
+
       toast({
         title: "updated successfully",
         description: "Organization updated successfully",
       });
+
       
       
     } catch (error) {
@@ -407,7 +409,9 @@ export default function TabsDemo() {
     
     <div className="space-y-1">
       <Label htmlFor="ContactNumber">Contact Number</Label>
+
       <Input id="contactNumber" name="contactNumber" type="tel" placeholder="+94 772143651" required />
+
     </div>
     
     <div className="space-y-1">
