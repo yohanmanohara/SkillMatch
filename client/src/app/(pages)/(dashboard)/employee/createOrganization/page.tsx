@@ -8,13 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+
 import  state  from "@/data/state";
 import companyTypes from "@/data/companytypes";
+
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast";
 import {
+
     Select,
     SelectContent,
     SelectItem,
@@ -23,6 +26,7 @@ import {
   } from "@/components/ui/select"
   
 import {
+
   Tabs,
   TabsContent,
   TabsList,
@@ -58,12 +62,48 @@ export default function TabsDemo() {
   const router = useRouter();  
 
   const craeteCompany= async (e: React.FormEvent<HTMLFormElement>) => {
+
+  // User interface for type-checking
+  interface User {
+    username: string;
+    email: string;
+    firstname: string;
+    lastname: string;
+    contactnumber: string;
+    country: string;
+    city: string;
+    status: string;
+  }
+
+  const [user, setUser] = useState<User | null>(null);
+  const userId = sessionStorage.getItem('poop'); // Replace 'poop' with the correct session key.
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (userId) {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getsingleuser/?id=${userId}`, {
+            cache: 'no-store',
+          });
+          const data = await res.json();
+          setUser(data);
+        } catch (error) {
+          console.error("Failed to fetch user:", error);
+        }
+      }
+    };
+    fetchUser();
+  }, [userId]);
+  const router = useRouter();  
+
+  const handleProfile = async (e: React.FormEvent<HTMLFormElement>) => {
+
     e.preventDefault();
     
   
     try {
       const formData = new FormData(e.currentTarget);
-  
+
       const createOrganization = {
         
         companuPicUrl: formData.get('companuPicUrl') as string,
@@ -106,10 +146,48 @@ export default function TabsDemo() {
     //     title: "updated successfully",
     //     description: "Organization updated successfully",
     //   });
+
+      const updatedUser = {
+        username: formData.get('username'),
+        email: formData.get('email'),
+        firstname: formData.get('firstname'),
+        lastname: formData.get('lastname'),
+        contactnumber: formData.get('contactnumber'),
+        country: formData.get('country'),
+        city: formData.get('city'),
+        status: formData.get('status'),
+      };
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updateusser/?id=${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedUser),
+      });
+  
+    
+      if (!response.ok) {
+        const errorData = await response.json();
+        toast({
+          title: "Faild to update user",
+          description:errorData.error || "Failed to update user. Please try again..",
+        });
+      }
+  
+  
+      router.refresh();
+      window.location.reload();
+      toast({
+        title: "updated successfully",
+        description: "User updated successfully",
+      });
+
       
       
     } catch (error) {
      
+
       console.error("An error occurred while creating the organization:", error);
       
     }
@@ -150,6 +228,59 @@ export default function TabsDemo() {
 
 
 
+
+      console.error("An error occurred while updating the profile:", error);
+      
+    }
+  };
+
+
+
+
+  const haddlepasswordupdate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  
+    try {
+      const formData = new FormData(e.currentTarget);
+  
+      const updatedPassword = {
+        currentPassword: formData.get('currentPassword') as string,
+        newPassword: formData.get('newPassword') as string,
+        confirmPassword: formData.get('confirmPassword') as string,
+      };
+  
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updatpassword/?id=${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedPassword),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        toast({
+          title: "Failed to change password",
+          description: errorData.error || "Please try again.",
+        });
+        return; // Exit early on error
+      }
+  
+      toast({
+        title: "Password changed successfully",
+        description: "Your password has been updated.",
+      });
+  
+      window.location.reload();
+    } catch (error) {
+      console.error("An error occurred while changing password:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+      });
+    }
+  };
+
   
 
   return (
@@ -161,11 +292,16 @@ export default function TabsDemo() {
         </TabsList>
 
         
+
          
         <TabsContent value="company">
           <Card>
             <CardHeader>
+
               <CardTitle>Fill the Form to Create A organiztion</CardTitle>
+
+              <CardTitle>Edit Your Compaby Details</CardTitle>
+
               <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
                 <AvatarImage src="/avatadefault.jpg" alt="User Avatar" />
               </Avatar>
@@ -173,6 +309,7 @@ export default function TabsDemo() {
                 Make changes to your account here. Click save when you&apos;re done.
               </CardDescription>
             </CardHeader>
+
 
             <form onSubmit={craeteCompany}>
   <CardContent className="space-y-5">
@@ -221,10 +358,47 @@ export default function TabsDemo() {
     <div className="space-y-1">
       <Label htmlFor="streetAddress">Street Address</Label>
       <Input id="streetAddress" name="streetAddress"  placeholder="121 / 04 , western street" required/>
+
+            <form onSubmit={handleProfile}>
+  <CardContent className="space-y-5">
+    {/* Company Name */}
+    <div className="space-y-1">
+      <Label htmlFor="orgName">Company Name</Label>
+      <Input id="orgName" name="orgName" placeholder="Enter Company Name" required />
+    </div>
+    
+    {/* Company Email */}
+    <div className="space-y-1">
+      <Label htmlFor="orgEmail">Company Type</Label>
+      <Input id="orgEmail" name="orgType"  readOnly />
+    </div>
+    <div className="space-y-1">
+      <Label htmlFor="orgEmail">Company Email</Label>
+      <Input id="orgEmail" name="orgEmail"  readOnly />
+    </div>
+    
+    {/* Contact Number */}
+    <div className="space-y-1">
+      <Label htmlFor="orgPhone">Contact Number</Label>
+      <Input id="orgPhone" name="orgPhone"  placeholder="0772243631" required />
+    </div>
+    
+    {/* Website URL */}
+    <div className="space-y-1">
+      <Label htmlFor="website">Website URL</Label>
+      <Input id="website" name="website"  placeholder="websitelink" />
+    </div>
+    
+    {/* Address Fields */}
+    <div className="space-y-1">
+      <Label htmlFor="street">Street Address</Label>
+      <Input id="street" name="street"  placeholder="Enter Street Address" />
+
     </div>
     
     <div className="space-y-1">
       <Label htmlFor="city">City</Label>
+
       
       <Select>
   <SelectTrigger className="w-full">
@@ -239,10 +413,12 @@ export default function TabsDemo() {
   </SelectContent>
 </Select>
 
+
     </div>
     
     <div className="space-y-1">
       <Label htmlFor="state">State</Label>
+
 
   <Select>
   <SelectTrigger className="w-full">
@@ -279,11 +455,39 @@ export default function TabsDemo() {
   
   <CardFooter>
     <Button type="submit" variant="secondary">Create Organization</Button>
+
+      <Input id="state" name="state" placeholder="Enter Your State" />
+    </div>
+    
+    <div className="space-y-1">
+      <Label htmlFor="postalCode">Postal Code</Label>
+      <Input id="postalCode" name="postalCode" placeholder="Enter Your Postal Code" />
+    </div>
+    
+    <div className="space-y-1">
+      <Label htmlFor="country">Country</Label>
+      <Input id="country" name="country"  placeholder="Enter Your Country" />
+    </div>
+
+    <div>
+      <Label htmlFor="description">Description</Label>
+      <Textarea placeholder="Type your message here."  className="h-60"/>
+  
+    </div>
+    
+    
+    
+  </CardContent>
+  
+  <CardFooter>
+    <Button type="submit" variant="secondary">Save Changes</Button>
+
   </CardFooter>
 </form>
 
           </Card>
         </TabsContent>
+
 
       </Tabs>
     </div>
