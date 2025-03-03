@@ -58,4 +58,38 @@ const createOrganization = async (req, res) => {
 };
 
 
-module.exports = { createOrganization };
+
+
+  const getpicture = async (req, res) => {
+    const { id } = req.query;
+    try {
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).json({ message: 'Organization not found' });
+      }
+
+      const organization = await Organization.findOne({ user: id });
+      if (!organization) {
+        return res.status(404).json({ message: 'Organization not found' });
+      }
+
+      const companyanme = organization.comapnyName;
+      if (!companyanme) {
+        return res.status(404).json({ message: 'Organization name not found' });
+      }
+      const companyPicUrl = organization.companyPicUrl;
+      if (!companyPicUrl) {
+        return res.status(404).json({ message: 'Organization picture not found' });
+      }
+      res.status(200).json({ 
+        message: 'Organization data retrieved successfully', 
+        companyName: companyanme,
+        picture: companyPicUrl 
+      });
+    } catch (error) {
+      res.status(500).json({ message: 'Error retrieving organization picture', error: error.message });
+    }
+  }
+
+
+  module.exports = { createOrganization,getpicture };

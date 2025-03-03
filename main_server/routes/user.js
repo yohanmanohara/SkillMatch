@@ -16,8 +16,10 @@ const {updatePassword} = require('../controllers/users/userController-customer')
 const {otpfroget} = require('../controllers/users/userController-customer')
 const {resetpassword} = require('../controllers/users/userController-customer')
 const {createOrganization} = require('../controllers/organization/organizationControllers')
+const {getpicture} = require('../controllers/organization/organizationControllers')
 const router = express.Router()
 
+router.get('/getorganizationspicture', getpicture)
 
 router.post('/createorganizations', createOrganization)
 
