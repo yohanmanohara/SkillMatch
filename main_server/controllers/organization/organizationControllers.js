@@ -1,6 +1,91 @@
 const Organization = require('../../models/organizationModel');
 const User = require('../../models/userModel')
 require('dotenv').config();
+const Job = require('../../models/jobModel'); // Path to the Job model
+
+// Function to add a new job
+const addjobs = async (req, res) => {
+  const { id } = req.query; // ID of the organization from query params
+  const {
+    companyname,
+    title,
+    employmentTypes,
+    description,
+    location,
+    requirements,
+    desirable,
+    benefits,
+    expirienceduration,
+    educationlevel,
+    pictureurl,
+    expiredate,
+    salaryMin,
+    salaryMax,
+  } = req.body;
+
+  if (
+    !companyname ||
+    !title ||
+    !employmentTypes ||
+    !description ||
+    !location ||
+    !requirements ||
+    !desirable ||
+    !benefits ||
+    !expirienceduration ||
+    !educationlevel ||
+    !pictureurl ||
+    !expiredate ||
+    !salaryMin ||
+    !salaryMax
+    
+  ) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  try {
+    // Create a new job using the Job model
+    const newJob = new Job({
+      companyname,
+      title,
+      employmentTypes,
+      description,
+      location,
+      requirements,
+      desirable,
+      benefits,
+      expirienceduration,
+      educationlevel,
+      pictureurl,
+      expiredate,
+      salaryMin,
+      salaryMax,
+    });
+
+    await newJob.save();
+
+    // Find the organization by ID and update its job list
+    const org = await Organization.findById(id);
+
+    if (!org) {
+      return res.status(404).json({ message: 'Organization not found' });
+    }
+
+    // Push the new job's ID into the organization's jobs array
+    org.jobs.push(newJob._id); // Assuming your Organization schema has a `jobs` array
+
+    await org.save(); // Save the updated organization document
+
+    // Respond with the saved job
+    return res.status(201).json({ message: 'Job added successfully', job: newJob });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Internal Server Error', error: err.message });
+  }
+};
+
+
+
 
 const createOrganization = async (req, res) => {
   const { id } = req.query;
@@ -91,4 +176,4 @@ const createOrganization = async (req, res) => {
   }
 
 
-  module.exports = { createOrganization,getpicture };
+  module.exports = { createOrganization,getpicture ,addjobs};

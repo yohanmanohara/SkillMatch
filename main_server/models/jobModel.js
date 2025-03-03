@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const JobSchema = new mongoose.Schema({
-   title: {
+  companyname: {
     type: String,
     required: true,
   },
-  salary: {
+  title: {
     type: String, 
     required: true,
   },
@@ -24,10 +24,8 @@ const JobSchema = new mongoose.Schema({
     required: true,
   },
 
-  company: {
-    type: String,
-    required: true,
-  },
+
+  
   requirements: {
     type: [String],
     required: true,
@@ -40,7 +38,7 @@ const JobSchema = new mongoose.Schema({
     default: [],
   },
 
-  benifits: {
+  benefits: {
     type: [String],
     required: true,
     default: [],
@@ -56,7 +54,7 @@ const JobSchema = new mongoose.Schema({
     required: true,
   },
   
-  logoId :{
+  pictureurl :{
     type: String,
     required: true,
   },
@@ -65,14 +63,23 @@ const JobSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-
-
-  date: {
-    type: Date,
-    default: Date.now,
+  salaryMin :{
+    type:Number,
+    required: true,
   },
+  salaryMax:{
+    type:Number,
+    required: true,
+
+  },
+
+   organization: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Organization',
+      required: true,
+    },
 
 
 });
 
-module.exports = mongoose.model('Job', JobSchema);
+module.exports = mongoose.model('Jobs', JobSchema);

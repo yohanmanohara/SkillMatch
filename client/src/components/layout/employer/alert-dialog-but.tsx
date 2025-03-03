@@ -22,7 +22,7 @@ import { Label } from "@radix-ui/react-dropdown-menu";
 import { Input } from "@/components/ui/input"
 import { X } from "lucide-react";
 import { useRef } from "react";
-import { set } from "zod";
+import { date, set } from "zod";
 export default function JobForm() {
   const [companyname, setcompanyname] = useState("");
   const previewUrl = "/avatadefault.jpg";
@@ -49,7 +49,7 @@ export default function JobForm() {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getorganizationspicture/?id=${userId}`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -60,17 +60,14 @@ export default function JobForm() {
   
       if (data) {
        
-        setpictureurl(data.pictureurl); 
-        setcompanyname(data.companyName);
+        
+        setpictureurl(data.pictureurl||""); 
+        setcompanyname(data.companyName||"");
         setuploaded(true);
         setPicture(data.pictureurl);
-        // Update formData after getting the new picture and company name
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        companyname: data.companyName,
-        pictureurl: data.pictureurl || '',
-      }));
-        console.log(formData);
+       
+        
+        
         
        
       } else {
@@ -80,7 +77,13 @@ export default function JobForm() {
       console.error("Error fetching organization picture:", error);
     }
   };
-
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      companyname: companyname,
+      pictureurl: pictureurl,
+    }));
+  }, [companyname, pictureurl]);
 
   useEffect(() => {
 
@@ -158,9 +161,27 @@ export default function JobForm() {
 
   
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async  (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted", formData);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/addjobs/?id=${userId}`,
+        {
+          method: "POST",
+          body: JSON.stringify(formData), 
+        }
+      );
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        console.log("Form submitted successfully:", data);
+      } else {
+        console.error("Error submitting form:", data);
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+    }
   };
 
 
@@ -265,10 +286,27 @@ export default function JobForm() {
     });
   };
   
+  interface JobFormData {
+  companyname: string;
+  title: string;
+  employmentTypes: string[];
+  description: string;
+  location: string;
+  requirements: string[];
+  desirable: string[];
+  benefits: string[];
+  expirienceduration: number;
+  educationlevel: string;
+  pictureurl: string;
+  expiredate: string;
+  salaryMin: number;
+  salaryMax: number;
+}
+
 
   
-    const [formData, setFormData] = useState({
-      companyname: companyname as String,
+    const [formData, setFormData] = useState<JobFormData>({
+      companyname: companyname,
       title: "",
       employmentTypes: [] as string[], 
       description: "",
@@ -287,30 +325,26 @@ export default function JobForm() {
     });
 
 
-
-
   const clearInputs = () => {
     setFormData({
-      companyname: companyname,
+      companyname:  "", // Default to empty string if undefined
       title: "",
-      benefits: [],
-      requirements: [],
-      desirable: [],
-      salaryMin: 15000,
-      salaryMax: 100000,
       employmentTypes: [],
       description: "",
       location: "",
+      requirements: [],
+      desirable: [],
+      benefits: [],
       expirienceduration: 0,
       educationlevel: "",
-      pictureurl:pictureurl,
+      pictureurl: "",
       expiredate: "",
+      salaryMin: 15000,
+      salaryMax: 100000,
 
     });
     setValues([15000, 100000]);
     setStep(1);
-    setError("");
-    setError2("");
     setuploaded(false);
     setPicture("");
     setSelectedFile(null);
@@ -319,6 +353,7 @@ export default function JobForm() {
     }
     window.location.reload();
   };
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement; // Assert as 
