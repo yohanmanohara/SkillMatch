@@ -64,7 +64,15 @@ export default function TabsDemo() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [uploaded, setuploaded] = useState(false);
   const [picture, setPicture] = useState("");
+  const role = sessionStorage.getItem('role');
 
+  useEffect(() => {
+
+    if (role == 'Employer') {
+      router.push("/employee/overview");
+    }
+
+  }, []);
 
   const handleFileUpload = async () => {
     setLoading(true);
