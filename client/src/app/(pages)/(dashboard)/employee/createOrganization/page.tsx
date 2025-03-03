@@ -64,15 +64,10 @@ export default function TabsDemo() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [uploaded, setuploaded] = useState(false);
   const [picture, setPicture] = useState("");
-  const role = sessionStorage.getItem('role');
 
-  useEffect(() => {
+  const [role, setRole] = useState<string | null>(null); 
+  
 
-    if (role == 'Employer') {
-      router.push("/employee/overview");
-    }
-
-  }, []);
 
   const handleFileUpload = async () => {
     setLoading(true);
@@ -316,6 +311,21 @@ export default function TabsDemo() {
 
 
   useEffect(() => {
+    const storedRole = sessionStorage.getItem("role");
+
+    if (storedRole) {
+      // Parse the role object if it's a JSON string
+      const parsedRole = JSON.parse(storedRole);
+
+      console.log(parsedRole); // Logs the parsed role object
+
+      if (parsedRole?.role === 'Employer') {
+        router.push("/employee/overview");
+      }
+    } else {
+      setRole(storedRole); // Update state with stored role
+    }
+
     const fetchLocations = async () => {
       try {
         const response = await fetch(
