@@ -49,7 +49,7 @@ export default function TabsDemo() {
     companyDescription: string;
 
   }
-
+  const previewUrl = "/avatadefault.jpg";
   const [locations, setLocations] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
@@ -175,8 +175,6 @@ export default function TabsDemo() {
     fetchLocations();
   }, []);
 
-
-
   
 
   return (
@@ -193,9 +191,17 @@ export default function TabsDemo() {
           <Card>
             <CardHeader>
               <CardTitle>Fill the Form to Create A organiztion</CardTitle>
-              <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
-                <AvatarImage src="/avatadefault.jpg" alt="User Avatar" />
-              </Avatar>
+              {/* Avatar Preview */}
+      <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
+        <AvatarImage src={previewUrl } alt="User Avatar" />
+      </Avatar>
+
+      <Input type="file" accept="image/*" onChange={handleFileChange} />
+      <Button onClick={handleUpload} disabled={!selectedFile}>
+        Upload
+      </Button> 
+
+      
               <CardDescription>
                 Make changes to your account here. Click save when you&apos;re done.
               </CardDescription>
