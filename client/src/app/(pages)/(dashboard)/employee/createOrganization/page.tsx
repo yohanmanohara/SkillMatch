@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import  state  from "@/data/state";
 import companyTypes from "@/data/companytypes";
-
+import { Loader2 } from "lucide-react"; 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast";
@@ -29,7 +29,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Textarea } from "@/components/ui/textarea"
 export default function TabsDemo() {
@@ -60,96 +60,148 @@ export default function TabsDemo() {
   const router = useRouter();  
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [error, setError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [uploaded, setuploaded] = useState(false);
   const [picture, setPicture] = useState("");
 
 
   const handleFileUpload = async () => {
-      
     setLoading(true);
+  
     if (!selectedFile) {
-      setError("Please select a file to upload.");
+      toast({
+        title: "File requirements",
+        description: "select file to upload",
+      });
       setLoading(false);
       return;
     }
+  
     const allowedTypes = ["image/jpeg", "image/png"];
     if (!allowedTypes.includes(selectedFile.type)) {
-      setError("Only JPG and PNG files are allowed.");
+      toast({
+        title: "File requirements",
+        description: "Only JPG and PNG files are allowed.",
+      });
+      setLoading(false);
+      return;
+    }
+  
+    // Check image dimensions
+    const isValidSize = await checkImageDimensions(selectedFile);
+    if (!isValidSize) {
+      setError("Image must be exactly 826×826 pixels.");
+      toast({
+        title: "File requirements",
+        description: "Image must be exactly 826×826 pixels..",
+      });
       setLoading(false);
       return;
     }
   
     const formDataUpload = new FormData();
-    formDataUpload.append('file', selectedFile);
+    formDataUpload.append("file", selectedFile);
   
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/jobs/fileupload/?id=${userId}`, {
-        method: "POST",
-        body: formDataUpload,
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/jobs/fileupload/?id=${userId}`,
+        {
+          method: "POST",
+          body: formDataUpload,
+        }
+      );
       const data = await response.json();
+  
       if (response.ok) {
         setPicture(data.url);
         setuploaded(true);
         setLoading(false);
-
+  
         toast({
           title: "File uploaded",
           description: "File uploaded successfully.",
         });
       } else {
-        
         toast({
           title: "Error",
           description: data.error || "Failed to upload file.",
         });
-    
         setLoading(false);
       }
     } catch (error) {
       console.error("Error uploading file:", error);
       toast({
         title: "Error",
-        description:  "Failed to upload file.",
+        description: "Failed to upload file.",
       });
       setLoading(false);
     }
   };
-
+  
+  const checkImageDimensions = (file: File): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        resolve(img.width === 826 && img.height === 826);
+      };
+      img.onerror = () => resolve(false);
+      img.src = URL.createObjectURL(file);
+    });
+  };
+  
   const handleClear = () => { 
 
     setPicture("");
     setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setuploaded(false);
   }
 
 
 
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
 
-    if (file) {
-      const validTypes = ["image/png", "image/jpeg"];
-      
-      if (!validTypes.includes(file.type)) {
-        toast({
-              title: "Error",
-              description: "Only PNG and JPEG files are allowed.",
-            });
-        
-            setSelectedFile(null);
-        return;
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // setLogo(reader.result as string); 
-      };
-      reader.readAsDataURL(file);
-      setSelectedFile(file);  
-      
+  if (!file) return;
 
-    }
+  const validTypes = ["image/png", "image/jpeg"];
+
+  if (!validTypes.includes(file.type)) {
+    toast({
+      title: "Error",
+      description: "Only PNG and JPEG files are allowed.",
+    });
+
+    setSelectedFile(null);
+    handleClear();
+    return;
+  }
+
+  const isValidSize = await checkImageDimensions(file);
+  if (!isValidSize) {
+    setError("Image must be exactly 826×826 pixels.");
+    toast({
+      title: "File requirements",
+      description: "Image must be exactly 826×826 pixels.",
+    });
+    
+    handleClear();
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onloadend = () => {
   };
+  reader.readAsDataURL(file);
+
+  setSelectedFile(file);
+  setPicture(URL.createObjectURL(file));
+};
+
+
 
 
   
@@ -173,6 +225,14 @@ export default function TabsDemo() {
       return;
     }
 
+    if(!picture)
+    {
+      toast({
+        title: "Please Upload Company Image",
+        description: "Please Upload Company Image",
+      });
+      return
+    }
     if(!cityies)
     {
       toast({
@@ -203,30 +263,30 @@ export default function TabsDemo() {
       };
 
         console.log(createOrganization);
-    //   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updateusser/?id=${userId}`, {
-    //     method: "PATCH",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(createOrganization),   
-    //   });
+      // const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updateusser/?id=${userId}`, {
+      //   method: "PATCH",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(createOrganization),   
+      // });
   
     
-    //   if (!response.ok) {
-    //     const errorData = await response.json();
-    //     toast({
-    //       title: "Faild to Create  Organization",
-    //       description:errorData.error || "Failed  Please try again..",
-    //     });
-    //   }
+      // if (!response.ok) {
+      //   const errorData = await response.json();
+      //   toast({
+      //     title: "Faild to Create  Organization",
+      //     description:errorData.error || "Failed  Please try again..",
+      //   });
+      // }
   
   
-    //   router.refresh();
-    //   window.location.reload();
-    //   toast({
-    //     title: "updated successfully",
-    //     description: "Organization updated successfully",
-    //   });
+      // router.refresh();
+      // window.location.reload();
+      // toast({
+      //   title: "updated successfully",
+      //   description: "Organization updated successfully",
+      // });
       
       
     } catch (error) {
@@ -289,11 +349,16 @@ export default function TabsDemo() {
       <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
       <AvatarImage src={picture ? picture : previewUrl} alt="User Avatar" />
       </Avatar>
-
-      <Input type="file" accept="image/*" onChange={handleFileChange} />
+      <Input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} />
       <div className="flex gap-5"> 
         <Button variant="secondary" onClick={handleFileUpload} >
-        Upload
+        {loading ? (
+        <Loader2 className="animate-spin w-5 h-5" />
+      ) : uploaded ? (
+        "Uploaded"
+      ) : (
+        "Upload"
+      )}
       </Button> 
       <Button onClick={handleClear} variant="outline">
           Clear
