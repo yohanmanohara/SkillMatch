@@ -26,9 +26,21 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const [expanded, setExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const toggleExpand = () => {
     setExpanded(!expanded);
+  };
+
+  const handleShare = async () => {
+    try {
+      const jobUrl = `${window.location.origin}/job/${job.id}`;
+      await navigator.clipboard.writeText(jobUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // Hide message after 2 sec
+    } catch (error) {
+      console.error("Failed to copy:", error);
+    }
   };
 
   return (
@@ -47,6 +59,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
             {job.title}
           </div>
           <p className="text-black text-sm">{job.company}</p>
+          <p className="text-gray-500 text-sm">{job.location}</p>
           <p className="text-gray-500 text-sm">{job.salary}</p>
         </div>
 
@@ -54,8 +67,12 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           <Button variant="default" className="text-sm px-3 py-1">
             Apply Now
           </Button>
-          <Button variant="secondary" className="border-black text-sm px-3 py-1">
-            Share
+          <Button
+            variant="secondary"
+            className="border-black text-sm px-3 py-1"
+            onClick={handleShare}
+          >
+            {copied ? "Link Copied!" : "Share"}
           </Button>
         </div>
       </div>
@@ -70,6 +87,15 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               <p key={index}>{para}</p>
             ))}
 
+            {/* Job Details */}
+            <div className="grid grid-cols-2 gap-2">
+              <p><strong>Posted:</strong> {job.posted}</p>
+              <p><strong>Expires:</strong> {job.expire}</p>
+              <p><strong>Level:</strong> {job.level}</p>
+              <p><strong>Education:</strong> {job.education}</p>
+            </div>
+
+            {/* Requirements */}
             <div>
               <div className="font-semibold">Requirements:</div>
               <ul className="list-disc list-inside">
@@ -79,6 +105,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               </ul>
             </div>
 
+            {/* Benefits */}
             <div>
               <div className="font-semibold">Benefits:</div>
               <ul className="list-disc list-inside">
@@ -88,6 +115,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               </ul>
             </div>
 
+            {/* Desirable Skills */}
             <div>
               <div className="font-semibold">Desirable Skills:</div>
               <ul className="list-disc list-inside">
