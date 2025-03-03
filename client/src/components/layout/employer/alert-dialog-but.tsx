@@ -1,3 +1,4 @@
+"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -59,13 +60,19 @@ export default function JobForm() {
   
       if (data) {
        
-        setPicture(data.picture); 
+        setpictureurl(data.pictureurl); 
         setcompanyname(data.companyName);
         setuploaded(true);
-        console.log(data.picture);
-        console.log(data.companyName);
-          console.log(formData);
-        // setpictureurl(data.picture);
+        setPicture(data.pictureurl);
+        // Update formData after getting the new picture and company name
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        companyname: data.companyName,
+        pictureurl: data.pictureurl || '',
+      }));
+        console.log(formData);
+        
+       
       } else {
         console.warn("No picture data found in response");
       }
@@ -260,24 +267,24 @@ export default function JobForm() {
   
 
   
-  const [formData, setFormData] = useState({
-    companyname: companyname,
-    title: "",
-    employmentTypes: [] as string[], 
-    description: "",
-    location: "",
-    requirements: [] as string[],  
-    desirable: [] as string[],     
-    benefits: [] as string[], 
-    expirienceduration: 0,
-    educationlevel: "",
-    pictureurl: pictureurl,
-    expiredate: "",
-    salaryMin: 15000,
-    salaryMax: 100000,
-  
+    const [formData, setFormData] = useState({
+      companyname: companyname as String,
+      title: "",
+      employmentTypes: [] as string[], 
+      description: "",
+      location: "",
+      requirements: [] as string[],  
+      desirable: [] as string[],     
+      benefits: [] as string[], 
+      expirienceduration: 0,
+      educationlevel: "",
+      pictureurl: pictureurl || '',
+      expiredate: "",
+      salaryMin: 15000,
+      salaryMax: 100000,
+    
 
-  });
+    });
 
 
 

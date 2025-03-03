@@ -82,9 +82,8 @@ const createOrganization = async (req, res) => {
         return res.status(404).json({ message: 'Organization picture not found' });
       }
       res.status(200).json({ 
-        message: 'Organization data retrieved successfully', 
         companyName: companyanme,
-        picture: companyPicUrl 
+        pictureurl: companyPicUrl,
       });
     } catch (error) {
       res.status(500).json({ message: 'Error retrieving organization picture', error: error.message });
