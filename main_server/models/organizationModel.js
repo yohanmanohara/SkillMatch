@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const Schema = mongoose.Schema
+
 const OrganizationSchema = new mongoose.Schema({
     companuPicUrl: {
     type: String,
@@ -57,5 +59,5 @@ const OrganizationSchema = new mongoose.Schema({
         default: Date.now,
     }
 }, { timestamps: true });
-
-module.exports = mongoose.model('Organization', OrganizationSchema);
+const Organization = mongoose.model('Organization', OrganizationSchema);
+module.exports = Organization;

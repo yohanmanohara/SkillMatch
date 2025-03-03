@@ -19,7 +19,7 @@ const { createOrganization } = require('../controllers/organization/organization
 const router = express.Router()
 
 
-router.post('/createOrganization', createOrganization)
+router.post('/createorganizations/:id', createOrganization)
 
 router.post('/login', loginUser)
 

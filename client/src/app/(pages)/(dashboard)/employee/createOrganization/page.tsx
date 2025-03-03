@@ -54,6 +54,7 @@ export default function TabsDemo() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const userId = sessionStorage.getItem('poop'); 
+
   const [companyType,setcompanyType]=useState("");
   const [states,setStates]=useState("");
   const [cityies,setCityies]=useState("");
@@ -104,7 +105,7 @@ export default function TabsDemo() {
   
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/jobs/fileupload/?id=${userId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/file/fileupload/?id=${userId}`,
         {
           method: "POST",
           body: formDataUpload,
@@ -244,7 +245,7 @@ export default function TabsDemo() {
     try {
       const formData = new FormData(e.currentTarget);
   
-      const createOrganization = {
+      const organizationData = {
         
         companuPicUrl: picture,
         comapnyName: formData.get('companyName'),
@@ -260,14 +261,14 @@ export default function TabsDemo() {
 
       };
 
-        console.log(createOrganization);
+        console.log(organizationData);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/createOrganization/?id=${userId}`, {
-        method: "PATCH",
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/createorganizations/?id=${userId}`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(createOrganization),   
+        body: JSON.stringify(organizationData),
       });
   
     

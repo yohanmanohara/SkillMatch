@@ -1,11 +1,9 @@
 const Organization = require('../../models/organizationModel');
-const userModel = require('../../models/userModel')
+const User = require('../../models/userModel')
 require('dotenv').config();
 
 
 const createOrganization = async (req, res) => {
-  
-  
       const { id } = req.query; 
       const {
         companyName, companyType, companyEmail, contactNumber,
