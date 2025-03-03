@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import  state  from "@/data/state";
 import companyTypes from "@/data/companytypes";
-
+import { Loader2 } from "lucide-react"; 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast";
@@ -29,7 +29,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Textarea } from "@/components/ui/textarea"
 export default function TabsDemo() {
@@ -49,63 +49,244 @@ export default function TabsDemo() {
     companyDescription: string;
 
   }
-
+  const previewUrl = "/avatadefault.jpg";
   const [locations, setLocations] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const userId = sessionStorage.getItem('poop'); // Replace 'poop' with the correct session key.
+  const userId = sessionStorage.getItem('poop'); 
   const [companyType,setcompanyType]=useState("");
+  const [states,setStates]=useState("");
+  const [cityies,setCityies]=useState("");
   const router = useRouter();  
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [error, setError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [uploaded, setuploaded] = useState(false);
+  const [picture, setPicture] = useState("");
 
+
+  const handleFileUpload = async () => {
+    setLoading(true);
+  
+    if (!selectedFile) {
+      toast({
+        title: "File requirements",
+        description: "select file to upload",
+      });
+      setLoading(false);
+      return;
+    }
+  
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(selectedFile.type)) {
+      toast({
+        title: "File requirements",
+        description: "Only JPG and PNG files are allowed.",
+      });
+      setLoading(false);
+      return;
+    }
+  
+    // Check image dimensions
+    const isValidSize = await checkImageDimensions(selectedFile);
+    if (!isValidSize) {
+      setError("Image must be exactly 826×826 pixels.");
+      toast({
+        title: "File requirements",
+        description: "Image must be exactly 826×826 pixels..",
+      });
+      setLoading(false);
+      return;
+    }
+  
+    const formDataUpload = new FormData();
+    formDataUpload.append("file", selectedFile);
+  
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/jobs/fileupload/?id=${userId}`,
+        {
+          method: "POST",
+          body: formDataUpload,
+        }
+      );
+      const data = await response.json();
+  
+      if (response.ok) {
+        setPicture(data.url);
+        setuploaded(true);
+        setLoading(false);
+  
+        toast({
+          title: "File uploaded",
+          description: "File uploaded successfully.",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: data.error || "Failed to upload file.",
+        });
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast({
+        title: "Error",
+        description: "Failed to upload file.",
+      });
+      setLoading(false);
+    }
+  };
+  
+  const checkImageDimensions = (file: File): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        resolve(img.width === 826 && img.height === 826);
+      };
+      img.onerror = () => resolve(false);
+      img.src = URL.createObjectURL(file);
+    });
+  };
+  
+  const handleClear = () => { 
+
+    setPicture("");
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setuploaded(false);
+  }
+
+
+
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+
+  if (!file) return;
+
+  const validTypes = ["image/png", "image/jpeg"];
+
+  if (!validTypes.includes(file.type)) {
+    toast({
+      title: "Error",
+      description: "Only PNG and JPEG files are allowed.",
+    });
+
+    setSelectedFile(null);
+    handleClear();
+    return;
+  }
+
+  const isValidSize = await checkImageDimensions(file);
+  if (!isValidSize) {
+    setError("Image must be exactly 826×826 pixels.");
+    toast({
+      title: "File requirements",
+      description: "Image must be exactly 826×826 pixels.",
+    });
+    
+    handleClear();
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onloadend = () => {
+  };
+  reader.readAsDataURL(file);
+
+  setSelectedFile(file);
+  setPicture(URL.createObjectURL(file));
+};
+
+
+
+
+  
   const craeteCompany= async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
+    if(!companyType)
+    {
+      toast({
+        title: "Please Select Company Type",
+        description: "Please Select Company Type",
+      });
+      return;
+    }
+    if(!states)
+    {
+      toast({
+        title: "Please Select State",
+        description: "Please Select State",
+      });
+      return;
+    }
+
+    if(!picture)
+    {
+      toast({
+        title: "Please Upload Company Image",
+        description: "Please Upload Company Image",
+      });
+      return
+    }
+    if(!cityies)
+    {
+      toast({
+        title: "Please Select City",
+        description: "Please Select City",
+      });
+      return;
+    }
+
   
     try {
       const formData = new FormData(e.currentTarget);
   
       const createOrganization = {
         
-        companuPicUrl: formData.get('companuPicUrl') as string,
+        companuPicUrl: picture,
         comapnyName: formData.get('companyName'),
-        companyType: formData.get('companyTypes'),
+        companyType: companyType,
         companyEmail: formData.get('companyEmail'),
         contactnumber: formData.get('contactNumber'),
         websiteUrl: formData.get('websiteUrl'),
         streetAddress: formData.get('streetAddress'),
-        city: formData.get('city'),
-        state: formData.get('state'),
+        city: cityies,
+        state: states,
         postalCode: formData.get('postalCode'),
-        country: formData.get('country'),
         companyDescription: formData.get('companyDescription'),
 
       };
 
         console.log(createOrganization);
-    //   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updateusser/?id=${userId}`, {
-    //     method: "PATCH",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(createOrganization),   
-    //   });
+      // const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updateusser/?id=${userId}`, {
+      //   method: "PATCH",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(createOrganization),   
+      // });
   
     
-    //   if (!response.ok) {
-    //     const errorData = await response.json();
-    //     toast({
-    //       title: "Faild to Create  Organization",
-    //       description:errorData.error || "Failed  Please try again..",
-    //     });
-    //   }
+      // if (!response.ok) {
+      //   const errorData = await response.json();
+      //   toast({
+      //     title: "Faild to Create  Organization",
+      //     description:errorData.error || "Failed  Please try again..",
+      //   });
+      // }
   
   
-    //   router.refresh();
-    //   window.location.reload();
-    //   toast({
-    //     title: "updated successfully",
-    //     description: "Organization updated successfully",
-    //   });
+      // router.refresh();
+      // window.location.reload();
+      // toast({
+      //   title: "updated successfully",
+      //   description: "Organization updated successfully",
+      // });
       
       
     } catch (error) {
@@ -148,8 +329,6 @@ export default function TabsDemo() {
     fetchLocations();
   }, []);
 
-
-
   
 
   return (
@@ -166,9 +345,27 @@ export default function TabsDemo() {
           <Card>
             <CardHeader>
               <CardTitle>Fill the Form to Create A organiztion</CardTitle>
-              <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
-                <AvatarImage src="/avatadefault.jpg" alt="User Avatar" />
-              </Avatar>
+             
+      <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
+      <AvatarImage src={picture ? picture : previewUrl} alt="User Avatar" />
+      </Avatar>
+      <Input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} />
+      <div className="flex gap-5"> 
+        <Button variant="secondary" onClick={handleFileUpload} >
+        {loading ? (
+        <Loader2 className="animate-spin w-5 h-5" />
+      ) : uploaded ? (
+        "Uploaded"
+      ) : (
+        "Upload"
+      )}
+      </Button> 
+      <Button onClick={handleClear} variant="outline">
+          Clear
+        </Button>
+      </div>
+     
+      
               <CardDescription>
                 Make changes to your account here. Click save when you&apos;re done.
               </CardDescription>
@@ -186,18 +383,18 @@ export default function TabsDemo() {
     <div className="space-y-1">
       <Label htmlFor="companyType">Company Type</Label>
       
-      <Select>
+      <Select name="companyType" onValueChange={(value) => setcompanyType(value)}>
   <SelectTrigger className="w-full">
     <SelectValue placeholder="Company Types" />
   </SelectTrigger>
   <SelectContent className="max-h-60 overflow-y-auto">
-    {companyTypes.map((companyTypes, index) => (
-      <SelectItem className="dark:text-white" key={index} value={companyTypes.label}  >
-        {companyTypes.label}
+    {companyTypes.map((type, index) => (
+      <SelectItem className="dark:text-white" key={index} value={type.label}>
+        {type.label}
       </SelectItem>
     ))}
-    </SelectContent>
-   </Select>
+  </SelectContent>
+</Select>
 
     </div>
 
@@ -210,7 +407,7 @@ export default function TabsDemo() {
     
     <div className="space-y-1">
       <Label htmlFor="ContactNumber">Contact Number</Label>
-      <Input id="contactNumber" name="contactNumber"  placeholder="+94 772143651" required />
+      <Input id="contactNumber" name="contactNumber" type="number" placeholder="+94 772143651" required />
     </div>
     
     <div className="space-y-1">
@@ -226,7 +423,7 @@ export default function TabsDemo() {
     <div className="space-y-1">
       <Label htmlFor="city">City</Label>
       
-      <Select>
+      <Select  name="cityies" onValueChange={(value) => setCityies(value)}>
   <SelectTrigger className="w-full">
     <SelectValue placeholder="City" />
   </SelectTrigger>
@@ -244,7 +441,7 @@ export default function TabsDemo() {
     <div className="space-y-1">
       <Label htmlFor="state">State</Label>
 
-  <Select>
+  <Select  name="state" onValueChange={(value) => setStates(value)}>
   <SelectTrigger className="w-full">
     <SelectValue placeholder="State" />
   </SelectTrigger>
