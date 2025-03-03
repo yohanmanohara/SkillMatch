@@ -23,7 +23,7 @@ import { X } from "lucide-react";
 import { useRef } from "react";
 import { set } from "zod";
 export default function JobForm() {
-
+  const [companyname, setcompanyname] = useState("");
   const previewUrl = "/avatadefault.jpg";
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [picture, setPicture] = useState("");
@@ -43,6 +43,71 @@ export default function JobForm() {
 
 
 
+  const getOrganizationpicture = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getorganizationspicture/?id=${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      const data = await response.json();
+  
+      if (data) {
+       
+        setPicture(data.picture); 
+        setcompanyname(data.companyName);
+        setuploaded(true);
+        console.log(data.picture);
+        console.log(data.companyName);
+          console.log(formData);
+        // setpictureurl(data.picture);
+      } else {
+        console.warn("No picture data found in response");
+      }
+    } catch (error) {
+      console.error("Error fetching organization picture:", error);
+    }
+  };
+
+
+  useEffect(() => {
+
+    const fetchLocations = async () => {
+      
+      try {
+        const response = await fetch(
+          "https://countriesnow.space/api/v0.1/countries/cities",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ country: "Sri Lanka" }),
+          }
+        );
+        
+        const data = await response.json();
+  
+        if (data && data.data) {
+          setLocations(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getOrganizationpicture();
+
+    
+    fetchLocations();
+
+  }, []);
  
 
   const  handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,11 +261,11 @@ export default function JobForm() {
 
   
   const [formData, setFormData] = useState({
+    companyname: companyname,
     title: "",
     employmentTypes: [] as string[], 
     description: "",
     location: "",
-    company: "",
     requirements: [] as string[],  
     desirable: [] as string[],     
     benefits: [] as string[], 
@@ -219,6 +284,7 @@ export default function JobForm() {
 
   const clearInputs = () => {
     setFormData({
+      companyname: companyname,
       title: "",
       benefits: [],
       requirements: [],
@@ -228,10 +294,9 @@ export default function JobForm() {
       employmentTypes: [],
       description: "",
       location: "",
-      company: "",
       expirienceduration: 0,
       educationlevel: "",
-      pictureurl: "",
+      pictureurl:pictureurl,
       expiredate: "",
 
     });
@@ -364,66 +429,6 @@ export default function JobForm() {
   };
 
 
-  const getOrganizationpicture = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getorganizationspicture/?id=${userId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-  
-      const data = await response.json();
-  
-      if (data && data.picture) {
-        setPicture(data.picture); 
-        setuploaded(true);
-        setpictureurl(data.picture);
-      } else {
-        console.warn("No picture data found in response");
-      }
-    } catch (error) {
-      console.error("Error fetching organization picture:", error);
-    }
-  };
-
-
-  useEffect(() => {
-
-    const fetchLocations = async () => {
-      
-      try {
-        const response = await fetch(
-          "https://countriesnow.space/api/v0.1/countries/cities",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ country: "Sri Lanka" }),
-          }
-        );
-        
-        const data = await response.json();
-  
-        if (data && data.data) {
-          setLocations(data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching locations:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getOrganizationpicture();
-
-    
-    fetchLocations();
-
-  }, []);
   
   
   return (
@@ -439,18 +444,18 @@ export default function JobForm() {
 
           <AlertDialogHeader className="flex flex-col items-center text-center">
             <div>
-              <AlertDialogTitle>Add Jobs Here</AlertDialogTitle>
+              <AlertDialogTitle></AlertDialogTitle>
             </div>
             <AlertDialogDescription>
-              Please fill out the form to add your job details.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
           <div className="flex flex-col gap-4 p-4">
             {step === 1 && (
               <>
-              
-              <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
+                      <p>{companyname}</p>    
+
+       <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
       <AvatarImage src={picture ? picture : previewUrl} alt="User Avatar" />
       </Avatar>
       <Input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} />
