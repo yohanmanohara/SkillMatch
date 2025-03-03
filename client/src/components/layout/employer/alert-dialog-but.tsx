@@ -11,58 +11,85 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { useState } from "react";
+import { toast } from "@/components/ui/use-toast";
+import { use, useState } from "react";
 import { jobTitles } from "@/utils/jobTitles";
 import { useEffect } from "react";
+import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
 import { Loader2 } from "lucide-react"; 
 import { Label } from "@radix-ui/react-dropdown-menu";
+import { Input } from "@/components/ui/input"
 import { X } from "lucide-react";
+import { useRef } from "react";
 import { set } from "zod";
 export default function JobForm() {
+
+  const previewUrl = "/avatadefault.jpg";
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [picture, setPicture] = useState("");
   const [values, setValues] = useState([15000, 100000]);
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
   const [error2, setError2] = useState("");
   const [loading, setLoading] = useState(false);
   const [locations, setLocations] = useState([] as string[]);
-  const [logo, setLogo] = useState<string | null>(null);
   const [errorimage, setErrorimage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploaded, setuploaded] = useState(false);
+  const [pictureurl, setpictureurl] =useState("");
   
   const userId = sessionStorage.getItem('poop')
 
-  
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+
+
+ 
+
+  const  handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-
-    if (file) {
-      const validTypes = ["image/png", "image/jpeg"];
-      
-      if (!validTypes.includes(file.type)) {
-        setErrorimage("Only PNG and JPEG files are allowed.");
-        setLogo(null);
-        return;
-      }
-
-      setErrorimage(""); 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogo(reader.result as string); 
-      };
-      reader.readAsDataURL(file);
-      setSelectedFile(file);  
-      setError("");
-
+  
+    if (!file) return;
+  
+    const validTypes = ["image/png", "image/jpeg"];
+  
+    if (!validTypes.includes(file.type)) {
+      toast({
+        title: "Error",
+        description: "Only PNG and JPEG files are allowed.",
+      });
+  
+      setSelectedFile(null);
+      handleClear();
+      return;
     }
+  
+    const isValidSize = await checkImageDimensions(file);
+    if (!isValidSize) {
+      setError("Image must be exactly 826×826 pixels.");
+      toast({
+        title: "File requirements",
+        description: "Image must be exactly 826×826 pixels.",
+      });
+      
+      handleClear();
+      return;
+    }
+  
+    const reader = new FileReader();
+    reader.onloadend = () => {
+    };
+    reader.readAsDataURL(file);
+  
+    setSelectedFile(file);
+    setPicture(URL.createObjectURL(file));
   };
 
+  
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted", formData);
   };
-
-
 
 
   const handleRemoveItem = (field: keyof typeof formData, index: number) => {
@@ -80,49 +107,96 @@ export default function JobForm() {
     if (category === "benefits") setFormData((prevData) => ({ ...prevData, benefits: [...prevData.benefits, value] }));
   };
 
-    const handleFileUpload = async () => {
-      
-      setLoading(true);
-      if (!selectedFile) {
-        setError("Please select a file to upload.");
-        setLoading(false);
-        return;
-      }
-      const allowedTypes = ["image/jpeg", "image/png"];
-      if (!allowedTypes.includes(selectedFile.type)) {
-        setError("Only JPG and PNG files are allowed.");
-        setLoading(false);
-        return;
-      }
     
-      const formDataUpload = new FormData();
-      formDataUpload.append('file', selectedFile);
-    
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/jobs/fileupload/?id=${userId}`, {
+  const handleFileUpload = async () => {
+    setLoading(true);
+  
+    if (!selectedFile) {
+      toast({
+        title: "File requirements",
+        description: "select file to upload",
+      });
+      setLoading(false);
+      return;
+    }
+  
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(selectedFile.type)) {
+      toast({
+        title: "File requirements",
+        description: "Only JPG and PNG files are allowed.",
+      });
+      setLoading(false);
+      return;
+    }
+  
+    // Check image dimensions
+    const isValidSize = await checkImageDimensions(selectedFile);
+    if (!isValidSize) {
+      setError("Image must be exactly 826×826 pixels.");
+      toast({
+        title: "File requirements",
+        description: "Image must be exactly 826×826 pixels..",
+      });
+      setLoading(false);
+      return;
+    }
+  
+    const formDataUpload = new FormData();
+    formDataUpload.append("file", selectedFile);
+  
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/file/fileupload/?id=${userId}`,
+        {
           method: "POST",
           body: formDataUpload,
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setFormData((prevData) => ({ ...prevData, logoId: data.url }));
-          setuploaded(true);
-          setLoading(false);
-        } else {
-          setError(data.error || "Failed to upload file.");
-          setLoading(false);
         }
-      } catch (error) {
-        console.error("Error uploading file:", error);
-        setError("Failed to upload file.");
+      );
+      const data = await response.json();
+  
+      if (response.ok) {
+        setPicture(data.url);
+        setuploaded(true);
+        setLoading(false);
+        setFormData((prevData) => ({ ...prevData, pictureurl: data.url }));
+
+        toast({
+          title: "File uploaded",
+          description: "File uploaded successfully.",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: data.error || "Failed to upload file.",
+        });
         setLoading(false);
       }
-    };
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast({
+        title: "Error",
+        description: "Failed to upload file.",
+      });
+      setLoading(false);
+    }
+  };
   
+  const checkImageDimensions = (file: File): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        resolve(img.width === 826 && img.height === 826);
+      };
+      img.onerror = () => resolve(false);
+      img.src = URL.createObjectURL(file);
+    });
+  };
+  
+
   
   const [formData, setFormData] = useState({
     title: "",
-    salary: "",
     employmentTypes: [] as string[], 
     description: "",
     location: "",
@@ -132,8 +206,11 @@ export default function JobForm() {
     benefits: [] as string[], 
     expirienceduration: 0,
     educationlevel: "",
-    logoId: "",
+    pictureurl: pictureurl,
     expiredate: "",
+    salaryMin: 15000,
+    salaryMax: 100000,
+  
 
   });
 
@@ -146,14 +223,15 @@ export default function JobForm() {
       benefits: [],
       requirements: [],
       desirable: [],
-      salary: "",
+      salaryMin: 15000,
+      salaryMax: 100000,
       employmentTypes: [],
       description: "",
       location: "",
       company: "",
       expirienceduration: 0,
       educationlevel: "",
-      logoId: "",
+      pictureurl: "",
       expiredate: "",
 
     });
@@ -162,15 +240,26 @@ export default function JobForm() {
     setError("");
     setError2("");
     setuploaded(false);
-    setLogo(null);
+    setPicture("");
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    window.location.reload();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement; // Assert as HTMLInputElement
-    if (!selectedFile) {
-      setError("Please select a file to upload.");
-      return;
+    const { name, value, type, checked } = e.target as HTMLInputElement; // Assert as 
+    if(!uploaded)
+    {
+      if (!selectedFile) {
+        setError("Please select a file to upload.");
+        return;
+      }
+
+
     }
+   
     if (type === "checkbox" && name === "employmentTypes") {
       setFormData((prevData) => {
         let updatedEmploymentTypes = [...prevData.employmentTypes];
@@ -184,7 +273,6 @@ export default function JobForm() {
         return { ...prevData, employmentTypes: updatedEmploymentTypes };
       });
     } 
-      // Handle other types of inputs (text, select, textarea)
       setFormData({
         ...formData,
         [name]: value,
@@ -193,11 +281,20 @@ export default function JobForm() {
   };
   
 
+  const handleClear = () => { 
+
+    setPicture("");
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setuploaded(false);
+  }
+
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
     if (step === 1) {
-      // Check if job title or employment types are missing
-      if (!formData.title || formData.employmentTypes.length === 0|| uploaded === false) {
+      if (!formData.title || formData.employmentTypes.length === 0|| uploaded === false || !formData.salaryMin || !formData.salaryMax) {
         setError("Please fill out all fields. and upload the logo");
         return;
       }
@@ -216,10 +313,7 @@ export default function JobForm() {
       setError2("Please fill out all fields.");
       return;
     }
-    if (!formData.company ) {
-      setError2("Please fill out all fields.");
-      return;
-    }
+   
     
        }
 
@@ -258,8 +352,6 @@ export default function JobForm() {
 
            }
           }
- 
-
 
    
     setError("");
@@ -272,8 +364,37 @@ export default function JobForm() {
   };
 
 
+  const getOrganizationpicture = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getorganizationspicture/?id=${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      const data = await response.json();
+  
+      if (data && data.picture) {
+        setPicture(data.picture); 
+        setuploaded(true);
+        setpictureurl(data.picture);
+      } else {
+        console.warn("No picture data found in response");
+      }
+    } catch (error) {
+      console.error("Error fetching organization picture:", error);
+    }
+  };
+
+
   useEffect(() => {
+
     const fetchLocations = async () => {
+      
       try {
         const response = await fetch(
           "https://countriesnow.space/api/v0.1/countries/cities",
@@ -297,15 +418,17 @@ export default function JobForm() {
         setLoading(false);
       }
     };
+    getOrganizationpicture();
 
-
-  
+    
     fetchLocations();
+
   }, []);
   
   
   return (
     <AlertDialog>
+
       <AlertDialogTrigger asChild>
         <Button variant="secondary" className="w-40">
           Add Job
@@ -313,6 +436,7 @@ export default function JobForm() {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <form onSubmit={handleSubmit}>
+
           <AlertDialogHeader className="flex flex-col items-center text-center">
             <div>
               <AlertDialogTitle>Add Jobs Here</AlertDialogTitle>
@@ -325,61 +449,27 @@ export default function JobForm() {
           <div className="flex flex-col gap-4 p-4">
             {step === 1 && (
               <>
-              <label htmlFor="companyLogo" className="text-lg font-semibold" >
-                Upload Company Logo
-              </label>
-
-              <div className="flex flex-row gap-2">
-              {logo && (
-          <div >
-          
-            <img src={logo} alt="Company Logo" className="w-16 h-16 object-cover rounded-full border" />
-          </div>
-           )}
-
-              <input
-                type="file"
-                id="companyLogo"
-                accept="image/*"
-                className=" block w-full h-11 border border-green-400 rounded-md shadow-sm p-2"
-                onChange={handleFileChange}
-              />
-              </div>
-
-            {logo && (
-              <div className="flex flex-row gap-3">
-              <Button
-                type="button"
-                className="mt-2 bg-red-500 text-white px-4 py-2 rounded-md"
-                onClick={() => {
-                  setLogo(null);
-                  setSelectedFile(null);
-                }}
-                
-              >
-                Remove Logo
-              </Button>
-
-              <Button
-      type="button"
-      className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md flex items-center gap-2"
-      onClick={handleFileUpload}
-      disabled={loading}
-      
-      
-    >
-     {loading ? (
+              
+              <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
+      <AvatarImage src={picture ? picture : previewUrl} alt="User Avatar" />
+      </Avatar>
+      <Input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} />
+      <div className="flex gap-5"> 
+        <Button variant="secondary" onClick={handleFileUpload} >
+        {loading ? (
         <Loader2 className="animate-spin w-5 h-5" />
       ) : uploaded ? (
-        "Uploaded"
+        "Need Tochage Uploaded picture"
       ) : (
         "Upload"
       )}
-    </Button>
-              </div>
-            )
-            }
-
+      </Button> 
+      <Button onClick={handleClear} variant="outline">
+          Clear
+        </Button>
+      </div>
+     
+            
 
             {errorimage && <p className="text-red-500 text-sm">{errorimage}</p>}
 
@@ -407,6 +497,8 @@ export default function JobForm() {
                 </select>
                 
 
+
+
                 <label htmlFor="employmentTypes" className="text-lg font-semibold">
            Type of Employment
           </label>
@@ -425,34 +517,43 @@ export default function JobForm() {
         ))}
       </div>
 
-                <div>
+
+
+                <div className="flex flex-col gap-4">
                   <label htmlFor="salary" className="text-lg font-semibold">
-                    Salary
+                    Min Salary
                   </label>
-                  <div style={{ width: "300px", margin: "20px auto" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-                      <input
-                        type="text"
-                        value={`Rs. ${values[0].toLocaleString()}`}
-                        readOnly
-                        style={{ border: "none", width: "80px", textAlign: "center", background: "transparent" }}
-                      />
-                      <span>to</span>
-                      <input
-                        type="text"
-                        value={`Rs. ${values[1].toLocaleString()}`}
-                        readOnly
-                        style={{ border: "none", width: "80px", textAlign: "center", background: "transparent" }}
-                      />
-                    </div>
-                    <Slider
-                      value={values}
-                      onValueChange={(newValue: number[]) => setValues(newValue)}
-                      min={15000}
-                      max={2000000}
-                      style={{ color: "#5F3FF3" }}
-                    />
-                  </div>
+                  
+           <input
+            type="number"
+            className="border  border-green-400 p-2 rounded w-full"
+            id="minsalary"
+            name="salaryMin"
+            value={formData.salaryMin}
+            onChange={handleChange}
+            required
+            placeholder="Enter a Min salary"
+          />
+            
+            <label htmlFor="salary" className="text-lg font-semibold">
+                    Max Salary
+          </label>
+          
+          <input
+            type="number"
+            className="border  border-green-400 p-2 rounded w-full"
+            id="salaryMax"
+            name="salaryMax"
+            value={formData.salaryMax}
+            onChange={handleChange}
+            required
+            placeholder="Enter a Min salary"
+          />
+            
+
+
+                    
+                  
                 </div>
                 {error && <p className="text-red-500 text-sm">{error}</p>}
               </>
@@ -473,7 +574,7 @@ export default function JobForm() {
   required
   className="border p-2 rounded w-full h-30  border-green-400" // Adjust height here
   placeholder="Enter job description here (at least 200 words)"
-  rows={10} // Adjust number of rows
+  rows={10} 
 />
 
                 {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -500,19 +601,7 @@ export default function JobForm() {
                 </select>
               
 
-                <label htmlFor="company" className="text-sm">
-                  Company Name
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  required
-                  className="border  border-green-400 p-2 rounded"
-                  placeholder="Enter company name with pvt ltd or inc." 
-                />
+                
               </>
             )}
                             {error2 && <p className="text-red-500 text-sm">{error2}</p>}
@@ -524,7 +613,6 @@ export default function JobForm() {
             
               (<>
               <div className="space-y-4">
-      {/* Requirements */}
       <div>
         <Label>Requirements</Label>
         <div className="flex gap-2">
@@ -713,10 +801,13 @@ export default function JobForm() {
            </Button>
 
           }
-            <AlertDialogAction onClick={handleNext}>
-              {step < 5 ? "Next" : "Submit"}
-            </AlertDialogAction>
+           <AlertDialogAction onClick={step < 5 ? handleNext : handleSubmit}>
+            {step < 5 ? "Next" : "Submit"}
+           </AlertDialogAction>
+
           </AlertDialogFooter>
+
+
         </form>
       
       </AlertDialogContent>

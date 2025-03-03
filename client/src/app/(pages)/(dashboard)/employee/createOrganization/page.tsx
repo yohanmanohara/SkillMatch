@@ -91,7 +91,6 @@ export default function TabsDemo() {
       return;
     }
   
-    // Check image dimensions
     const isValidSize = await checkImageDimensions(selectedFile);
     if (!isValidSize) {
       setError("Image must be exactly 826×826 pixels.");
@@ -164,7 +163,7 @@ export default function TabsDemo() {
   }
 
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const  handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const file = e.target.files?.[0];
 
   if (!file) return;
