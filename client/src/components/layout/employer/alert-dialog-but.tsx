@@ -163,11 +163,16 @@ export default function JobForm() {
   
   const handleSubmit = async  (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Submitting formData:", JSON.stringify(formData, null, 2)); 
+    console.log(formData);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/addjobs/?id=${userId}`,
         {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",  // ✅ Ensure correct header
+          },
           body: JSON.stringify(formData), 
         }
       );
@@ -308,7 +313,7 @@ export default function JobForm() {
     const [formData, setFormData] = useState<JobFormData>({
       companyname: companyname,
       title: "",
-      employmentTypes: [] as string[], 
+      employmentTypes: [], 
       description: "",
       location: "",
       requirements: [] as string[],  
@@ -354,40 +359,30 @@ export default function JobForm() {
     window.location.reload();
   };
 
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement; // Assert as 
-    if(!uploaded)
-    {
-      if (!selectedFile) {
-        setError("Please select a file to upload.");
-        return;
-      }
-
-
-    }
-   
-    if (type === "checkbox" && name === "employmentTypes") {
-      setFormData((prevData) => {
-        let updatedEmploymentTypes = [...prevData.employmentTypes];
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked; // Only apply this for checkboxes
   
-        if (checked) {
-          updatedEmploymentTypes.push(value);
-        } else {
-          updatedEmploymentTypes = updatedEmploymentTypes.filter((type) => type !== value);
-        }
+    if (!uploaded && !selectedFile) {
+      setError("Please select a file to upload.");
+      return;
+    }
+  
+    setFormData((prevData) => {
+      // Handle checkbox case for employmentTypes
+      if (type === "checkbox" && name === "employmentTypes") {
+        const updatedEmploymentTypes = checked
+          ? [...prevData.employmentTypes, value]
+          : prevData.employmentTypes.filter((type: string) => type !== value);
   
         return { ...prevData, employmentTypes: updatedEmploymentTypes };
-      });
-    } 
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    
+      }
+  
+      // Default case for other input types
+      return { ...prevData, [name]: value };
+    });
   };
   
-
   const handleClear = () => { 
 
     setPicture("");
