@@ -49,8 +49,12 @@ const addjobs = async (req, res) => {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
+
+  const user = await User.findById(id);
+  const organizationid =await user.company;
+  console.log(organizationid);
+
   try {
-    // Create a new job using the Job model
     const newJob = new Job({
       companyname,
       title,
@@ -66,22 +70,20 @@ const addjobs = async (req, res) => {
       expiredate,
       salaryMin,
       salaryMax,
-      organization: id,
+      organization: organizationid,
     });
 
     await newJob.save();
 
-    // Find the organization by ID and update its job list
-    const org = await Organization.findById(id);
-
+    const org = await Organization.findById(organizationid);
     if (!org) {
       return res.status(404).json({ message: 'Organization not found' });
     }
 
-    // Push the new job's ID into the organization's jobs array
-    org.jobs.push(newJob._id); // Assuming your Organization schema has a `jobs` array
+    org.addedjobs.push(newJob._id); 
 
-    await org.save(); // Save the updated organization document
+    await org.save(); 
+   
 
     // Respond with the saved job
     return res.status(201).json({ message: 'Job added successfully', job: newJob });
