@@ -85,6 +85,7 @@ export default function JobForm() {
     }));
   }, [companyname, pictureurl]);
 
+
   useEffect(() => {
 
     const fetchLocations = async () => {
@@ -117,8 +118,10 @@ export default function JobForm() {
     
     fetchLocations();
 
+
   }, []);
  
+
 
   const  handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -163,16 +166,17 @@ export default function JobForm() {
   
   const handleSubmit = async  (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitting formData:", JSON.stringify(formData, null, 2)); 
-    console.log(formData);
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/addjobs/?id=${userId}`,
         {
           method: "POST",
+
           headers: {
             "Content-Type": "application/json",  // ✅ Ensure correct header
           },
+
           body: JSON.stringify(formData), 
         }
       );
@@ -313,7 +317,9 @@ export default function JobForm() {
     const [formData, setFormData] = useState<JobFormData>({
       companyname: companyname,
       title: "",
-      employmentTypes: [], 
+
+      employmentTypes: [] as string[], 
+
       description: "",
       location: "",
       requirements: [] as string[],  
@@ -359,14 +365,25 @@ export default function JobForm() {
     window.location.reload();
   };
 
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked; // Only apply this for checkboxes
-  
-    if (!uploaded && !selectedFile) {
-      setError("Please select a file to upload.");
-      return;
+
+   
+    const { name, value, type, checked } = e.target as HTMLInputElement; // Assert as 
+    if(!uploaded)
+    {
+      if (!selectedFile) {
+        setError("Please select a file to upload.");
+        return;
+      }
+
+
     }
+   
+    if (type === "checkbox" && name === "employmentTypes") {
+      setFormData((prevData) => {
+        let updatedEmploymentTypes = [...prevData.employmentTypes];
+
   
     setFormData((prevData) => {
       // Handle checkbox case for employmentTypes
@@ -376,13 +393,25 @@ export default function JobForm() {
           : prevData.employmentTypes.filter((type: string) => type !== value);
   
         return { ...prevData, employmentTypes: updatedEmploymentTypes };
+
       }
   
       // Default case for other input types
       return { ...prevData, [name]: value };
     });
+
   };
   
+  const handleClear = () => { 
+
+    setPicture("");
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setuploaded(false);
+  }
+
   const handleClear = () => { 
 
     setPicture("");
