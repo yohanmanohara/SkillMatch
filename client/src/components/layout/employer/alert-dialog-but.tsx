@@ -85,6 +85,7 @@ export default function JobForm() {
     }));
   }, [companyname, pictureurl]);
 
+
   useEffect(() => {
 
     const fetchLocations = async () => {
@@ -117,8 +118,10 @@ export default function JobForm() {
     
     fetchLocations();
 
+
   }, []);
  
+
 
   const  handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -163,11 +166,17 @@ export default function JobForm() {
   
   const handleSubmit = async  (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/addjobs/?id=${userId}`,
         {
           method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",  // ✅ Ensure correct header
+          },
+
           body: JSON.stringify(formData), 
         }
       );
@@ -308,7 +317,9 @@ export default function JobForm() {
     const [formData, setFormData] = useState<JobFormData>({
       companyname: companyname,
       title: "",
+
       employmentTypes: [] as string[], 
+
       description: "",
       location: "",
       requirements: [] as string[],  
@@ -356,6 +367,8 @@ export default function JobForm() {
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+
+   
     const { name, value, type, checked } = e.target as HTMLInputElement; // Assert as 
     if(!uploaded)
     {
@@ -370,23 +383,34 @@ export default function JobForm() {
     if (type === "checkbox" && name === "employmentTypes") {
       setFormData((prevData) => {
         let updatedEmploymentTypes = [...prevData.employmentTypes];
+
   
-        if (checked) {
-          updatedEmploymentTypes.push(value);
-        } else {
-          updatedEmploymentTypes = updatedEmploymentTypes.filter((type) => type !== value);
-        }
+    setFormData((prevData) => {
+      // Handle checkbox case for employmentTypes
+      if (type === "checkbox" && name === "employmentTypes") {
+        const updatedEmploymentTypes = checked
+          ? [...prevData.employmentTypes, value]
+          : prevData.employmentTypes.filter((type: string) => type !== value);
   
         return { ...prevData, employmentTypes: updatedEmploymentTypes };
-      });
-    } 
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    
+
+      }
+  
+      // Default case for other input types
+      return { ...prevData, [name]: value };
+    });
+
   };
   
+  const handleClear = () => { 
+
+    setPicture("");
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setuploaded(false);
+  }
 
   const handleClear = () => { 
 
