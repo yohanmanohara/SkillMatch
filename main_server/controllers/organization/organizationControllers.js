@@ -7,7 +7,6 @@ const addjobs = async (req, res) => {
   const { id } = req.query; // ID of the organization from query params
   
   console.log("Received Data:", req.body);
-
   const {
     companyname,
     title,
@@ -28,23 +27,13 @@ const addjobs = async (req, res) => {
   if (
     !companyname ||
     !title ||
-
     !description ||
     !location ||
-
-    !employmentTypes ||
-    !description ||
-    !location ||
-    !requirements ||
-    !desirable ||
-    !benefits ||
-
     !expirienceduration ||
     !educationlevel ||
     !pictureurl ||
     !expiredate ||
     !salaryMin ||
-
     !salaryMax ||
     ! employmentTypes.length === 0 ||  // Ensure array is not empty
     ! requirements.length === 0 ||  
@@ -57,7 +46,6 @@ const addjobs = async (req, res) => {
   
   
   {
-
     return res.status(400).json({ message: 'All fields are required' });
   }
 
@@ -78,9 +66,7 @@ const addjobs = async (req, res) => {
       expiredate,
       salaryMin,
       salaryMax,
-
       organization: id,
-
     });
 
     await newJob.save();
