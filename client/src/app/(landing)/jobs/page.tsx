@@ -5,66 +5,67 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import JobCards from "@/components/landing/ExpandableCard";
 
+// Job Data should be outside to avoid issues with useState
+const jobData = [
+  {
+    id: 1,
+    title: "Cloud Solutions Architect",
+    company: "Company Name",
+    salary: "$200,000/yr",
+    location: "Dhaka, Bangladesh",
+    posted: "14 Jun, 2021",
+    experience: "3 years",
+    education: "Graduation",
+    expire: "14 Aug, 2021",
+    level: "Entry level",
+    requirements:
+      "3+ years of experience in a similar role, Experience with cloud-based technologies, Experience with AWS, Azure, and GCP",
+    benefits:
+      "Health insurance, Paid time off, Professional development assistance",
+    desirable:
+      "Experience with Kubernetes, Experience with Terraform, Experience with Docker",
+    description: [
+      "Velstar is a Shopify Plus agency, and we partner with brands to help them grow, we also do the same with our people!",
+      "Here at Velstar, we don't just make websites, we create exceptional digital experiences that consumers love.",
+      "Our team of designers, developers, strategists, and creators work together to push brands to the next level.",
+    ],
+    tags: ["On Site", "Full Time"],
+    logo: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+  },
+  {
+    id: 2,
+    title: "Frontend Developer",
+    company: "Tech Innovators",
+    salary: "$120,000/yr",
+    location: "San Francisco, USA",
+    posted: "20 Jul, 2021",
+    experience: "2 years",
+    education: "Bachelor's Degree",
+    expire: "20 Sep, 2021",
+    level: "Mid level",
+    requirements:
+      "2+ years of experience in frontend development, Proficiency in React, HTML, CSS, and JavaScript",
+    benefits:
+      "Health insurance, Stock options, Remote work flexibility",
+    desirable:
+      "Experience with TypeScript, Familiarity with Redux, Knowledge of modern frontend build pipelines",
+    description: [
+      "Tech Innovators is a leading tech company focused on developing cutting-edge web applications.",
+      "We are looking for a talented Frontend Developer to join our team and help us build amazing user experiences.",
+    ],
+    tags: ["Remote", "Full Time"],
+    logo: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+  },
+];
+
 export default function JobListingPage() {
   const searchParams = useSearchParams();
-  const initialSearch = searchParams.get("search") || "";
-  const initialLocation = searchParams.get("location") || "";
+  const initialSearch = searchParams?.get("search") || "";
+  const initialLocation = searchParams?.get("location") || "";
 
   const [search, setSearch] = useState(initialSearch);
   const [location, setLocation] = useState(initialLocation);
-  const [filteredJobs, setFilteredJobs] = useState<typeof jobData>([]);
-
-  const jobData = [
-    {
-      id: 1,
-      title: "Cloud Solutions Architect",
-      company: "Company Name",
-      salary: "$200,000/yr",
-      location: "Dhaka, Bangladesh",
-      posted: "14 Jun, 2021",
-      experience: "3 years",
-      education: "Graduation",
-      expire: "14 Aug, 2021",
-      level: "Entry level",
-      requirements:
-        "3+ years of experience in a similar role, Experience with cloud-based technologies, Experience with AWS, Azure, and GCP",
-      benefits:
-        "Health insurance, Paid time off, Professional development assistance",
-      desirable:
-        "Experience with Kubernetes, Experience with Terraform, Experience with Docker",
-      description: [
-        "Velstar is a Shopify Plus agency, and we partner with brands to help them grow, we also do the same with our people!",
-        "Here at Velstar, we don't just make websites, we create exceptional digital experiences that consumers love.",
-        "Our team of designers, developers, strategists, and creators work together to push brands to the next level.",
-      ],
-      tags: ["On Site", "Full Time"],
-      logo: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
-    },
-    {
-      id: 2,
-      title: "Frontend Developer",
-      company: "Tech Innovators",
-      salary: "$120,000/yr",
-      location: "San Francisco, USA",
-      posted: "20 Jul, 2021",
-      experience: "2 years",
-      education: "Bachelor's Degree",
-      expire: "20 Sep, 2021",
-      level: "Mid level",
-      requirements:
-        "2+ years of experience in frontend development, Proficiency in React, HTML, CSS, and JavaScript",
-      benefits:
-        "Health insurance, Stock options, Remote work flexibility",
-      desirable:
-        "Experience with TypeScript, Familiarity with Redux, Knowledge of modern frontend build pipelines",
-      description: [
-        "Tech Innovators is a leading tech company focused on developing cutting-edge web applications.",
-        "We are looking for a talented Frontend Developer to join our team and help us build amazing user experiences.",
-      ],
-      tags: ["Remote", "Full Time"],
-      logo: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
-    },
-  ];
+  const [filteredJobs, setFilteredJobs] = useState(jobData);
 
   // Function to filter jobs based on search input & location
   const handleSearch = () => {
@@ -76,10 +77,10 @@ export default function JobListingPage() {
     setFilteredJobs(filtered);
   };
 
-  // Run the search filter initially
+  // Re-run search when `search` or `location` changes
   useEffect(() => {
     handleSearch();
-  }, []);
+  }, [search, location]); // <- Fix: Run when values change
 
   return (
     <div className="max-w-4xl mx-auto p-6">
