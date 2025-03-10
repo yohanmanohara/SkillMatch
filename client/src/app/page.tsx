@@ -25,7 +25,6 @@ const page = () => {
   
     <Container>
     <Customerfeedback/>
-    
     </Container>
 
     <Container>
