@@ -10,6 +10,7 @@ import Customerfeedback from "@/components/landing/customerfeedback";
 import Contactus from "@/components/landing/Getintouch";
 import JobDescription from "@/components/JobDescription/JobDescription";
 import LatestJobs from "@/components/LatestJobs/LatestJobs";
+import JobCards from "@/components/landing/JobCards";
 
 const Page = () => {
   const [jobs, setJobs] = useState([]);
@@ -57,6 +58,10 @@ const Page = () => {
 
       <Container>
         <Contactus />
+      </Container>
+
+      <Container>
+        <JobCards />
       </Container>
 
       <Container>

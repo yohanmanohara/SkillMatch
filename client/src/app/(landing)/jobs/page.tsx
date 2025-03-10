@@ -128,8 +128,8 @@ const JobListingPage = () => {
 
       <div className="grid gap-4">
         {currentJobs.length > 0 ? (
-          currentJobs.map((job) => (
-            <JobCard key={job.id} job={job} />
+          currentJobs.map((job, index) => (
+            <JobCard key={job.id || index } job={job} />
           ))
         ) : (
           <p className="text-gray-500 text-center">No jobs found.</p>
