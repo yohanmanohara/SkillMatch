@@ -1,38 +1,39 @@
-import React from 'react';
+import React from "react";
+import { Button } from "@/components/ui/button";
 
-function buttonfilter() {
+function ButtonFilter() {
   return (
     <div className="flex flex-col items-center p-6 rounded-lg">
       <h2 className="text-3xl font-bold mb-6">People also searched</h2>
 
       <div className="flex flex-wrap justify-center gap-3 w-full">
-        <button className="bg-[#DCFCE0] text-black px-4 py-2 rounded-md whitespace-nowrap hover:bg-green-500 transition-colors duration-300">
+        <Button className="bg-green-100 text-black hover:bg-green-500">
           Software Developer
-        </button>
-        <button className="bg-[#DCFCE0] text-black px-4 py-2 rounded-md whitespace-nowrap hover:bg-green-500 transition-colors duration-300">
+        </Button>
+        <Button className="bg-green-100 text-black hover:bg-green-500">
           HR Manager
-        </button>
-        <button className="bg-[#DCFCE0] text-black px-4 py-2 rounded-md whitespace-nowrap hover:bg-green-500 transition-colors duration-300">
+        </Button>
+        <Button className="bg-green-100 text-black hover:bg-green-500">
           FrontEnd Developer
-        </button>
-        <button className="bg-[#DCFCE0] text-black px-4 py-2 rounded-md whitespace-nowrap hover:bg-green-500 transition-colors duration-300">
+        </Button>
+        <Button className="bg-green-100 text-black hover:bg-green-500">
           UI/UX Developer
-        </button>
+        </Button>
       </div>
 
       <div className="flex flex-wrap justify-center gap-3 w-full mt-4">
-        <button className="bg-[#DCFCE0] text-black px-4 py-2 rounded-md whitespace-nowrap hover:bg-green-500 transition-colors duration-300">
+        <Button className="bg-green-100 text-black hover:bg-green-500">
           Sales Representative
-        </button>
-        <button className="bg-[#DCFCE0] text-black px-4 py-2 rounded-md whitespace-nowrap hover:bg-green-500 transition-colors duration-300">
+        </Button>
+        <Button className="bg-green-100 text-black hover:bg-green-500">
           BackEnd Developer
-        </button>
-        <button className="bg-[#DCFCE0] text-black px-4 py-2 rounded-md whitespace-nowrap hover:bg-green-500 transition-colors duration-300">
+        </Button>
+        <Button className="bg-green-100 text-black hover:bg-green-500">
           Fullstack Developer
-        </button>
+        </Button>
       </div>
     </div>
   );
 }
 
-export default buttonfilter;
+export default ButtonFilter;

@@ -11,8 +11,7 @@ import JobDescription from '@/components/JobDescription/JobDescription';
 const page = () => {
   return (
     <> 
-       
-      
+        
     <Navbar />  
       
     <Hero/>
@@ -21,26 +20,17 @@ const page = () => {
     <Container>
     <JobCards/>
     </Container>
-   
-  
+
     <Container>
     <Customerfeedback/>
-    
     </Container>
 
     <Container>
     <Contactus/>
     </Container>
-
-    <Container>
-    <JobDescription/>
-    </Container>
-
-   
       
     <Footer/> 
     </>
-   
   )
 }
 
