@@ -3,6 +3,44 @@ const User = require('../../models/userModel')
 require('dotenv').config();
 const Job = require('../../models/jobModel'); // Path to the Job model
 
+
+
+
+const fetchjobs = async(req,res)=>
+{
+  
+  try {
+    const jobItems = await Job.find(); 
+
+    res.status(200).json(jobItems);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch job items', error: err.message });
+  }
+
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const addjobs = async (req, res) => {
   const { id } = req.query; // ID of the organization from query params
   
@@ -185,4 +223,4 @@ const createOrganization = async (req, res) => {
   }
 
 
-  module.exports = { createOrganization,getpicture ,addjobs};
+  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs};

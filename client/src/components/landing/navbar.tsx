@@ -65,7 +65,7 @@ const NavigationBar = () => {
         <div className='hidden lg:block'>
           <ul className="flex justify-center items-center space-x-8">
             <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/jobsearch'}>+ Post a Job</Link></li>
-            <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/jobsearch'}>Jobs</Link></li>
+            <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/jobs'}>Jobs</Link></li>
             <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/#contact'}>Contact US</Link></li>
             <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/#faq'}>FAQ</Link></li>
             
