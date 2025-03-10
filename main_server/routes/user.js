@@ -18,9 +18,13 @@ const {resetpassword} = require('../controllers/users/userController-customer')
 const {createOrganization} = require('../controllers/organization/organizationControllers')
 const {getpicture} = require('../controllers/organization/organizationControllers')
 const {addjobs} = require('../controllers/organization/organizationControllers')
+const {fetchjobs} = require('../controllers/organization/organizationControllers')
+
 const router = express.Router()
 
 router.post('/getorganizationspicture', getpicture)
+
+router.get('/fetchjobs',fetchjobs)
 
 router.post('/addjobs',addjobs)
 
