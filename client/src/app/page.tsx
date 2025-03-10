@@ -41,6 +41,7 @@ const Page = () => {
   }, []);
 
   return (
+
     <>
       <Navbar />  
       <Hero />
@@ -63,6 +64,7 @@ const Page = () => {
       </Container>
 
       <Footer />
+
     </>
   );
 };
