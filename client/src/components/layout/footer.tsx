@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 
 const Footer = () => {
@@ -43,8 +44,8 @@ const Footer = () => {
         <div className="mb-4 md:mb-0 pl-12">
           <h5 className="font-bold mb-2">Audience</h5>
           <ul>
-            <li><a href="#" className="text-gray-600 hover:text-black text-lg">Employers</a></li>
-            <li><a href="#" className="text-gray-600 hover:text-black text-lg">Candidates</a></li>
+            <li><Link href="/employers" className="text-gray-600 hover:text-black text-lg">Employers</Link></li>
+            <li><Link href="/candidates" className="text-gray-600 hover:text-black text-lg">Candidates</Link></li>
           </ul>
         </div>
 
@@ -52,8 +53,8 @@ const Footer = () => {
         <div className="mb-4 md:mb-0 pl-12">
           <h5 className="font-bold mb-2">Help</h5>
           <ul>
-            <li><a href="#" className="text-gray-600 hover:text-black text-lg">Customer Support</a></li>
-            <li><a href="#" className="text-gray-600 hover:text-black text-lg">Documentation</a></li>
+            <li><Link href="/support" className="text-gray-600 hover:text-black text-lg">Customer Support</Link></li>
+            <li><Link href="/documentation" className="text-gray-600 hover:text-black text-lg">Documentation</Link></li>
           </ul>
         </div>
 
@@ -61,8 +62,8 @@ const Footer = () => {
         <div className="mb-4 md:mb-0 pl-12">
           <h5 className="font-bold mb-2">Legal</h5>
           <ul>
-            <li><a href="#" className="text-gray-600 hover:text-black text-lg">Terms of Service</a></li>
-            <li><a href="#" className="text-gray-600 hover:text-black text-lg">Privacy Policy</a></li>
+            <li><Link href="/terms" className="text-gray-600 hover:text-black text-lg">Terms of Service</Link></li>
+            <li><Link href="/privacy" className="text-gray-600 hover:text-black text-lg">Privacy Policy</Link></li>
           </ul>
         </div>
 
