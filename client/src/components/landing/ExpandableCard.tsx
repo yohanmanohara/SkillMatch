@@ -14,10 +14,10 @@ interface JobCardProps {
     expirienceduration: string;
     expiredate: string;
     educationlevel: string;
-    requirements: string | string[];  // Allow both array or string
-    benefits: string | string[];  // Allow both array or string
-    desirable: string | string[];  // Allow both array or string
-    description: string[] | string;  // Allow both array or string
+    requirements: string | string[];
+    benefits: string | string[];
+    desirable: string | string[];
+    description: string[] | string;
     employmentTypes: string[];
     pictureurl: string;
   };
@@ -25,68 +25,65 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const [expanded, setExpanded] = useState(false);
-  const [copied, setCopied] = useState(false);
   const previewUrl = "/avatadefault.jpg";
-  const picture = job.pictureurl || previewUrl;  // Fallback to previewUrl if pictureurl is undefined
+  const picture = job.pictureurl || previewUrl;
 
   const toggleExpand = () => {
     setExpanded(!expanded);
   };
 
-  
+  const getShortDescription = (text: string) => {
+    const words = text.split(" ");
+    return words.length > 100 ? words.slice(0, 100).join(" ") + "..." : text;
+  };
+
+  const fullDescription = Array.isArray(job.description)
+    ? job.description.join(" ")
+    : job.description;
 
   return (
-    <div className="bg-green-100 rounded-lg shadow-lg p-2 flex flex-col lg:flex-row lg:space-x-6 relative  w-min-content">
+    <div className="bg-green-100 rounded-lg shadow-lg p-2 flex flex-col lg:flex-row lg:space-x-6 relative w-min-content">
       <div className="flex flex-col items-center lg:w-1/4">
         <div className="bg-blue-500 rounded-full p-2">
           <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
-            <AvatarImage src={picture} alt="Company Logo" className="w-[75px] h-[75px]"  />
+            <AvatarImage src={picture} alt="Company Logo" className="w-[75px] h-[75px]" />
           </Avatar>
         </div>
 
         <div className="text-center mt-3">
-          <div className="text-lg font-bold text-black cursor-pointer" onClick={toggleExpand}>
+          <div className="text-xl font-bold text-black cursor-pointer" onClick={toggleExpand}>
             {job.title}
           </div>
-          
-          {/* Company name and location next to each other */}
-          <div className="flex justify-center gap-4 mt-2">
-            <p className="text-black text-sm">{job.companyname}</p>
-            <p className="text-gray-500 text-sm">{job.location}</p>
+
+          <div className="flex justify-center items-center mt-2 space-x-2">
+            <p className="text-black">{job.companyname}</p>
+            <p className="text-black">{job.location}</p>
           </div>
+
+          <p className="text-gray-500">Salary: {job.salaryMin}</p>
         </div>
 
-        <div className="mt-4 flex ">
+        <div className="mt-4">
           <Button variant="default" className="text-sm px-3 py-1">
             Apply Now
           </Button>
-         
         </div>
       </div>
 
-      {/* Right Section */}
-      <div className="lg:w-3/4 flex flex-col text-center lg:text-left">
+      <div className="lg:w-3/4 flex flex-col text-center lg:text-left relative">
         {!expanded ? (
-          <p className="text-gray-700 text-sm mb-4">
-            {Array.isArray(job.description) ? job.description[0] : job.description}
-          </p>
+          <p className="text-gray-700 mb-4 text-center">{getShortDescription(fullDescription)}</p>
         ) : (
           <div className="text-gray-700 text-sm space-y-3">
-            {Array.isArray(job.description)
-              ? job.description.map((para, index) => <p key={index}>{para}</p>)
-              : <p>{job.description}</p>}
+            <p>{fullDescription}</p>
 
-            {/* Job Details */}
             <div className="grid grid-cols-2 gap-2">
               <p><strong>Posted:</strong> {job.posted}</p>
               <p><strong>Expires:</strong> {job.expiredate}</p>
               <p><strong>Level:</strong> {job.educationlevel}</p>
               <p><strong>Education:</strong> {job.educationlevel}</p>
-              {/* Move salaryMin to the expanded section */}
-              <p><strong>Salary:</strong> {job.salaryMin}</p>
             </div>
 
-            {/* Requirements */}
             <div>
               <div className="font-semibold">Requirements:</div>
               <ul className="list-disc list-inside">
@@ -98,7 +95,6 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               </ul>
             </div>
 
-            {/* Benefits */}
             <div>
               <div className="font-semibold">Benefits:</div>
               <ul className="list-disc list-inside">
@@ -110,7 +106,6 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               </ul>
             </div>
 
-            {/* Desirable Skills */}
             <div>
               <div className="font-semibold">Desirable Skills:</div>
               <ul className="list-disc list-inside">
@@ -124,15 +119,14 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           </div>
         )}
 
-        {/* Expand/Collapse Button */}
-        <div className="self-end">
-          <Button variant="ghost" onClick={toggleExpand} className="text-gray-800 text-sm">
-            {expanded ? "Show Less" : "Read More..."}
-          </Button>
+        <div className="absolute bottom-2 right-2">
+            <Button variant='outline' onClick={toggleExpand} className=" flex items-center hover:bg-green-200 border-none">
+            {/* {expanded ? "Show Less" : "Read More..."} */}
+            <span className="ml-1">{expanded ? <img src={'/upload.png'} alt="icon" style={{ width: '20px', marginRight: '8px' }} /> :<img src={'/arrow.png'} alt="icon" style={{ width: '20px', marginRight: '8px' }} />}</span>
+            </Button>
         </div>
       </div>
 
-      {/* Tags at the Bottom Center */}
       <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {job.employmentTypes.map((tag, tagIndex) => (
           <span key={tagIndex} className="text-xs font-semibold bg-green-200 text-green-800 py-1 px-2 rounded-full">
