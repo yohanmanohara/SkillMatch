@@ -222,5 +222,24 @@ const createOrganization = async (req, res) => {
     }
   }
 
+  const deletejob = async (req, res) => {
+    try {
+      const jobId = req.params.id;
+      const deletedJob = await Job.findByIdAndDelete(jobId);
+  
+      if (!deletedJob) {
+        return res.status(404).json({ message: "Job not found" });
+      }
+  
+      res.status(200).json({ message: "Job deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting job:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  
+  
+  
 
-  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs};
+
+  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs,deletejob};

@@ -26,6 +26,10 @@ export const UserClient = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 5; // Limit of jobs per page
 
+  const handleDelete = (jobId: number) => {
+    setJobs((prevJobs) => prevJobs.filter((job) => job.id !== jobId));
+  };
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -41,6 +45,8 @@ export const UserClient = () => {
     };
     fetchJobs();
   }, []);
+
+  
 
   // Pagination logic
   const indexOfLastJob = currentPage * jobsPerPage;
@@ -75,11 +81,13 @@ export const UserClient = () => {
 
       {/* Centering the cards */}
       <div className='flex flex-col items-center justify-center md:flex-row gap-4'>
-        <div className='w-full md:w-1/5'></div>
-        <div className='w-full md:w-3/5'>
-          <Cards jobs={currentJobs} />
+        <div className='w-full md:w-1/6'></div>
+        <div className='w-full md:w-4/6 flex flex-col gap-4'>
+        {currentJobs.map((job) => (
+          <Cards key={job.id} job={job} onDelete={handleDelete} />
+        ))}
         </div>
-        <div className='w-full md:w-1/5'></div>
+        <div className='w-full md:w-1/6'></div>
       </div>
 
       {/* Pagination Component */}

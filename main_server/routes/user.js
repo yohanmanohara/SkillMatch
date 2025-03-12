@@ -19,11 +19,13 @@ const {createOrganization} = require('../controllers/organization/organizationCo
 const {getpicture} = require('../controllers/organization/organizationControllers')
 const {addjobs} = require('../controllers/organization/organizationControllers')
 const {fetchjobs} = require('../controllers/organization/organizationControllers')
+const{deletejob} = require('../controllers/organization/organizationControllers')   
 
 const router = express.Router()
 
 router.post('/getorganizationspicture', getpicture)
 
+router.delete('/deletejob/:id',deletejob)
 router.get('/fetchjobs',fetchjobs)
 
 router.post('/addjobs',addjobs)
