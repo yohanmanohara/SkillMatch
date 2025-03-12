@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ const Footer = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
-      
+
       const data = await response.json();
       setMessage(data.message);
       setEmail('');
@@ -44,8 +44,8 @@ const Footer = () => {
         <div className="mb-4 md:mb-0 pl-12">
           <h5 className="font-bold mb-2">Audience</h5>
           <ul>
-            <li><Link href="/employers" className="text-gray-600 hover:text-black text-lg">Employers</Link></li>
-            <li><Link href="/candidates" className="text-gray-600 hover:text-black text-lg">Candidates</Link></li>
+            <li><Link href="/(landing)/footer_components/employers" className="text-gray-600 hover:text-black text-lg">Employers</Link></li>
+            <li><Link href="/(landing)/footer_components/candidates" className="text-gray-600 hover:text-black text-lg">Candidates</Link></li>
           </ul>
         </div>
 
@@ -53,8 +53,8 @@ const Footer = () => {
         <div className="mb-4 md:mb-0 pl-12">
           <h5 className="font-bold mb-2">Help</h5>
           <ul>
-            <li><Link href="/support" className="text-gray-600 hover:text-black text-lg">Customer Support</Link></li>
-            <li><Link href="/documentation" className="text-gray-600 hover:text-black text-lg">Documentation</Link></li>
+            <li><Link href="/(landing)/footer_components/support" className="text-gray-600 hover:text-black text-lg">Customer Support</Link></li>
+            <li><Link href="/(landing)/footer_components/documentation" className="text-gray-600 hover:text-black text-lg">Documentation</Link></li>
           </ul>
         </div>
 
@@ -62,8 +62,8 @@ const Footer = () => {
         <div className="mb-4 md:mb-0 pl-12">
           <h5 className="font-bold mb-2">Legal</h5>
           <ul>
-            <li><Link href="/terms" className="text-gray-600 hover:text-black text-lg">Terms of Service</Link></li>
-            <li><Link href="/privacy" className="text-gray-600 hover:text-black text-lg">Privacy Policy</Link></li>
+            <li><Link href="/(landing)/footer_components/terms" className="text-gray-600 hover:text-black text-lg">Terms of Service</Link></li>
+            <li><Link href="/(landing)/footer_components/privacy" className="text-gray-600 hover:text-black text-lg">Privacy Policy</Link></li>
           </ul>
         </div>
 
