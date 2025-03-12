@@ -1,55 +1,50 @@
-import * as React from "react";
-import { useState } from "react";
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+interface Job {
+  id: number;
+  title: string;
+  location: string;
+  companyname: string;
+  salaryMin: string;
+  posted: string;
+  pictureurl: string;
+}
 
-export default function CardWithForm() {
-  const [cards, setCards] = useState([
-    {
-      name: "Sample Project 1",
-      framework: "Next.js",
-    },
-    {
-      name: "Sample Project 1",
-      framework: "Next.js",
-    },
-   
-   
-  ]); // Initial example data
+interface CardsProps {
+  jobs: Job[];
+}
 
-  const handleDeploy = () => {
-    
-    const exampleData = {
-      name: "New Project",
-      framework: "SvelteKit",
-    };
-
-    setCards([...cards, exampleData]);
-  };
-
+const Cards = ({ jobs }: CardsProps) => {
   return (
-    <div className="w-full pl-3 pr-3 lg:pl-32 lg:pr-32">
-  
-      <div className="mt-4">
-        {cards.map((card, index) => (
-          <Card key={index} className="w-full shadow-lg mt-4 bg-[#DCFCE0] text-black">
-            <CardHeader>
-              <CardTitle>{card.name}</CardTitle>
-              <CardDescription>Framework: {card.framework}</CardDescription>
+    <div className="flex flex-col gap-4">
+      {jobs.map((job, index) => (
+        <Card key={job.id || index} className="shadow-lg bg-green-100 text-black p-4 flex flex-col space-y-3 md:flex-row items-center gap-4">
+          <div className="w-16 h-16 flex-shrink-0 md:w-24 md:h-24">
+            <Avatar className="rounded-full h-full w-full overflow-hidden">
+              <AvatarImage src={job.pictureurl} alt="Company Logo" className="w-full h-full" />
+            </Avatar>
+          </div>
+
+            <CardContent className="flex-1 ">
+            <CardHeader className="p-0 flex flex-col items-center md:items-start">
+              <CardTitle className="text-xl font-bold text-black ">{job.title}</CardTitle>
+              <div className="flex mt-2 space-x-1">
+                <p className="text-black">{job.companyname}</p>,
+                <p className="text-black">{job.location}</p>
+              </div>
             </CardHeader>
-            <CardContent>
-              <p>Project created successfully!</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+            <CardFooter className="flex flex-col items-center md:items-end">
+              <div>
+                <p className="text-gray-600 font-medium">Job created successfully!</p>
+              </div>
+            </CardFooter>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
-}
+};
+
+export default Cards;
