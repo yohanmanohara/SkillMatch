@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,11 +10,14 @@ import { Trash } from "lucide-react";
 
 function Page() {
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [time, setTime] = useState(""); // New state for event time
+  const [time, setTime] = useState("");
   const [notes, setNotes] = useState("");
   const [eventTitle, setEventTitle] = useState("");
   const [savedNotes, setSavedNotes] = useState<{ id: number; date: Date | undefined; text: string }[]>([]);
   const [events, setEvents] = useState<{ id: number; date: Date | undefined; time: string; title: string }[]>([]);
+
+  
+  const userEmail = "recruitwise.info@gmail.com";
 
   const handleSaveNote = () => {
     if (notes.trim() === "") return;
@@ -25,11 +29,31 @@ function Page() {
     setSavedNotes(savedNotes.filter((note) => note.id !== id));
   };
 
-  const handleAddEvent = () => {
+  const handleAddEvent = async () => {
     if (eventTitle.trim() === "" || time.trim() === "") return;
-    setEvents([...events, { id: Date.now(), date, time, title: eventTitle }]);
+
+    const newEvent = { id: Date.now(), date, time, title: eventTitle };
+    setEvents([...events, newEvent]);
     setEventTitle("");
-    setTime(""); // Reset time input
+    setTime("");
+
+    try {
+      const response = await fetch("/api/sendReminder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: userEmail,
+          eventTitle: newEvent.title,
+          eventDate: newEvent.date?.toDateString(),
+          eventTime: newEvent.time,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data.message);
+    } catch (error) {
+      console.error("Error sending reminder:", error);
+    }
   };
 
   const handleDeleteEvent = (id: number) => {
