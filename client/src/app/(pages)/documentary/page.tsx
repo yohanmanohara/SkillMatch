@@ -290,7 +290,6 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
       </div>
 
       {/* Mobile Sidebar */}
-      <div className={`fixed inset-0 bg-black bg-opacity-50 z-50 ${isOpen ? "block" : "hidden"}`} onClick={toggleSidebar}></div>
       <div
         className={`fixed top-0 left-0 w-64 h-full bg-gray-800 p-4 z-50 transform ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-transform md:hidden`}
       >
