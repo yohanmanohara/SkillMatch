@@ -46,7 +46,8 @@ const Client_Feedback = () => {
           What do we offer?
         </div>
 
-        <div className="flex flex-col md:flex-row gap-8 md:gap-20 my-9 items-center">
+        {/* Flex container updated to center align items */}
+        <div className="flex flex-col sm:flex-row gap-8 sm:gap-20 my-9 ">
           <div className="flex flex-row font-bold gap-4 items-center">
             <Image src={Security} alt="Security" width={40} height={40} />
             <div>Security Guarantee</div>
@@ -69,7 +70,7 @@ const Client_Feedback = () => {
         {feedbacks.map(({ id, feedback, name, title, humanIcon, commaIcon }) => (
           <div
             key={id}
-            className="flex flex-col items-start justify-center gap-6 text-black border-0 rounded-xl w-full sm:w-[300px] bg-[#BEF4CE] px-6 py-4"
+            className="flex flex-col items-start justify-center gap-6 text-black border-0 rounded-xl w-full sm:w-[300px] md:w-[350px] bg-[#BEF4CE] px-6 py-4"
           >
             <Image src={commaIcon} alt="Comma" />
             <div className="text-sm md:text-base">{feedback}</div>
