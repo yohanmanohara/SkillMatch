@@ -57,8 +57,8 @@ function Page() {
           <CardTitle>Welcome, {userData.name}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted">{userData.jobTitle}</p>
-          <p className="text-sm text-muted mt-2">Profile Completion: {userData.profileCompletion}%</p>
+          <p>{userData.jobTitle}</p>
+          <p className="text-sm mt-2">Profile Completion: {userData.profileCompletion}%</p>
         </CardContent>
       </Card>
 
@@ -66,15 +66,14 @@ function Page() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Briefcase className="text-blue-500" /> Job Applications
+            <Briefcase className="text-blue-500" />
+            Job Applications
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="text-muted">
-            <li>In Progress: {userData.jobApplications.inProgress}</li>
-            <li>Accepted: {userData.jobApplications.accepted}</li>
-            <li>Rejected: {userData.jobApplications.rejected}</li>
-          </ul>
+          <div>In Progress: {userData.jobApplications.inProgress}</div>
+          <div>Accepted: {userData.jobApplications.accepted}</div>
+          <div>Rejected: {userData.jobApplications.rejected}</div>
         </CardContent>
       </Card>
 
@@ -82,15 +81,14 @@ function Page() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Bookmark className="text-green-500" /> Saved Jobs
+            <Bookmark className="text-green-500" />
+            Saved Jobs
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="text-muted">
-            {userData.savedJobs.slice(0, showAllSavedJobs ? userData.savedJobs.length : 2).map((job, index) => (
-              <li key={index} className="mb-2">{job.title} - {job.company} ({job.location})</li>
-            ))}
-          </ul>
+          {userData.savedJobs.slice(0, showAllSavedJobs ? userData.savedJobs.length : 2).map((job, index) => (
+            <div key={index} className="mb-2">{job.title} - {job.company} ({job.location})</div>
+          ))}
           <Button className="mt-4 w-full" onClick={() => setShowAllSavedJobs(!showAllSavedJobs)}>
             {showAllSavedJobs ? "Show Less" : "View All Saved Jobs"}
           </Button>
@@ -101,11 +99,12 @@ function Page() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Bell className="text-yellow-500" /> Notifications
+            <Bell className="text-yellow-500" />
+            Notifications
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted">Total jobs in Software Engineering: {userData.totalSoftwareJobs}</p>
+          <div>Total jobs in Software Engineering: {userData.totalSoftwareJobs}</div>
         </CardContent>
       </Card>
 
@@ -113,15 +112,14 @@ function Page() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Star className="text-purple-500" /> Skills & Endorsements
+            <Star className="text-purple-500" />
+            Skills & Endorsements
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="text-muted">
-            {userData.skills.map((skill, index) => (
-              <li key={index} className="mb-2">{skill.skill} - {skill.endorsements} endorsements</li>
-            ))}
-          </ul>
+          {userData.skills.map((skill, index) => (
+            <div key={index} className="mb-2">{skill.skill} - {skill.endorsements} endorsements</div>
+          ))}
         </CardContent>
       </Card>
 
@@ -131,11 +129,9 @@ function Page() {
           <CardTitle>Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="text-muted">
-            {userData.recentActivity.map((activity, index) => (
-              <li key={index} className="mb-2">{activity}</li>
-            ))}
-          </ul>
+          {userData.recentActivity.map((activity, index) => (
+            <div key={index} className="mb-2">{activity}</div>
+          ))}
         </CardContent>
       </Card>
 
@@ -145,11 +141,9 @@ function Page() {
           <CardTitle>Upcoming Interviews</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="text-muted">
-            {userData.upcomingInterviews.map((interview, index) => (
-              <li key={index} className="mb-2">{interview.jobTitle} at {interview.company} on {interview.date}</li>
-            ))}
-          </ul>
+          {userData.upcomingInterviews.map((interview, index) => (
+            <div key={index} className="mb-2">{interview.jobTitle} at {interview.company} on {interview.date}</div>
+          ))}
         </CardContent>
       </Card>
 
@@ -159,11 +153,9 @@ function Page() {
           <CardTitle>Career Tips</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="text-muted">
-            {userData.careerTips.map((tip, index) => (
-              <li key={index} className="mb-2">{tip}</li>
-            ))}
-          </ul>
+          {userData.careerTips.map((tip, index) => (
+            <div key={index} className="mb-2">{tip}</div>
+          ))}
         </CardContent>
       </Card>
 
@@ -173,11 +165,9 @@ function Page() {
           <CardTitle>Job Alerts</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="text-muted">
-            {userData.jobAlerts.map((alert, index) => (
-              <li key={index} className="mb-2">{alert}</li>
-            ))}
-          </ul>
+          {userData.jobAlerts.map((alert, index) => (
+            <div key={index} className="mb-2">{alert}</div>
+          ))}
         </CardContent>
       </Card>
     </div>
