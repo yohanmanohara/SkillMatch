@@ -3,12 +3,18 @@ import React, { useRef, useState } from 'react';
 import AlertDialogDemo from '@/components/common/rusumadd';
 import { Button } from '@/components/ui/button';
 import Dropzone, { DropzoneState } from 'shadcn-dropzone';
-
+import { Api } from '@mui/icons-material';
+import { set } from 'date-fns';
+import { Loader2 } from 'lucide-react';
+import { useEffect } from 'react';
 const Resume = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [file, setUploadedFile] = useState<File | null>(null);
   const [resumload, setResumload] = useState<File | boolean>(false);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [URL, setURL] = useState('');
+  const userid = sessionStorage.getItem('poop');
 
   const handleCancel = () => {
     if (fileInputRef.current) {
@@ -19,16 +25,66 @@ const Resume = () => {
     setResumload(false); // Reset resume load state
   };
 
-  const handleSubmit = () => {
-    if (!uploadedFile) {
+  const handleSubmit = async () => {
+    if (!file) {
       setError(true);
       return;
     }
-
-    setResumload(uploadedFile); // Set the state to show the PDF viewer
-    setError(false); // Reset any error
+  
+   
+    const formDataUpload = new FormData();
+    formDataUpload.append('file', file);
+  
+    try {
+      setLoading(true);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/file/cvupload/?id=${userid}`, {
+        method: 'POST',
+        body: formDataUpload,
+      });
+  
+      const responseText = await response.text(); // Read the response as text for better error visibility
+  
+      if (!response.ok) {
+        console.error('Error response:', responseText);
+        throw new Error(`Failed to upload file: ${response.status} ${response.statusText}`);
+      }
+  
+      const data = JSON.parse(responseText); 
+      updatemono(data.url);
+      setURL(data.url);
+      setError(false);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setError(true);
+      setLoading(false);
+    }
+  };
+  
+  const updatemono = async (url: any) => {
+    try {
+      console.log('URL received in updatemono:', url);
+  
+      const formdataurl = { url }; 
+  
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updatecv/?id=${userid}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Sending JSON data
+        },
+        body: JSON.stringify({ formdataurl }) // Convert the object to a JSON string
+      });
+      
+      const data = await response.json();
+      console.log('Updated data:', data);
+      setLoading(false);
+      setResumload(true);
+    } catch (error) {
+      console.error('Error updating data:', error);
+      setLoading(false);
+    }
   };
 
+  
   const removeFile = () => {
     setUploadedFile(null);
     setError(false);
@@ -42,9 +98,9 @@ const Resume = () => {
           <div className="w-full flex flex-col gap-4">
             <AlertDialogDemo />
             <div className="w-full  h-[80vh] overflow-auto flex items-center justify-center " >
-              {uploadedFile && (
+              {file && (
                 <iframe
-                  src={URL.createObjectURL(uploadedFile)} // Safely use createObjectURL
+                  src={window.URL.createObjectURL(file)} // Safely use createObjectURL
                   title="Resume"
                   width="100%"
                   height="100%"
@@ -90,11 +146,11 @@ const Resume = () => {
                 </div>
               )}
             </Dropzone>
-            {uploadedFile && (
+            {file && (
               <div className="mt-4 w-full max-w-md">
                 <ul>
                   <li className="flex justify-between items-center mb-2">
-                    <span>{uploadedFile.name}</span>
+                    <span>{file.name}</span>
                     <Button onClick={removeFile} variant="outline" size="sm">
                       Remove
                     </Button>
@@ -103,9 +159,9 @@ const Resume = () => {
               </div>
             )}
             <div className="flex gap-4 mt-4">
-              <Button onClick={handleSubmit} variant="secondary">
-                Submit
-              </Button>
+            <Button onClick={handleSubmit} variant="secondary" disabled={loading}>
+      {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Submit'}
+    </Button>
               <Button onClick={handleCancel} variant="outline">
                 Cancel
               </Button>

@@ -21,10 +21,12 @@ const {addjobs} = require('../controllers/organization/organizationControllers')
 const {fetchjobs} = require('../controllers/organization/organizationControllers')
 const {updatejobs} = require('../controllers/organization/organizationControllers')
 const {deletejob} = require('../controllers/organization/organizationControllers')
-
+const {updatecv} = require('../controllers/users/userController-customer')
 const router = express.Router()
 
 router.post('/getorganizationspicture', getpicture)
+
+router.post('/updatecv',updatecv)
 
 router.get('/fetchjobs',fetchjobs)
 
