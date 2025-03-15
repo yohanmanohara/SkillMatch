@@ -19,7 +19,7 @@ import { jobTitles } from "@/utils/jobTitles";
 import { toast } from "@/components/ui/use-toast";
 
 interface JobFormData {
-  _id: number;
+  _id: string;
   companyname: string;
   title: string;
   employmentTypes: string[];
@@ -299,6 +299,7 @@ const EditJobDialog: React.FC<EditJobDialogProps> = ({ job, onSave, onClose, isO
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   required
+                  className="border p-2 rounded  border-green-400   dark:bg-gray-700"
                  
                 >
                   <option className="text-black bg-transparent " value="">Select Job Title</option>
