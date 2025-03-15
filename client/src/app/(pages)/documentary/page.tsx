@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 // Static content data
@@ -258,7 +258,7 @@ const documentaryContent = {
       </div>
     ),
   },
-  }
+}
 
 const DocumentaryPage = () => {
   const searchParams = useSearchParams();
@@ -284,4 +284,10 @@ const DocumentaryPage = () => {
   );
 };
 
-export default DocumentaryPage;
+const SuspenseWrapper = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <DocumentaryPage />
+  </Suspense>
+);
+
+export default SuspenseWrapper;
