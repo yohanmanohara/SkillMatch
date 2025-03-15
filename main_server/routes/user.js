@@ -34,6 +34,7 @@ router.post('/addjobs',addjobs)
 
 router.post('/createorganizations', createOrganization)
 
+
 router.post('/login', loginUser)
 
 router.post('/signup', signupUser)
@@ -61,8 +62,6 @@ router.put('/putinactive/:id', putInactive)
 router.get('/protected', verifyToken);
 
 router.get('/admin', verifyTokenadmin);
-
-router.get('/getsingleuser', getsingleuser);
 
 router.get('/getsingleuser', getsingleuser);
 
