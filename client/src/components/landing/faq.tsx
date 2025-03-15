@@ -1,71 +1,63 @@
-import React from 'react'
+"use client";
 
+import React from "react";
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-  } from "@/components/ui/accordion"
-  
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
-function page() {
+const FAQ: React.FC = () => {
   return (
-    <div >
-    <Accordion type="single" collapsible className="w-full pt-16 ">
-    <AccordionItem value="item-1">
-      <AccordionTrigger>What credit score do I need to apply for a credit card?</AccordionTrigger>
-      <AccordionContent>
-      The required credit score may vary depending on the specific credit card. Generally, a good to excellent credit score (typically 670 or above) increases your chances of approval for premium credit cards.
-      </AccordionContent>
-    </AccordionItem>
-    <AccordionItem value="item-2">
-      <AccordionTrigger> How can I apply for a credit card online?</AccordionTrigger>
-      <AccordionContent>
-      To apply for a credit card online:
+    <div className="w-full px-4 py-10 md:py-16">
+      <div className="max-w-6xl mx-auto">
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Why can&apos;t I upload my photo?</AccordionTrigger>
+            <AccordionContent>
+              The image should be <strong>872x872</strong> pixels.
+            </AccordionContent>
+          </AccordionItem>
 
-        1. Go to the bank&apos;s website or app.
-        2. Choose a credit card.
-        3. Fill out the application with your details.
-        4. Submit and wait for approval.
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Why can&apos;t I submit my application?</AccordionTrigger>
+            <AccordionContent>
+              Ensure all required fields are filled out and your resume is uploaded in <strong>PDF format</strong>.
+            </AccordionContent>
+          </AccordionItem>
 
-        It&apo;s quick and convenient!
-      </AccordionContent>
-    </AccordionItem>
-    <AccordionItem value="item-3">
-      <AccordionTrigger>Are there any annual fees associated with the credit card?</AccordionTrigger>
-      <AccordionContent>
-      Yes, some credit cards have annual fees, but many offer no-fee options. It depends on the card you choose.
-      </AccordionContent>
-    </AccordionItem>
+          <AccordionItem value="item-3">
+            <AccordionTrigger>How do I reset my password?</AccordionTrigger>
+            <AccordionContent>
+              Click on <strong>&quot;Forgot Password&quot;</strong> on the login page and follow the instructions to reset your password.
+            </AccordionContent>
+          </AccordionItem>
 
-    <AccordionItem value="item-4">
-      <AccordionTrigger>How long does it take to receive the credit card once approved?</AccordionTrigger>
-      <AccordionContent>
-      Once approved, it typically takes 7-10 business days to receive your credit card.
-      </AccordionContent>
-    </AccordionItem>
+          <AccordionItem value="item-4">
+            <AccordionTrigger>Why am I not receiving email notifications?</AccordionTrigger>
+            <AccordionContent>
+              Check your <strong>spam/junk folder</strong> and ensure you have enabled email notifications in your account settings.
+            </AccordionContent>
+          </AccordionItem>
 
-    <AccordionItem value="item-5">
-      <AccordionTrigger> How can I check my credit card balance and transactions?</AccordionTrigger>
-      <AccordionContent>
-      You can check your credit card balance and transactions through your bank&apos;s mobile app, online banking portal, or by contacting customer service.
-      </AccordionContent>
-    </AccordionItem>
+          <AccordionItem value="item-5">
+            <AccordionTrigger>How can I update my job listing after posting?</AccordionTrigger>
+            <AccordionContent>
+              You can edit your job card from the <strong>dashboard</strong> by selecting the job post and making the necessary changes.
+            </AccordionContent>
+          </AccordionItem>
 
-    <AccordionItem value="item-6">
-      <AccordionTrigger>  What should I do if my credit card is lost or stolen?</AccordionTrigger>
-      <AccordionContent>
-      If your credit card is lost or stolen, immediately contact your card issuer to report it. They will block the card and issue a replacement.      </AccordionContent>
-    </AccordionItem>
+          <AccordionItem value="item-6">
+            <AccordionTrigger>Why can&apos;t I submit my job description?</AccordionTrigger>
+            <AccordionContent>
+              The job description must be exactly <strong>200 words</strong>. If it&apos;s below or above the limit, it won&apos;t be accepted.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </div>
+  );
+};
 
-    <AccordionItem value="item-7">
-      <AccordionTrigger>  Is my credit card information secure?</AccordionTrigger>
-      <AccordionContent>
-      Yes, credit card information is generally secure with encryption and fraud protection measures in place. However, always be cautious when sharing details online or in public.</AccordionContent>
-    </AccordionItem>
-  </Accordion>
-  </div>
-  )
-}
-
-export default page
+export default FAQ;
