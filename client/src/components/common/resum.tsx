@@ -1,142 +1,186 @@
 'use client';
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import AlertDialogDemo from '@/components/common/rusumadd';
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Dropzone, { DropzoneState } from 'shadcn-dropzone';
-import { useRouter } from 'next/navigation';
-import { useRef } from "react";
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
+import Dropzone, { DropzoneState } from 'shadcn-dropzone';
+import { Loader2 } from 'lucide-react';
 
 const Resume = () => {
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [uploadedFiles, setUploadedFiles] = React.useState<File[]>([]);
-    const [resumload, setResumload] = React.useState(false);
-    const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [file, setUploadedFile] = useState<File | null>(null);
+  const [resumload, setResumload] = useState<File | boolean>(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [URL, setURL] = useState('');
+  const userid = sessionStorage.getItem('poop');
 
-    const handleCancel = () => {
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Clear the selected file
-      }
-      setUploadedFiles([]); // Clear the uploaded files state
-    };
+  const handleCancel = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''; // Clear the selected file
+    }
+    setUploadedFile(null); // Clear the uploaded file state
+    setError(false); // Reset error state
+    setResumload(false); // Reset resume load state
+  };
 
-    const handleSubmit = () => {
-        if (uploadedFiles.length === 0) {
-            alert('Please upload at least one file before submitting.');
-            return;
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getsingleuser/?id=${userid}`);
+        const data = await response.json();
+        if (data.cvUrl) {
+          setURL(data.cvUrl);
+          setResumload(true);
         }
-
-        // Handle file submission logic here, such as uploading files to a server
-        console.log('Submitting files:', uploadedFiles);
-
-        // Optionally, you can reset the form after submission
-        setUploadedFiles([]);
-        setResumload(true);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
 
-    return (
-        <>
-            <div>
-                {resumload ? (
-                    <div className='w-full flex justify-end '>
-                        <AlertDialogDemo />
-                    </div>
-                ) : (
-                    <div className="flex justify-center h-screen items-center flex-col gap-4">
-                        <div className='text-2xl'>Upload Your CV Here</div>
-                        <Dropzone
-                            onDrop={(acceptedFiles: File[]) => {
-                                setUploadedFiles(acceptedFiles);
-                            }}
-                        >
-                            {(dropzone: DropzoneState) => (
-                                <div className='flex gap-11 flex-col h-full'>
-                                    <div
-                                        className={`flex items-center justify-center w-full   h-full p-28 lg:p-64 border-dashed rounded-md transition-colors 
-                                          ${dropzone.isDragAccept ? 'border-green-500 bg-green-50' : 'border-gray-950'}
-                                          ${dropzone.isDragReject ? 'border-red-500 bg-red-50' : ''}`}
-                                    >
-                                        {dropzone.isDragAccept ? (
-                                            <div className="text-sm font-medium text-green-600 animate-pulse">
-                                                Drop your files here!
-                                            </div>
-                                        ) : dropzone.isDragReject ? (
-                                            <div className="text-sm font-medium text-red-600">
-                                                File type not accepted, try again!
-                                            </div>
-                                        ) : (
-                                            <div className="flex items-center flex-col gap-2">
-                                                <div className="flex items-center gap-1.5 text-sm font-medium">
-                                                    <span className="text-blue-500">Upload files</span>
-                                                    {/* <svg
-                                                        className="w-5 h-5 text-blue-500"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth="2"
-                                                            d="M3 7v4a1 1 0 001 1h3m10 0h3a1 1 0 001-1V7m-2 10h-3m-6 0h-3m4-5V7a4 4 0 00-4-4H7a4 4 0 00-4 4v3m16 0a4 4 0 01-4-4h-3"
-                                                        />
-                                                    </svg> */}
-                                                </div>
-                                                <div className="text-xs text-gray-400 font-medium">
-                                                    Drag and drop files here, or click to select.
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className='w-full flex flex-row gap-14'>
-                                        {uploadedFiles.length > 0 && (
-                                            <div className="mt-4">
-                                                <h4 className="text-sm font-medium mb-2">Uploaded Files:</h4>
-                                                <ul className="list-disc pl-5 space-y-1 text-gray-600">
-                                                    {uploadedFiles.map((file, index) => (
-                                                        <li key={index} className="text-xs">
-                                                            {file.name} - {(file.size / 1024).toFixed(2)} KB
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
-                                        {uploadedFiles.length > 0 && (
-                                            <div className="flex flex-wrap gap-2 flex-row">
-                                                {uploadedFiles.map((file, index) => (
-                                                    file.type.startsWith('image/') && (
-                                                        <div key={index} className="w-16 h-16 overflow-hidden rounded-md">
-                                                            <Image
-                                                                src={URL.createObjectURL(file)}
-                                                                alt={file.name}
-                                                                className="object-cover w-full h-full"
-                                                            />
-                                                        </div>
-                                                    )
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                 
-                                </div>
-                            )}
-                        </Dropzone>
-                        <div className="flex gap-4 mt-4">
-                                        <Button onClick={handleSubmit} variant="secondary">
-                                            Submit
-                                        </Button>
-                                        <Button onClick={handleCancel} variant="outline">
-                                            Cancel
-                                        </Button>
-                          </div>
-                    </div>
-                )}
+
+    fetchUserData();
+  }, [userid]);
+
+  
+  const handleSubmit = async () => {
+    if (!file) {
+      setError(true);
+      return;
+    }
+
+    const formDataUpload = new FormData();
+    formDataUpload.append('file', file);
+
+    try {
+      setLoading(true);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/file/cvupload/?id=${userid}`, {
+        method: 'POST',
+        body: formDataUpload,
+      });
+
+      const responseText = await response.text();
+
+      if (!response.ok) {
+        console.error('Error response:', responseText);
+        throw new Error(`Failed to upload file: ${response.status} ${response.statusText}`);
+      }
+
+      const data = JSON.parse(responseText);
+      updatemono(data.url);
+      setURL(data.url);
+      setError(false);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setError(true);
+      setLoading(false);
+    }
+  };
+
+  const updatemono = async (url: string) => {
+    try {
+      const formdataurl = { url };
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updatecv/?id=${userid}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Sending JSON data
+        },
+        body: JSON.stringify({ formdataurl }) // Convert the object to a JSON string
+      });
+
+      const data = await response.json();
+      setLoading(false);
+      window.location.reload(); // Reload after updating
+    } catch (error) {
+      console.error('Error updating data:', error);
+      setLoading(false);
+    }
+  };
+
+  const removeFile = () => {
+    setUploadedFile(null);
+    setError(false);
+    setResumload(false); // Reset PDF viewer state
+  };
+
+  return (
+    <>
+      <div>
+        {resumload ? (
+          <div className="w-full flex flex-col gap-4">
+            <AlertDialogDemo />
+            <div className="w-full h-[80vh] overflow-auto flex items-center justify-center">
+              <iframe
+                src={URL}
+                width="100%"
+                height="100%"
+                style={{ border: 'none' }}
+              />
             </div>
-        </>
-    );
+          </div>
+        ) : (
+          <div className="flex justify-center h-screen items-center flex-col gap-4">
+            <div className="text-2xl">Upload Your CV Here</div>
+            <Dropzone
+              onDrop={(acceptedFiles: File[]) => {
+                const pdfFiles = acceptedFiles.filter((file) => file.type === 'application/pdf');
+                if (pdfFiles.length > 0) {
+                  setUploadedFile(pdfFiles[0]);
+                  setError(false); // Clear error state if valid file
+                } else {
+                  setError(true); // Show error if file is not PDF
+                }
+              }}
+            >
+              {(dropzone: DropzoneState) => (
+                <div className="relative flex flex-col items-center gap-11 w-full">
+                  <div
+                    className={`flex items-center justify-center w-full lg:p-16 border-dashed rounded-2xl transition-colors 
+                      ${error ? 'border-red-500 bg-red-50' : dropzone.isDragAccept ? 'border-green-500 bg-green-50' : 'border-gray-950'}
+                      ${dropzone.isDragReject ? 'border-red-500 bg-red-50' : ''}`}
+                  >
+                    {dropzone.isDragAccept ? (
+                      <div className="text-sm font-medium text-green-600 animate-pulse">
+                        Drop your file here!
+                      </div>
+                    ) : dropzone.isDragReject || error ? (
+                      <div className="text-sm font-medium text-red-600">
+                        Only PDF files are accepted!
+                      </div>
+                    ) : (
+                      <div className="text-gray-500 text-sm font-semibold">
+                        Drag drop a file here, or click to select a file
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </Dropzone>
+            {file && (
+              <div className="mt-4 w-full max-w-md">
+                <ul>
+                  <li className="flex justify-between items-center mb-2">
+                    <span>{file.name}</span>
+                    <Button onClick={removeFile} variant="outline" size="sm">
+                      Remove
+                    </Button>
+                  </li>
+                </ul>
+              </div>
+            )}
+            <div className="flex gap-4 mt-4">
+              <Button onClick={handleSubmit} variant="secondary" disabled={loading}>
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Submit'}
+              </Button>
+              <Button onClick={handleCancel} variant="outline">
+                Cancel
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
 };
 
 export default Resume;
