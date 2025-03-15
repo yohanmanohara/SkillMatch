@@ -12,113 +12,127 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function TabsDemo() {
-  const userId = sessionStorage.getItem("poop"); // More meaningful key
+export default function EmployeeSettings() {
+  const userId = sessionStorage.getItem("userId"); // Retrieve user ID from session storage
   const router = useRouter();
-  const [lod, setLod] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null); // Create a ref for the form
 
-  const handleVehicle = async (e: React.FormEvent<HTMLFormElement>) => {
+  // Handle form submission for updating employee details
+  const handleEmployeeUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-   setLod(true);
+    setLoading(true);
+
     try {
-      const updateVehicle = {
-        name: e.currentTarget.model.value,
-        numberPlate: e.currentTarget.numberPlate.value,
-        driverName: e.currentTarget.driverName.value,
-        iotid: e.currentTarget.iot?.value || '', // Default to an empty string if not provided
-        contactnumber: e.currentTarget.contactnumber.value,
-        status: 'Active',
+      if (!formRef.current) {
+        throw new Error("Form reference is not available");
+      }
+
+      const formData = new FormData(formRef.current); // Use FormData to extract values
+      const employeeData = {
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        role: formData.get("role") as string,
+        department: formData.get("department") as string,
+        contactNumber: formData.get("contactNumber") as string,
+        status: "Active", // Default status for employees
       };
-  
-      console.log(updateVehicle);
-  
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/main_server/api/vehicle/addvehicle/?id=${userId}`, {
+
+      console.log(employeeData);
+
+      // Simulate API call to update employee details
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/main_server/api/employee/update/?id=${userId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updateVehicle),
+        body: JSON.stringify(employeeData),
       });
-  
+
       if (!response.ok) {
         try {
           const errorData = await response.json();
-          console.error("Failed to add vehicle:", errorData);
+          console.error("Failed to update employee:", errorData);
           toast({
-            title: "Failed to Add Vehicle",
-            description: errorData.message || "Failed to add vehicle. Please try again.",
+            title: "Failed to Update Employee Details",
+            description: errorData.message || "Failed to update employee details. Please try again.",
           });
         } catch {
           throw new Error("Invalid response format");
         }
         return;
       }
-  
+
       toast({
-        title: "Vehicle added successfully",
-        description: "Vehicle details have been successfully added.",
+        title: "Employee details updated successfully",
+        description: "Employee details have been successfully updated.",
       });
-  
-      router.push("/customer/vehicles");
+
+      router.push("/employee/settings"); // Redirect to employee settings or dashboard
     } catch (error) {
-      console.error("An error occurred while adding the vehicle:", error);
+      console.error("An error occurred while updating employee details:", error);
       toast({
         title: "Error",
         description: "An error occurred. Please try again.",
       });
-    
     } finally {
-      setLod(false);
+      setLoading(false);
     }
   };
- 
+
   return (
     <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
       <Tabs defaultValue="account" className="w-[400px] md:w-[800px]">
         <TabsList className="grid grid-cols-1 text-4xl w-full h-max border-spacing-1">
           <TabsTrigger value="account" className="text-xl">
-            Add Vehicle
+            Employee Settings
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="account">
           <Card>
             <CardHeader>
-              <CardTitle>Add Your Vehicle Details</CardTitle>
+              <CardTitle>Update Your Employee Details</CardTitle>
               <CardDescription>
-                Enter your vehicle details. Click &apos;Add Vehicle&apos; when done.
+                Enter your employee details. Click &apos;Update&apos; when done.
               </CardDescription>
             </CardHeader>
 
-            <form onSubmit={handleVehicle}>
+            {/* Attach the ref to the form */}
+            <form ref={formRef} onSubmit={handleEmployeeUpdate}>
               <CardContent className="space-y-2">
                 <div className="space-y-1">
-                  <Label htmlFor="name">Vehicle Name</Label>
-                  <Input id="model" name="model" placeholder="Vehicle model" />
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input id="name" name="name" placeholder="John Doe" />
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="numberPlate">Number Plate</Label>
-                  <Input id="numberPlate" name="numberPlate" placeholder="Ks-3948" />
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input id="email" name="email" placeholder="john.doe@example.com" />
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="driverName">Driver Name</Label>
-                  <Input id="driverName" name="driverName" placeholder="Driver full Name" />
+                  <Label htmlFor="role">Role</Label>
+                  <Input id="role" name="role" placeholder="Software Engineer" />
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="driverName">IOT Id</Label>
-                  <Input id="iot" name="iot" placeholder="iot device id" />
+                  <Label htmlFor="department">Department</Label>
+                  <Input id="department" name="department" placeholder="Engineering" />
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="contactnumber">Contact Number</Label>
-                  <Input id="contactnumber" name="contactnumber" placeholder="0772243631" />
+                  <Label htmlFor="contactNumber">Contact Number</Label>
+                  <Input
+                    id="contactNumber"
+                    name="contactNumber"
+                    placeholder="1234567890"
+                    pattern="\d*"
+                  />
                 </div>
               </CardContent>
               <CardFooter>
-                <Button type="submit" disabled={lod}>
-                  {lod ? "Processing" : "Add Vehicle"}
+                <Button type="submit" disabled={loading}>
+                  {loading ? "Processing" : "Update Details"}
                 </Button>
               </CardFooter>
             </form>
