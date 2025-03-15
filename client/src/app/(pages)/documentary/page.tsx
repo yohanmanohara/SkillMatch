@@ -1,8 +1,10 @@
-"use client"
-import React, { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+"use client";
+import React, { useState, Suspense, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
-// Static content data
+
+type ContentKey = keyof typeof documentaryContent;
+
 const documentaryContent = {
   'getting-started': {
     title: 'Getting Started',
@@ -258,28 +260,106 @@ const documentaryContent = {
       </div>
     ),
   },
-}
+  }
+
+// Sidebar Component
+const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: () => void }) => {
+  const router = useRouter();
+
+  const handleNavigation = (section: ContentKey) => {
+    router.push(`?content=${section}`);
+    toggleSidebar(); // Close sidebar after clicking
+  };
+
+  return (
+    <>
+      {/* Sidebar for larger screens */}
+      <div className="hidden md:block w-64 h-screen p-4 fixed border-r border-gray-700">
+        <ul className="space-y-2">
+          {Object.keys(documentaryContent).map((key) => (
+            <li key={key}>
+              <button
+                className="w-full text-left p-2 rounded hover:bg-gray-500"
+                onClick={() => handleNavigation(key as ContentKey)}
+              >
+                {documentaryContent[key as ContentKey].title}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Mobile Sidebar */}
+      <div className={`fixed inset-0 bg-black bg-opacity-50 z-50 ${isOpen ? "block" : "hidden"}`} onClick={toggleSidebar}></div>
+      <div
+        className={`fixed top-0 left-0 w-64 h-full bg-gray-800 p-4 z-50 transform ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-transform md:hidden`}
+      >
+        <button className="absolute top-4 right-4 text-white text-2xl" onClick={toggleSidebar}>
+          ✕
+        </button>
+        <ul className="mt-10 space-y-2">
+          {Object.keys(documentaryContent).map((key) => (
+            <li key={key}>
+              <button
+                className="w-full text-left p-2 rounded hover:bg-gray-500"
+                onClick={() => handleNavigation(key as ContentKey)}
+              >
+                {documentaryContent[key as ContentKey].title}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
+  );
+};
 
 const DocumentaryPage = () => {
   const searchParams = useSearchParams();
-  const content = searchParams.get('content'); // Extract content from query parameter
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showMenuButton, setShowMenuButton] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
-  // Check if content exists in the data
-  const activeContent = documentaryContent[content as keyof typeof documentaryContent];
+  const content = (searchParams.get("content") as ContentKey) || "getting-started";
+  const activeContent = documentaryContent[content] || documentaryContent["getting-started"];
 
-  // Handle case where content is undefined or invalid
-  if (!activeContent) {
-    return (
-      <div className="text-center">
-        <h1>Page not found</h1>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > lastScrollY) {
+        // If scrolling down, hide the menu button
+        setShowMenuButton(false);
+      } else {
+        // If scrolling up, show the menu button
+        setShowMenuButton(true);
+      }
+      setLastScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY]);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold">{activeContent.title}</h1>
-      <div className="mt-4 text-lg">{activeContent.content}</div>
+    <div className="flex">
+      {/* Mobile menu icon - hide when scrolling */}
+      {showMenuButton && (
+        <button
+          className="md:hidden fixed top-4 left-4 text-3xl z-[100] text-white p-3 rounded-md shadow-lg transition-opacity duration-300"
+          onClick={() => setIsSidebarOpen(true)}
+        >
+          ☰
+        </button>
+      )}
+
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+
+      <div className="md:ml-72 p-6 max-w-4xl w-full mx-auto pt-16">
+        <h1 className="text-3xl font-bold">{activeContent.title}</h1>
+        <div className="mt-4 text-lg">{activeContent.content}</div>
+      </div>
     </div>
   );
 };
