@@ -243,7 +243,7 @@ const createOrganization = async (req, res) => {
     }
   };
 
-  const deleteJob = async (req, res) => {
+  const deletejob = async (req, res) => {
     const { id } = req.query;
   
     try {
@@ -303,4 +303,4 @@ const createOrganization = async (req, res) => {
 
 
 
-  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs,updatejobs,deleteJob,getOrganizationJobs}; // Export the functions to be used in the routes file
+  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs,updatejobs,deletejob,getOrganizationJobs}; // Export the functions to be used in the routes file

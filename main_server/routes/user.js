@@ -22,6 +22,7 @@ const {fetchjobs} = require('../controllers/organization/organizationControllers
 const {updatejobs} = require('../controllers/organization/organizationControllers')
 const {deletejob} = require('../controllers/organization/organizationControllers')
 const {updatecv} = require('../controllers/users/userController-customer')
+const {getOrganizationJobs} = require('../controllers/organization/organizationControllers')
 
 const router = express.Router()
 
@@ -46,7 +47,7 @@ router.post('/getusers', getUsers)
 
 router.delete('/deleteuser/:id', deleteUser)
 
-router.delete('/deletejob', deleteJob)
+router.delete('/deletejob', deletejob)
 router.patch('/updateuser', updateUser)
 
 router.put('/putactive/:id', putActive)
