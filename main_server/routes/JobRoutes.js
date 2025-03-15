@@ -2,8 +2,8 @@ const express = require('express');
 const multer = require("multer");
 const router = express.Router();
 
-const JobController = require('../controllers/JobControllers');
-const cvController = require('../controllers/JobControllers');
+const { JobController, cvController } = require('../controllers/JobControllers');
+
 const upload = multer({ storage: multer.memoryStorage() });
 router.get('/:id', (req, res) => JobController.getSingleJob(req, res));
 router.get('/', (req, res) => JobController.getAllJobs(req, res));
@@ -14,4 +14,5 @@ router.delete('', (req, res) => JobController.deleteAllJobs(req, res));
 router.post("/fileupload",(req, res) => JobController.fileUpload(req, res));
 router.post("/cvupload",(req, res) => cvController.cvUpload(req, res));
 router.get('/jobsearch', (req, res) => JobController.primaryJobSearch(req, res));
+
 module.exports = router;
