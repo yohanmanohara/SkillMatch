@@ -1,11 +1,9 @@
-import { notFound } from 'next/navigation';
+"use client"
 import React from 'react';
+import { useSearchParams } from 'next/navigation';
 
-// Define a union type of possible slugs
-type Slug = 'getting-started' | 'account' | 'faq' | 'security' | 'community' | 'billing';
-
-// Adjust the type definition for content to accept both string and JSX elements
-const documentaryContent: Record<Slug, { title: string; content: string | JSX.Element }> = {
+// Static content data
+const documentaryContent = {
   'getting-started': {
     title: 'Getting Started',
     content: (
@@ -260,32 +258,30 @@ const documentaryContent: Record<Slug, { title: string; content: string | JSX.El
       </div>
     ),
   },
-};
-
-// Define the type for the params prop
-interface PageProps {
-  params: {
-    slug: Slug;  // This will infer the type of `slug` for each possible route
-  };
-}
-
-// Default export: A React component that renders the content based on the slug
-export default function DocumentaryPage({ params }: PageProps) {
-  const { slug } = params;
-
-  // Ensure slug is one of the valid values
-  if (!slug || !documentaryContent[slug]) {
-    return notFound(); // Render the Next.js 404 page if slug is not valid
   }
 
-  const pageContent = documentaryContent[slug];
+const DocumentaryPage = () => {
+  const searchParams = useSearchParams();
+  const content = searchParams.get('content'); // Extract content from query parameter
+
+  // Check if content exists in the data
+  const activeContent = documentaryContent[content as keyof typeof documentaryContent];
+
+  // Handle case where content is undefined or invalid
+  if (!activeContent) {
+    return (
+      <div className="text-center">
+        <h1>Page not found</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold">{pageContent.title}</h1>
-      <div className="mt-4 text-lg">
-        {pageContent.content}
-      </div>
+      <h1 className="text-3xl font-bold">{activeContent.title}</h1>
+      <div className="mt-4 text-lg">{activeContent.content}</div>
     </div>
   );
-}
+};
+
+export default DocumentaryPage;

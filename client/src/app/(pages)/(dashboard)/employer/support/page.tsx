@@ -13,49 +13,49 @@ interface CardItem {
 const Page: React.FC = () => {
   const firstRowItems: CardItem[] = [
     {
-      href: '/documentary/getting-started',
+      href: 'gettingStarted',
       src: '/puzzle.png',
-      alt: 'support',
+      alt: 'Getting Started',
       title: 'Getting Started',
       description: 'Start off the right foot!',
     },
     {
-      href: '/documentary/account',
+      href: 'account',
       src: '/vector.png',
-      alt: 'support',
+      alt: 'Account',
       title: 'Account',
-      description: 'Start off the right foot',
+      description: 'Set up your account',
     },
     {
-      href: '/documentary/faq',
+      href: 'faq',
       src: '/message.png',
-      alt: 'support',
+      alt: 'F.A.Q',
       title: 'F.A.Q',
-      description: 'Start off the right foot',
+      description: 'Common questions answered',
     },
   ];
 
   const secondRowItems: CardItem[] = [
     {
-      href: '/documentary/security',
+      href: 'security',
       src: '/shield.png',
-      alt: 'support',
+      alt: 'Security',
       title: 'Security',
-      description: 'Start off the right foot',
+      description: 'Protect your account',
     },
     {
-      href: '/documentary/community',
+      href: 'community',
       src: '/community.png',
-      alt: 'support',
+      alt: 'Community',
       title: 'Community',
-      description: 'Start off the right foot',
+      description: 'Engage with others',
     },
     {
-      href: '/documentary/billing',
+      href: 'billing',
       src: '/creditcard.png',
-      alt: 'support',
+      alt: 'Billing',
       title: 'Billing',
-      description: 'Start off the right foot',
+      description: 'Manage your payments',
     },
   ];
 
@@ -71,17 +71,17 @@ const Page: React.FC = () => {
           {firstRowItems.map((item, index) => (
             <Link
               key={index}
-              href={item.href}
-              className="card p-10 border-[3px] border-solid rounded-[10px] border-[#21C452] flex flex-col justify-center items-center transition-transform duration-300 hover:scale-105"
+              href={`/documentary?content=${item.href}`} // Pass the content key as a query parameter
+              className="card p-10 border-[3px] border-solid rounded-[10px] border-[#21C452] flex flex-col justify-between items-center transition-transform duration-300 hover:scale-105 w-[250px] h-[220px]" // Reduced height to 220px
             >
-              <div>
+              <div className="flex justify-center items-center">
                 <Image src={item.src} alt={item.alt} width={75} height={75} />
               </div>
-              <div className="flex flex-col justify-evenly space-y-1">
-                <div className="text-[14px] leading-[normal] flex justify-center">
+              <div className="flex flex-col justify-evenly space-y-2 w-full">
+                <div className="text-[14px] leading-[normal] text-center">
                   {item.title}
                 </div>
-                <div className="text-[12px] leading-[normal] flex justify-center">
+                <div className="text-[12px] leading-[normal] text-center">
                   {item.description}
                 </div>
               </div>
@@ -93,17 +93,17 @@ const Page: React.FC = () => {
           {secondRowItems.map((item, index) => (
             <Link
               key={index}
-              href={item.href}
-              className="card p-10 border-[3px] border-solid rounded-[10px] border-[#21C452] flex flex-col justify-center items-center transition-transform duration-300 hover:scale-105"
+              href={`/documentary?content=${item.href}`} // Pass the content key as a query parameter
+              className="card p-10 border-[3px] border-solid rounded-[10px] border-[#21C452] flex flex-col justify-between items-center transition-transform duration-300 hover:scale-105 w-[250px] h-[220px]" // Reduced height to 220px
             >
-              <div>
+              <div className="flex justify-center items-center">
                 <Image src={item.src} alt={item.alt} width={75} height={75} />
               </div>
-              <div className="flex flex-col justify-evenly space-y-1">
-                <div className="text-[14px] leading-[normal] flex justify-center">
+              <div className="flex flex-col justify-evenly space-y-2 w-full">
+                <div className="text-[14px] leading-[normal] text-center">
                   {item.title}
                 </div>
-                <div className="text-[12px] leading-[normal] flex justify-center">
+                <div className="text-[12px] leading-[normal] text-center">
                   {item.description}
                 </div>
               </div>
