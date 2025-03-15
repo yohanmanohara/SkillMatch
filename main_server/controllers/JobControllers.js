@@ -62,21 +62,6 @@ class cvController extends BaseController {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class JobController extends BaseController {
     constructor() {
         super(JobModel);
@@ -241,5 +226,8 @@ class JobController extends BaseController {
 
 }
 
-module.exports = new JobController();
-module.exports = new cvController();
+module.exports = {
+    JobController: new JobController(),
+    cvController: new cvController()
+  };
+  
