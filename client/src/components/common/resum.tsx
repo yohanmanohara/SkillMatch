@@ -75,7 +75,7 @@ const Resume = () => {
                                             </div>
                                         ) : (
                                             <div className="text-gray-500 text-sm font-semibold">
-                                                Drag 'n' drop a file here, or click to select a file
+                                                Drag drop a file here, or click to select a file
                                             </div>
                                         )}
                                     </div>
