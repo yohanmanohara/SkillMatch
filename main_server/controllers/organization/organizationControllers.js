@@ -243,25 +243,64 @@ const createOrganization = async (req, res) => {
     }
   };
 
-  const deletejob = async (req, res) => {
-    try {
-      const job = await Job.findById(req.params.id);
+  const deleteJob = async (req, res) => {
+    const { id } = req.query;
   
+    try {
+      const job = await Job.findById(id);
       if (!job) {
         return res.status(404).json({ message: "Job not found" });
       }
   
-      // Ensure only authorized users can delete the job (e.g., admin or recruiter)
-      // if (req.user.role !== "admin" && req.user.role !== "recruiter") {
-      //   return res.status(403).json({ message: "Not authorized to delete this job" });
-      // }
+      const organization = await Organization.findById(job.organization);
+      if (!organization) {
+        return res.status(404).json({ message: "Organization not found" });
+      }
+  
+      organization.addedjobs = organization.addedjobs.filter(jobId => !jobId.equals(id));
+      await organization.save(); 
   
       await job.deleteOne();
-      res.json({ message: "Job deleted successfully" });
+  
+      res.status(200).json({ message: "Job deleted successfully" });
+
   
     } catch (error) {
       res.status(500).json({ message: "Server error", error: error.message });
     }
   };
+  
+ 
+  
+  const getOrganizationJobs = async (req, res) => {
+    const { id } = req.query;
+    try {
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      const organization = await Organization.findOne({ user: id });
+      if (!organization) {
+        return res.status(404).json({ message: 'Organization not found' });
+      }
+  
+      const { addedjobs } = organization;
+      
+      if (!Array.isArray(addedjobs) || addedjobs.length === 0) {
+        return res.status(404).json({ message: 'No jobs found' });
+      }
+  
+      // Fetch jobs
+      const jobItems = await Job.find({ _id: { $in: addedjobs } });
+      res.status(200).json({ jobItems });
+  
+    } catch (error) {
+      res.status(500).json({ message: 'Error retrieving jobs', error: error.message });
+    }
+  };
+  
 
-  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs,updatejobs,deletejob}; // Export the functions to be used in the routes file
+
+
+  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs,updatejobs,deleteJob,getOrganizationJobs}; // Export the functions to be used in the routes file
