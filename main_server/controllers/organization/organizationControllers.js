@@ -222,5 +222,46 @@ const createOrganization = async (req, res) => {
     }
   }
 
+  const updatejobs = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updatedJobData = req.body;
+  
+      const updatedJob = await Job.findByIdAndUpdate(id, updatedJobData, {
+        new: true, // Return updated job document
+        runValidators: true, // Validate before updating
+      });
+  
+      if (!updatedJob) {
+        return res.status(404).json({ message: "Job not found" });
+      }
+  
+      res.status(200).json({ success: true, job: updatedJob });
+    } catch (error) {
+      console.error("Update Job Error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  };
 
-  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs};
+  const deletejob = async (req, res) => {
+    try {
+      const job = await Job.findById(req.params.id);
+  
+      if (!job) {
+        return res.status(404).json({ message: "Job not found" });
+      }
+  
+      // Ensure only authorized users can delete the job (e.g., admin or recruiter)
+      // if (req.user.role !== "admin" && req.user.role !== "recruiter") {
+      //   return res.status(403).json({ message: "Not authorized to delete this job" });
+      // }
+  
+      await job.deleteOne();
+      res.json({ message: "Job deleted successfully" });
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error: error.message });
+    }
+  };
+
+  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs,updatejobs,deletejob}; // Export the functions to be used in the routes file

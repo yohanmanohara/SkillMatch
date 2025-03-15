@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import Image from "next/image";
 
 interface JobCardProps {
   job: {
@@ -82,6 +83,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               <p><strong>Expires:</strong> {job.expiredate}</p>
               <p><strong>Level:</strong> {job.educationlevel}</p>
               <p><strong>Education:</strong> {job.educationlevel}</p>
+              <p><strong>Experience Duration:</strong> {job.expirienceduration}</p>
             </div>
 
             <div>
@@ -122,7 +124,11 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         <div className="absolute bottom-2 right-2">
             <Button variant='outline' onClick={toggleExpand} className=" flex items-center hover:bg-green-200 border-none">
             {/* {expanded ? "Show Less" : "Read More..."} */}
-            <span className="ml-1">{expanded ? <img src={'/upload.png'} alt="icon" style={{ width: '20px', marginRight: '8px' }} /> :<img src={'/arrow.png'} alt="icon" style={{ width: '20px', marginRight: '8px' }} />}</span>
+            <span className="ml-1">{expanded ? (
+                            <Image src="/upload.png" alt="icon" width={20} height={20} style={{ marginRight: "8px" }} />
+                            ) : (
+                            <Image src="/arrow.png" alt="icon" width={20} height={20} style={{ marginRight: "8px" }} />
+                            )}</span>
             </Button>
         </div>
       </div>
