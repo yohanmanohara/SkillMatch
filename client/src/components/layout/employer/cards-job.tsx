@@ -8,7 +8,7 @@ import Image from "next/image";
 
 interface JobCardProps {
   job: {
-        _id: number;
+        _id: string;
         title: string;
         companyname: string;
         salaryMin: number;
@@ -24,10 +24,11 @@ interface JobCardProps {
         employmentTypes: string[];
         pictureurl: string;
         salaryMax: number;
+        organization: string;
         
   };
-  onDelete: (jobId: number) => void; // Callback to update state in parent component
-  onEdit: (updatedJob: any) => void; // Callback to handle job updates
+  onDelete: (jobId: string) => void; // Callback to update state in parent component
+  onEdit: (updatedJob: any) => void; 
 }
 
 const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
@@ -56,27 +57,38 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this job?")) return;
-
+  
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/deletejob/${job._id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/deletejob/?id=${job._id}`,
         {
           method: "DELETE",
+          headers: { 'Content-Type': 'application/json' },
         }
       );
-
+  
+      console.log(job._id);
       if (!res.ok) {
-        throw new Error("Failed to delete the job");
+        const errorMessage = await res.text(); // Optionally capture server message
+        throw new Error(errorMessage || "Failed to delete the job");
       }
-
-      onDelete(job._id); // Remove job from UI
+      
+        if (onDelete) {
+        onDelete(job._id); // Remove job from UI
+      }
+  
       alert("Job deleted successfully!");
-      window.location.reload();
-    } catch (err) {
-      console.error("Error deleting job:", err);
-      alert("Something went wrong.");
+      
+      
+
+      // Optionally, you can reload the page if necessary
+       window.location.reload();
+    } catch (error) {
+      console.error("Error deleting job:", error);
+      alert(`Something went wrong:`);
     }
   };
+  
 
   const handleSave = (updatedJob: any) => {
     onEdit(updatedJob); // Pass the updated job data to the parent component
