@@ -19,14 +19,13 @@ const {createOrganization} = require('../controllers/organization/organizationCo
 const {getpicture} = require('../controllers/organization/organizationControllers')
 const {addjobs} = require('../controllers/organization/organizationControllers')
 const {fetchjobs} = require('../controllers/organization/organizationControllers')
-const{deletejob} = require('../controllers/organization/organizationControllers') 
-const { updateJob } = require('../controllers/organization/organizationControllers')
+const {updatejobs} = require('../controllers/organization/organizationControllers')
+const {deletejob} = require('../controllers/organization/organizationControllers')
 
 const router = express.Router()
 
 router.post('/getorganizationspicture', getpicture)
 
-router.delete('/deletejob/:id',deletejob)
 router.get('/fetchjobs',fetchjobs)
 
 router.post('/addjobs',addjobs)
@@ -43,16 +42,16 @@ router.post('/getusers', getUsers)
 
 router.delete('/deleteuser/:id', deleteUser)
 
+router.delete('/deletejob/:id', deletejob)
 router.patch('/updateuser', updateUser)
 
-router.put('/updatejob/:id', updateJob)
 router.put('/putactive/:id', putActive)
 
 router.put('/putemployer/:id', putEmployer)
 
 router.put('/putemployee/:id', putEmployee)
 
-
+router.put('/updatejobs/:id', updatejobs)
 router.put('/putinactive/:id', putInactive)
 
 router.put('/putinactive/:id', putInactive)

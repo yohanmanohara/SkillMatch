@@ -5,9 +5,10 @@ import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { useRouter } from "next/navigation";
 import EditJobDialog from "@/components/layout/employer/edit-job-dialog"; // Import the EditJobDialog component
 import Image from "next/image";
+
 interface JobCardProps {
   job: {
-     id: number;
+        _id: number;
         title: string;
         companyname: string;
         salaryMin: number;
@@ -58,7 +59,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/deletejob/${job.id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/deletejob/${job._id}`,
         {
           method: "DELETE",
         }
@@ -68,8 +69,9 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
         throw new Error("Failed to delete the job");
       }
 
-      onDelete(job.id); // Remove job from UI
+      onDelete(job._id); // Remove job from UI
       alert("Job deleted successfully!");
+      window.location.reload();
     } catch (err) {
       console.error("Error deleting job:", err);
       alert("Something went wrong.");

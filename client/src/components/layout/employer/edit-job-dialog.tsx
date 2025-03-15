@@ -20,7 +20,7 @@ import { jobTitles } from "@/utils/jobTitles";
 import { toast } from "@/components/ui/use-toast";
 
 interface JobFormData {
-  id: number;
+  _id: number;
   companyname: string;
   title: string;
   employmentTypes: string[];
@@ -139,7 +139,7 @@ const EditJobDialog: React.FC<EditJobDialogProps> = ({ job, onSave, onClose, isO
     setError("");
   
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/deletejob/${job.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updatejobs/${formData._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -154,6 +154,7 @@ const EditJobDialog: React.FC<EditJobDialogProps> = ({ job, onSave, onClose, isO
           title: "Success",
           description: "Job updated successfully!",
         });
+        window.location.reload();
   
         onSave(result.job); // Update UI with new job data
         onClose();
