@@ -19,7 +19,8 @@ const {createOrganization} = require('../controllers/organization/organizationCo
 const {getpicture} = require('../controllers/organization/organizationControllers')
 const {addjobs} = require('../controllers/organization/organizationControllers')
 const {fetchjobs} = require('../controllers/organization/organizationControllers')
-const{deletejob} = require('../controllers/organization/organizationControllers')   
+const{deletejob} = require('../controllers/organization/organizationControllers') 
+const { updateJob } = require('../controllers/organization/organizationControllers')
 
 const router = express.Router()
 
@@ -44,6 +45,7 @@ router.delete('/deleteuser/:id', deleteUser)
 
 router.patch('/updateuser', updateUser)
 
+router.put('/updatejob/:id', updateJob)
 router.put('/putactive/:id', putActive)
 
 router.put('/putemployer/:id', putEmployer)

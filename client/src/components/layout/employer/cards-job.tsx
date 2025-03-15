@@ -3,30 +3,35 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { useRouter } from "next/navigation";
-
+import EditJobDialog from "@/components/layout/employer/edit-job-dialog"; // Import the EditJobDialog component
+import Image from "next/image";
 interface JobCardProps {
   job: {
-    id: number;
-    title: string;
-    companyname: string;
-    salaryMin: string;
-    location: string;
-    posted: string;
-    expirienceduration: string;
-    expiredate: string;
-    educationlevel: string;
-    requirements: string | string[];
-    benefits: string | string[];
-    desirable: string | string[];
-    description: string[] | string;
-    employmentTypes: string[];
-    pictureurl: string;
+     id: number;
+        title: string;
+        companyname: string;
+        salaryMin: number;
+        location: string;
+        posted: string;
+        expirienceduration: number;
+        expiredate: string;
+        educationlevel: string;
+        requirements:  string[];
+        benefits:   string[];
+        desirable:  string[];
+        description: string ;
+        employmentTypes: string[];
+        pictureurl: string;
+        salaryMax: number;
+        
   };
   onDelete: (jobId: number) => void; // Callback to update state in parent component
+  onEdit: (updatedJob: any) => void; // Callback to handle job updates
 }
 
-const JobCard: React.FC<JobCardProps> = ({ job, onDelete }) => {
+const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
   const [expanded, setExpanded] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // State to control dialog visibility
   const previewUrl = "/avatadefault.jpg";
   const picture = job.pictureurl || previewUrl;
   const router = useRouter();
@@ -45,27 +50,35 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete }) => {
     : job.description;
 
   const handleEdit = () => {
-    router.push(`/edit-job/${job.id}`);
+    setIsEditDialogOpen(true); // Open the edit dialog
   };
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this job?")) return;
-  
+
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/deletejob/${job.id}`, {
-        method: "DELETE",
-      });
-  
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/deletejob/${job.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
       if (!res.ok) {
         throw new Error("Failed to delete the job");
       }
-  
+
       onDelete(job.id); // Remove job from UI
       alert("Job deleted successfully!");
     } catch (err) {
       console.error("Error deleting job:", err);
       alert("Something went wrong.");
     }
+  };
+
+  const handleSave = (updatedJob: any) => {
+    onEdit(updatedJob); // Pass the updated job data to the parent component
+    setIsEditDialogOpen(false); // Close the dialog
   };
 
   return (
@@ -108,10 +121,10 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete }) => {
             <p>{fullDescription}</p>
 
             <div className="grid grid-cols-2 gap-2">
-              <p><strong>Posted:</strong> {job.posted}</p>
               <p><strong>Expires:</strong> {job.expiredate}</p>
               <p><strong>Level:</strong> {job.educationlevel}</p>
               <p><strong>Education:</strong> {job.educationlevel}</p>
+              <p><strong>Experience Duration:</strong> {job.expirienceduration}</p>
             </div>
 
             <div>
@@ -119,9 +132,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete }) => {
               <ul className="list-disc list-inside">
                 {Array.isArray(job.requirements)
                   ? job.requirements.map((req, index) => <li key={index}>{req.trim()}</li>)
-                  : job.requirements.split(",").map((req, index) => (
-                      <li key={index}>{req.trim()}</li>
-                    ))}
+                  : (job.requirements as string || "").split(",").map((req: string, index: number) => <li key={index}>{req.trim()}</li>)}
               </ul>
             </div>
 
@@ -130,7 +141,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete }) => {
               <ul className="list-disc list-inside">
                 {Array.isArray(job.benefits)
                   ? job.benefits.map((benefit, index) => <li key={index}>{benefit.trim()}</li>)
-                  : job.benefits.split(",").map((benefit, index) => (
+                  : (job.benefits as string).split(",").map((benefit, index) => (
                       <li key={index}>{benefit.trim()}</li>
                     ))}
               </ul>
@@ -140,8 +151,8 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete }) => {
               <div className="font-semibold">Desirable Skills:</div>
               <ul className="list-disc list-inside">
                 {Array.isArray(job.desirable)
-                  ? job.desirable.map((des, index) => <li key={index}>{des.trim()}</li>)
-                  : job.desirable.split(",").map((des, index) => (
+                  ? job.desirable.map((des: string, index: number) => <li key={index}>{des.trim()}</li>)
+                  : (job.desirable as string || "").split(",").map((des: string, index: number) => (
                       <li key={index}>{des.trim()}</li>
                     ))}
               </ul>
@@ -152,11 +163,11 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete }) => {
         <div className="absolute bottom-2 right-2">
           <Button variant="outline" onClick={toggleExpand} className="flex items-center hover:bg-green-200 border-none">
             <span className="ml-1">
-              {expanded ? (
-                <img src="/upload.png" alt="icon" style={{ width: "20px", marginRight: "8px" }} />
-              ) : (
-                <img src="/arrow.png" alt="icon" style={{ width: "20px", marginRight: "8px" }} />
-              )}
+                {expanded ? (
+                <Image src="/upload.png" alt="icon" width={20} height={20} style={{ marginRight: "8px" }} />
+                ) : (
+                <Image src="/arrow.png" alt="icon" width={20} height={20} style={{ marginRight: "8px" }} />
+                )}
             </span>
           </Button>
         </div>
@@ -169,6 +180,14 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete }) => {
           </span>
         ))}
       </div>
+
+      {/* Render the EditJobDialog */}
+      <EditJobDialog
+        job={job}
+        onSave={handleSave}
+        onClose={() => setIsEditDialogOpen(false)}
+        isOpen={isEditDialogOpen}
+      />
     </div>
   );
 };

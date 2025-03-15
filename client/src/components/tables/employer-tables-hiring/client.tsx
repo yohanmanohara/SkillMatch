@@ -83,8 +83,8 @@ export const UserClient = () => {
       <div className='flex flex-col items-center justify-center md:flex-row gap-4'>
         <div className='w-full md:w-1/6'></div>
         <div className='w-full md:w-4/6 flex flex-col gap-4'>
-        {currentJobs.map((job) => (
-          <Cards key={job.id} job={job} onDelete={handleDelete} />
+        {currentJobs.map((job,index) => (
+          <Cards key={job.id || index} job={job} onDelete={handleDelete} onEdit={() => { /* Add your edit logic here */ }} />
         ))}
         </div>
         <div className='w-full md:w-1/6'></div>
