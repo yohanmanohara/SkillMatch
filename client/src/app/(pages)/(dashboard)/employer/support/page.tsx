@@ -76,22 +76,24 @@ const Page: React.FC = () => {
         <div className="flex flex-wrap gap-7 justify-evenly">
           {allItems.map((item, index) => (
             <Link
-              key={index}
-              href={`/documentary?content=${item.href}&descriptions=${descriptions}`} // Pass the descriptions as a query parameter
-              className="card p-10 border-[3px] border-solid rounded-[10px] border-[#21C452] flex flex-col justify-between items-center transition-transform duration-300 hover:scale-105 w-[250px] h-[220px]"
-            >
-              <div className="flex justify-center items-center">
-                <Image src={item.src} alt={item.alt} width={75} height={75} />
+            key={index}
+            href={`/documentary?content=${item.href}&description=${encodeURIComponent(item.description)}`}
+            target="_blank" // Open in new tab
+            rel="noopener noreferrer" // Security best practice
+            className="card p-10 border-[3px] border-solid rounded-[10px] border-[#21C452] flex flex-col justify-between items-center transition-transform duration-300 hover:scale-105 w-[250px] h-[220px]"
+          >
+            <div className="flex justify-center items-center">
+              <Image src={item.src} alt={item.alt} width={75} height={75} />
+            </div>
+            <div className="flex flex-col justify-evenly space-y-2 w-full">
+              <div className="text-[14px] leading-[normal] text-center">
+                {item.title}
               </div>
-              <div className="flex flex-col justify-evenly space-y-2 w-full">
-                <div className="text-[14px] leading-[normal] text-center">
-                  {item.title}
-                </div>
-                <div className="text-[12px] leading-[normal] text-center">
-                  {item.description}
-                </div>
+              <div className="text-[12px] leading-[normal] text-center">
+                {item.description}
               </div>
-            </Link>
+            </div>
+          </Link>          
           ))}
         </div>
       </div>
