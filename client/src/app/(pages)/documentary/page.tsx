@@ -245,21 +245,7 @@ const documentaryContent = {
       </div>
     ),
   },
-  'billing': {
-    title: 'Billing Information',
-    content: (
-      <div className="space-y-6">
-        <p>
-          Here is how you can manage your billing information and payments:
-        </p>
-        <ul className="list-disc list-inside mt-2">
-          <li>Update your billing address by going to your account settings.</li>
-          <li>Review your payment history and invoices in the billing section.</li>
-          <li>Ensure your payment method is up-to-date to avoid service interruptions.</li>
-        </ul>
-      </div>
-    ),
-  },
+  
   }
 
 // Sidebar Component
