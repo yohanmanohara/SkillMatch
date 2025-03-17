@@ -4,6 +4,9 @@ import AlertDialogDemo from '@/components/common/rusumadd';
 import { Button } from '@/components/ui/button';
 import Dropzone, { DropzoneState } from 'shadcn-dropzone';
 import { Loader2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+
+
 
 const Resume = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -102,9 +105,41 @@ const Resume = () => {
     setError(false);
     setResumload(false); // Reset PDF viewer state
   };
+const searchParams = useSearchParams();
+  const jobId = searchParams.get("jobId");
+  const title = searchParams.get("title");
+  const company = searchParams.get("company");
+  const email = searchParams.get("email");
+  const username = searchParams.get("username");
 
+  console.log("User Email:", email);
+  console.log("User Name:", username)
+  console.log("Job ID:", jobId);
+  console.log("Job Title:", title);
+  console.log("Company:", company);
   return (
+    
     <>
+
+<div className="p-6 space-y-4 text-black">
+    {/* Display Job and User Information */}
+    <div className="text-2xl font-semibold">Job Application</div>
+    
+    {/* Job Details Section */}
+    <div className="bg-green-100 shadow-lg p-4 rounded-lg">
+      <div className="text-xl font-bold">Job Details</div>
+      <div><strong>Job Title:</strong> {title}</div>
+      <div><strong>Company:</strong> {company}</div>
+     
+    </div>
+    
+    {/* User Details Section */}
+    <div className="bg-green-100 shadow-lg p-4 rounded-lg mt-4">
+      <div className="text-xl font-bold">User Details</div>
+      <div><strong>Username:</strong> {username}</div>
+      <div><strong>Email:</strong> {email}</div>
+    </div>
+</div>
       <div>
         {resumload ? (
           <div className="w-full flex flex-col gap-4">
