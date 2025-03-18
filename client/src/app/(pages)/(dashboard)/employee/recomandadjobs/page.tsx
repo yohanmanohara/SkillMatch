@@ -36,13 +36,13 @@ export default function RecommendedJobs() {
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      // Replace this with your actual API endpoint
+      /* Replace this with your actual API endpoint
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/main_server/api/jobs/recommended`);
       if (!response.ok) {
         throw new Error("Failed to fetch jobs");
       }
       const data = await response.json();
-      setJobs(data);
+      setJobs(data);*/
     } catch (error) {
       console.error("Error fetching jobs:", error);
       toast({
