@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 interface JobCardProps {
@@ -26,11 +27,48 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const [expanded, setExpanded] = useState(false);
+  
+  const userId = sessionStorage.getItem("poop") || "1";
+  const [userData, setUserData] = useState<{ id: number; email: string; username: string } | null>(null);
+  
   const previewUrl = "/avatadefault.jpg";
   const picture = job.pictureurl || previewUrl;
+  const router = useRouter();
+
+  // Fetch user data from the database
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getsingleuser/?id=${userId}`); // Replace with your actual API endpoint
+        if (!response.ok) throw new Error("Failed to fetch user data");
+
+        const data = await response.json();
+        setUserData({
+          id: data.id,
+          email: data.email,
+          username: data.username,
+        });
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const toggleExpand = () => {
     setExpanded(!expanded);
+  };
+
+  const handleApply = () => {
+    if (!userData) {
+      console.error("User data not available");
+      return;
+    }
+
+    router.push(
+      `/employee/resum?jobId=${job.id}&title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.companyname)}&userId=${userData.id}&email=${encodeURIComponent(userData.email)}&username=${encodeURIComponent(userData.username)}`
+    );
   };
 
   const getShortDescription = (text: string) => {
@@ -38,9 +76,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     return words.length > 100 ? words.slice(0, 100).join(" ") + "..." : text;
   };
 
-  const fullDescription = Array.isArray(job.description)
-    ? job.description.join(" ")
-    : job.description;
+  const fullDescription = Array.isArray(job.description) ? job.description.join(" ") : job.description;
 
   return (
     <div className="bg-green-100 rounded-lg shadow-lg p-2 flex flex-col lg:flex-row lg:space-x-6 relative w-min-content">
@@ -65,7 +101,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         </div>
 
         <div className="mt-4">
-          <Button variant="default" className="text-sm px-3 py-1">
+          <Button variant="default" className="text-sm px-3 py-1" onClick={handleApply} disabled={!userData}>
             Apply Now
           </Button>
         </div>
@@ -83,7 +119,6 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               <p><strong>Expires:</strong> {job.expiredate}</p>
               <p><strong>Level:</strong> {job.educationlevel}</p>
               <p><strong>Education:</strong> {job.educationlevel}</p>
-              <p><strong>Experience Duration:</strong> {job.expirienceduration}</p>
             </div>
 
             <div>
@@ -91,9 +126,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               <ul className="list-disc list-inside">
                 {Array.isArray(job.requirements)
                   ? job.requirements.map((req, index) => <li key={index}>{req.trim()}</li>)
-                  : job.requirements.split(",").map((req, index) => (
-                      <li key={index}>{req.trim()}</li>
-                    ))}
+                  : job.requirements.split(",").map((req, index) => <li key={index}>{req.trim()}</li>)}
               </ul>
             </div>
 
@@ -102,9 +135,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               <ul className="list-disc list-inside">
                 {Array.isArray(job.benefits)
                   ? job.benefits.map((benefit, index) => <li key={index}>{benefit.trim()}</li>)
-                  : job.benefits.split(",").map((benefit, index) => (
-                      <li key={index}>{benefit.trim()}</li>
-                    ))}
+                  : job.benefits.split(",").map((benefit, index) => <li key={index}>{benefit.trim()}</li>)}
               </ul>
             </div>
 
@@ -113,23 +144,22 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               <ul className="list-disc list-inside">
                 {Array.isArray(job.desirable)
                   ? job.desirable.map((des, index) => <li key={index}>{des.trim()}</li>)
-                  : job.desirable.split(",").map((des, index) => (
-                      <li key={index}>{des.trim()}</li>
-                    ))}
+                  : job.desirable.split(",").map((des, index) => <li key={index}>{des.trim()}</li>)}
               </ul>
             </div>
           </div>
         )}
 
         <div className="absolute bottom-2 right-2">
-            <Button variant='outline' onClick={toggleExpand} className=" flex items-center hover:bg-green-200 border-none">
-            {/* {expanded ? "Show Less" : "Read More..."} */}
-            <span className="ml-1">{expanded ? (
-                            <Image src="/upload.png" alt="icon" width={20} height={20} style={{ marginRight: "8px" }} />
-                            ) : (
-                            <Image src="/arrow.png" alt="icon" width={20} height={20} style={{ marginRight: "8px" }} />
-                            )}</span>
-            </Button>
+          <Button variant="outline" onClick={toggleExpand} className="flex items-center hover:bg-green-200 border-none">
+            <span className="ml-1">
+              {expanded ? (
+                <Image src="/upload.png" alt="icon" width={20} height={20} style={{ marginRight: "8px" }} />
+              ) : (
+                <Image src="/arrow.png" alt="icon" width={20} height={20} style={{ marginRight: "8px" }} />
+              )}
+            </span>
+          </Button>
         </div>
       </div>
 
