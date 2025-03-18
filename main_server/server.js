@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const mongoose = require('mongoose');
@@ -17,6 +18,7 @@ app.use(cors());
 
 app.use('/api/file', upload.single('file'), JobRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/jobs', JobRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
