@@ -50,13 +50,7 @@ const Page: React.FC = () => {
       title: 'Community',
       description: 'Engage with others',
     },
-    {
-      href: 'billing',
-      src: '/creditcard.png',
-      alt: 'Billing',
-      title: 'Billing',
-      description: 'Manage your payments',
-    },
+    
   ];
 
   // Combine the rows into one list of items for easy reference
