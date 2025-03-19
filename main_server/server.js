@@ -1,36 +1,39 @@
-// server.js
 const express = require('express');
+const multer = require('multer');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const JobRoutes = require('./routes/JobRoutes');
 const userRoutes = require('./routes/user');
-// const JobSearch = require('./routes/JobRoutes');
-// const OrganizationRoutes = require("./routes/OrganizationRoutes")
-// const MeeitngRoutes = require('./routes/MeetingRoutes')
+const { containerClient } = require('./Connnections/azureBlobClient');  // Importing the containerClient
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3002;
+const upload = multer({ storage: multer.memoryStorage() });
 
-// Middlewares
-app.use(express.json());  
+app.use(express.json());
 app.use(cors());
 
-// Routes
-app.use('/api/jobs', JobRoutes);
-// app.use('/api/organization',OrganizationRoutes);
-// app.use('/api/meetings', MeeitngRoutes);
-// app.use('/api/jobsearch', JobSearch);
- app.use('/api/user', userRoutes);
+app.use('/api/file', upload.single('file'), JobRoutes);
+app.use('/api/user', userRoutes);
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
-.then(() => {
-  app.listen(port, () => {
-    console.log(`Connected to DB & listning on port: ${port}`);
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
   });
-})
-.catch((error) => {
-  console.log(error);
-})
+
+containerClient.getProperties()
+  .then(() => {
+    console.log('Connected to Azure Blob Storage');
+  })
+  .catch((error) => {
+    console.error('Error connecting to Azure Blob Storage:', error);
+  });
+
+app.listen(port, () => {
+  console.log(`Server is listening on port: ${port}`);
+});

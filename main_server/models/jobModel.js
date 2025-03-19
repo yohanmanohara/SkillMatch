@@ -1,50 +1,85 @@
 const mongoose = require('mongoose');
 
 const JobSchema = new mongoose.Schema({
-  jobTitle: {
+  companyname: {
     type: String,
     required: true,
   },
-  typeOfEmployment: {
+  title: {
     type: String, 
     required: true,
   },
-  salary: {
-    type: String, 
+  employmentTypes: {
+    type: [String],
+    required: true,
+    default: [],
   },
-  jobDescriptionShort: {
+  description: {
     type: String,
+    required: true,
   },
-  jobDescriptionLong: {
-    experience: {
-      type: String, // Experience requirements (e.g., "2-4 years")
-    },
-    requirements: {
-      type: [String], // List of key requirements
-    },
-    desirable: {
-      type: [String], // List of desirable skills/traits
-    },
-    benefits: {
-      type: [String], // List of benefits provided
-    },
-    qualifications: {
-      type: [String], // List of qualifications needed
-    },
-  },
+ 
   location: {
     type: String,
+    required: true,
   },
-  expireInDays: {
-    type: Number, // Number of days until the job expires
+
+
+  
+  requirements: {
+    type: [String],
+    required: true,
+    default: [],
   },
-  fromOrganization: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Organization', // Reference to an Organization collection
+
+  desirable: {
+    type: [String],
+    required: true,
+    default: [],
   },
-  jobLevel: {
-    type: String, // e.g., "Entry Level", "Mid Level", "Senior Level"
+
+  benefits: {
+    type: [String],
+    required: true,
+    default: [],
   },
+  
+  expirienceduration: {
+    type: Number,
+    required: true,
+  },
+
+  educationlevel: {
+    type: String,
+    required: true,
+  },
+  
+  pictureurl :{
+    type: String,
+    required: true,
+  },
+
+  expiredate: {
+    type: Date,
+    required: true,
+  },
+  salaryMin :{
+    type:Number,
+    required: true,
+  },
+  salaryMax:{
+    type:Number,
+    required: true,
+
+  },
+
+   organization: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Organization',
+      required: true,
+    },
+
+
 });
 
-module.exports = mongoose.model('Job', JobSchema);
+module.exports = mongoose.model('Jobs', JobSchema);

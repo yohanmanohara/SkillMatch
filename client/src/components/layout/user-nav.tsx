@@ -102,8 +102,10 @@ export  function UserNav() {
                  }
                  }
                  >
-                   Resume CV
+                   Resume upload
           </DropdownMenuItem>
+
+         
 
 
                {showButton ? (
@@ -121,7 +123,18 @@ export  function UserNav() {
                 
                  
                
-               ):(<DropdownMenuItem 
+               ):(
+
+                <> <DropdownMenuItem 
+                onClick={() => {
+                  window.location.href = '/employee/createOrganization';
+                }
+                }
+                >
+                  Create a Organization
+                 </DropdownMenuItem>
+               
+               <DropdownMenuItem 
                  onClick={() => {
                    window.location.href = '/employee/profile';
                  }
@@ -129,7 +142,7 @@ export  function UserNav() {
                  >
                    Profile
                  </DropdownMenuItem>
-               
+               </>
                ) }
           
 

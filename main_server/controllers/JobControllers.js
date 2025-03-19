@@ -1,12 +1,66 @@
 const JobModel = require('../models/jobModel');
-// const {primaryJobCard, secondaryJobCard, jobDescription} = require('../Models/jobSearch');
 const BaseController = require('./BaseController');
-const { validationResult, query } = require('express-validator');
+const { containerClient } = require('../Connnections/azureBlobClient');
 
+const { validationResult, query } = require('express-validator');
 class JobController extends BaseController {
     constructor() {
         super(JobModel);
     }
+
+
+    async fileUpload(req, res) {
+        const { id } = req.query; // Get the `id` from the query parameters
+        try {
+            if (!req.file) {
+                return res.status(400).json({ error: "No file uploaded" });
+            }
+    
+            console.log("Uploaded file:", req.file);
+    
+            if (!containerClient) {
+                console.error("Container client is not initialized.");
+                return res.status(500).json({ error: "Azure container client not initialized" });
+            }
+    
+            // Construct the blob name using the `id` and the original filename
+            const blobName = `${id}-${req.file.originalname}`; // Append `id` to make the filename unique
+            const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+    
+            // Check if the file already exists by trying to get properties of the blob
+            try {
+                await blockBlobClient.getProperties();
+                console.log(`File already exists: ${blobName}`);
+                return res.status(200).json({ url: blockBlobClient.url }); // Return the existing URL
+            } catch (error) {
+                if (error.statusCode === 404) {
+                    // File does not exist, proceed to upload it
+                    console.log(`File does not exist, uploading: ${blobName}`);
+                } else {
+                    // Some other error occurred (e.g., permission error)
+                    console.error("Error checking file existence:", error);
+                    return res.status(500).json({ error: "Error checking file existence", details: error.message });
+                }
+            }
+    
+            // Upload to Azure Blob Storage if the file doesn't exist
+            console.log(`Uploading file ${blobName} to Azure Blob Storage...`);
+            await blockBlobClient.uploadData(req.file.buffer, {
+                blobHTTPHeaders: { blobContentType: req.file.mimetype },
+            });
+    
+            const fileUrl = blockBlobClient.url; // Get the uploaded file URL
+            console.log(`File uploaded successfully: ${fileUrl}`);
+    
+            return res.status(200).json({ url: fileUrl });
+    
+        } catch (error) {
+            console.error("Upload Error:", error); // Log the full error stack
+            return res.status(500).json({ error: "Upload failed", details: error.message }); // Provide detailed error message in the response
+        }
+    }
+    
+
 
     async getSingleJob(req, res) {
         const id = req.params.id;

@@ -52,13 +52,13 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  role: {
-    type: String,
-    required: true
-  },
+    role: {
+      type: String,
+      required: true
+    },
   savedjobs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Job' ,required: false}],
 
-  company: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Company' ,required: true}], 
+  company: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Organization', required: false }], 
 
 
 
