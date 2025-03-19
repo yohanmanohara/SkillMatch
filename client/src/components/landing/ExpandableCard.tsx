@@ -27,21 +27,31 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const [expanded, setExpanded] = useState(false);
-  
-  const userId = sessionStorage.getItem("poop") || "1";
   const [userData, setUserData] = useState<{ id: number; email: string; username: string } | null>(null);
   
+  const userId = sessionStorage.getItem("poop"); // Get user ID from sessionStorage
   const previewUrl = "/avatadefault.jpg";
   const picture = job.pictureurl || previewUrl;
   const router = useRouter();
 
-  // Fetch user data from the database
+  // Fetch user data only if the user is logged in
   useEffect(() => {
     const fetchUserData = async () => {
+      if (!userId || userId === "1") {
+        console.warn("User is not logged in or has a placeholder ID.");
+        return;
+      }
+    
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getsingleuser/?id=${userId}`); // Replace with your actual API endpoint
-        if (!response.ok) throw new Error("Failed to fetch user data");
-
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getsingleuser/?id=${userId}`
+        );
+    
+        if (!response.ok) {
+          console.error("Failed to fetch user data:", await response.text());
+          return;
+        }
+    
         const data = await response.json();
         setUserData({
           id: data.id,
@@ -49,12 +59,12 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           username: data.username,
         });
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching user data:", error instanceof Error ? error.message : error);
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [userId]); // Runs only when `userId` changes
 
   const toggleExpand = () => {
     setExpanded(!expanded);
@@ -62,14 +72,16 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 
   const handleApply = () => {
     if (!userData) {
-      console.error("User data not available");
+      console.warn("User is not logged in. Redirecting to login page.");
+      router.push(`/login?redirect=/employee/resum?jobId=${job.id}&title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.companyname)}`);
       return;
     }
-
+  
     router.push(
       `/employee/resum?jobId=${job.id}&title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.companyname)}&userId=${userData.id}&email=${encodeURIComponent(userData.email)}&username=${encodeURIComponent(userData.username)}`
     );
   };
+  
 
   const getShortDescription = (text: string) => {
     const words = text.split(" ");
@@ -101,7 +113,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         </div>
 
         <div className="mt-4">
-          <Button variant="default" className="text-sm px-3 py-1" onClick={handleApply} disabled={!userData}>
+          <Button variant="default" className="text-sm px-3 py-1" onClick={handleApply} >
             Apply Now
           </Button>
         </div>

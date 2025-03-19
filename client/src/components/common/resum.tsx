@@ -16,6 +16,7 @@ const Resume = () => {
   const [loading, setLoading] = useState(false);
   const [URL, setURL] = useState('');
   const userid = sessionStorage.getItem('poop');
+  const [showDetails, setShowDetails] = useState(false);
 
   const handleCancel = () => {
     if (fileInputRef.current) {
@@ -117,103 +118,111 @@ const searchParams = useSearchParams();
   console.log("Job ID:", jobId);
   console.log("Job Title:", title);
   console.log("Company:", company);
-  return (
-    
-    <>
 
-<div className="p-6 space-y-4 text-black">
-    {/* Display Job and User Information */}
-    <div className="text-2xl font-semibold">Job Application</div>
-    
-    {/* Job Details Section */}
-    <div className="bg-green-100 shadow-lg p-4 rounded-lg">
-      <div className="text-xl font-bold">Job Details</div>
-      <div><strong>Job Title:</strong> {title}</div>
-      <div><strong>Company:</strong> {company}</div>
-     
-    </div>
-    
-    {/* User Details Section */}
-    <div className="bg-green-100 shadow-lg p-4 rounded-lg mt-4">
-      <div className="text-xl font-bold">User Details</div>
-      <div><strong>Username:</strong> {username}</div>
-      <div><strong>Email:</strong> {email}</div>
-    </div>
-</div>
+  useEffect(() => {
+    if (jobId && title && company) {
+      setShowDetails(true);
+    }
+  }, [jobId, title, company]);
+
+  return (
+    <>
+    <div className='flex flex-col gap-4'>
       <div>
-        {resumload ? (
-          <div className="w-full flex flex-col gap-4">
-            <AlertDialogDemo />
-            <div className="w-full h-[80vh] overflow-auto flex items-center justify-center">
-              <iframe
-                src={URL}
-                width="100%"
-                height="100%"
-                style={{ border: 'none' }}
-              />
+        {/* Show job and user details only when redirected from Apply Now */}
+        {showDetails && (
+          <>
+            {/* Job Details Section */}
+            <div className="bg-green-100 shadow-lg p-4 rounded-lg text-black">
+              <div className="text-xl font-bold">Job Details</div>
+              <div><strong>Job Title:</strong> {title}</div>
+              <div><strong>Company:</strong> {company}</div>
             </div>
-          </div>
-        ) : (
-          <div className="flex justify-center h-screen items-center flex-col gap-4">
-            <div className="text-2xl">Upload Your CV Here</div>
-            <Dropzone
-              onDrop={(acceptedFiles: File[]) => {
-                const pdfFiles = acceptedFiles.filter((file) => file.type === 'application/pdf');
-                if (pdfFiles.length > 0) {
-                  setUploadedFile(pdfFiles[0]);
-                  setError(false); // Clear error state if valid file
-                } else {
-                  setError(true); // Show error if file is not PDF
-                }
-              }}
-            >
-              {(dropzone: DropzoneState) => (
-                <div className="relative flex flex-col items-center gap-11 w-full">
-                  <div
-                    className={`flex items-center justify-center w-full lg:p-16 border-dashed rounded-2xl transition-colors 
-                      ${error ? 'border-red-500 bg-red-50' : dropzone.isDragAccept ? 'border-green-500 bg-green-50' : 'border-gray-950'}
-                      ${dropzone.isDragReject ? 'border-red-500 bg-red-50' : ''}`}
-                  >
-                    {dropzone.isDragAccept ? (
-                      <div className="text-sm font-medium text-green-600 animate-pulse">
-                        Drop your file here!
-                      </div>
-                    ) : dropzone.isDragReject || error ? (
-                      <div className="text-sm font-medium text-red-600">
-                        Only PDF files are accepted!
-                      </div>
-                    ) : (
-                      <div className="text-gray-500 text-sm font-semibold">
-                        Drag drop a file here, or click to select a file
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </Dropzone>
-            {file && (
-              <div className="mt-4 w-full max-w-md">
-                <ul>
-                  <li className="flex justify-between items-center mb-2">
-                    <span>{file.name}</span>
-                    <Button onClick={removeFile} variant="outline" size="sm">
-                      Remove
-                    </Button>
-                  </li>
-                </ul>
-              </div>
-            )}
-            <div className="flex gap-4 mt-4">
-              <Button onClick={handleSubmit} variant="secondary" disabled={loading}>
-                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Submit'}
-              </Button>
-              <Button onClick={handleCancel} variant="outline">
-                Cancel
-              </Button>
+
+            {/* User Details Section */}
+            <div className="bg-green-100 shadow-lg p-4 rounded-lg mt-4 text-black">
+              <div className="text-xl font-bold">User Details</div>
+              <div><strong>Username:</strong> {username}</div>
+              <div><strong>Email:</strong> {email}</div>
             </div>
-          </div>
+          </>
         )}
       </div>
+      <div>
+      {resumload ? (
+        <div className="w-full flex flex-col gap-4">
+        <AlertDialogDemo />
+        <div className="w-full h-[80vh] overflow-auto flex items-center justify-center">
+          <iframe
+          src={URL}
+          width="100%"
+          height="100%"
+          style={{ border: 'none' }}
+          />
+        </div>
+        </div>
+      ) : (
+        <div className="flex justify-center h-screen items-center flex-col gap-4">
+        <div className="text-2xl">Upload Your CV Here</div>
+        <Dropzone
+          onDrop={(acceptedFiles: File[]) => {
+          const pdfFiles = acceptedFiles.filter((file) => file.type === 'application/pdf');
+          if (pdfFiles.length > 0) {
+            setUploadedFile(pdfFiles[0]);
+            setError(false); // Clear error state if valid file
+          } else {
+            setError(true); // Show error if file is not PDF
+          }
+          }}
+        >
+          {(dropzone: DropzoneState) => (
+          <div className="relative flex flex-col items-center gap-11 w-full">
+            <div
+            className={`flex items-center justify-center w-full lg:p-16 border-dashed rounded-2xl transition-colors 
+              ${error ? 'border-red-500 bg-red-50' : dropzone.isDragAccept ? 'border-green-500 bg-green-50' : 'border-gray-950'}
+              ${dropzone.isDragReject ? 'border-red-500 bg-red-50' : ''}`}
+            >
+            {dropzone.isDragAccept ? (
+              <div className="text-sm font-medium text-green-600 animate-pulse">
+              Drop your file here!
+              </div>
+            ) : dropzone.isDragReject || error ? (
+              <div className="text-sm font-medium text-red-600">
+              Only PDF files are accepted!
+              </div>
+            ) : (
+              <div className="text-gray-500 text-sm font-semibold">
+              Drag drop a file here, or click to select a file
+              </div>
+            )}
+            </div>
+          </div>
+          )}
+        </Dropzone>
+        {file && (
+          <div className="mt-4 w-full max-w-md">
+          <ul>
+            <li className="flex justify-between items-center mb-2">
+            <span>{file.name}</span>
+            <Button onClick={removeFile} variant="outline" size="sm">
+              Remove
+            </Button>
+            </li>
+          </ul>
+          </div>
+        )}
+        <div className="flex gap-4 mt-4">
+          <Button onClick={handleSubmit} variant="secondary" disabled={loading}>
+          {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Submit'}
+          </Button>
+          <Button onClick={handleCancel} variant="outline">
+          Cancel
+          </Button>
+        </div>
+        </div>
+      )}
+      </div>
+    </div>
     </>
   );
 };
