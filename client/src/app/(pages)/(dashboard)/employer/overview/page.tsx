@@ -1,99 +1,161 @@
-"use client"
-import React, { useState } from "react"
-import Chart from "@/components/charts/sample_chart"
-import { FileText } from "lucide-react"
+"use client";
 
-// Define the type for applications
-interface Application {
-  id: number
-  name: string
-  position: string
-  date: string
-  email: string
-  phone: string
-}
-
-const applications: Application[] = [
-  { id: 1, name: "John Doe", position: "Software Engineer", date: "Feb 29, 2024", email: "john.doe@example.com", phone: "123-456-7890" },
-  { id: 2, name: "Jane Smith", position: "UI/UX Designer", date: "Feb 28, 2024", email: "jane.smith@example.com", phone: "987-654-3210" },
-  { id: 3, name: "Michael Brown", position: "Data Analyst", date: "Feb 27, 2024", email: "michael.brown@example.com", phone: "555-555-5555" },
-]
+import React, { useState } from "react";
+import { Calendar } from "@/components/ui/calendar";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Trash } from "lucide-react";
 
 function Page() {
-  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [time, setTime] = useState("");
+  const [notes, setNotes] = useState("");
+  const [eventTitle, setEventTitle] = useState("");
+  const [savedNotes, setSavedNotes] = useState<{ id: number; date: Date | undefined; text: string }[]>([]);
+  const [events, setEvents] = useState<{ id: number; date: Date | undefined; time: string; title: string }[]>([]);
 
-  const handleApplicationClick = (app: Application) => {
-    if (selectedApplication?.id === app.id) {
-      setSelectedApplication(null) 
-      setIsModalOpen(false) 
-    } else {
-      setSelectedApplication(app) 
-      setIsModalOpen(true) 
+  
+  const userEmail = "recruitwise.info@gmail.com";
+
+  const handleSaveNote = () => {
+    if (notes.trim() === "") return;
+    setSavedNotes([...savedNotes, { id: Date.now(), date, text: notes }]);
+    setNotes("");
+  };
+
+  const handleDeleteNote = (id: number) => {
+    setSavedNotes(savedNotes.filter((note) => note.id !== id));
+  };
+
+  const handleAddEvent = async () => {
+    if (eventTitle.trim() === "" || time.trim() === "") return;
+
+    const newEvent = { id: Date.now(), date, time, title: eventTitle };
+    setEvents([...events, newEvent]);
+    setEventTitle("");
+    setTime("");
+
+    try {
+      const response = await fetch("/api/sendReminder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: userEmail,
+          eventTitle: newEvent.title,
+          eventDate: newEvent.date?.toDateString(),
+          eventTime: newEvent.time,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data.message);
+    } catch (error) {
+      console.error("Error sending reminder:", error);
     }
-  }
+  };
 
-  const closeModal = () => {
-    setIsModalOpen(false)
-    setSelectedApplication(null)
-  }
+  const handleDeleteEvent = (id: number) => {
+    setEvents(events.filter((event) => event.id !== id));
+  };
 
   return (
-    <div className="p-6 space-y-6">
-      <Chart />
+    <>
+      <div className="flex gap-6 mt-4 mb-10">
+        {/* Calendar Section */}
+        <div className="rounded-md border w-fit p-4">
+          <Calendar mode="single" selected={date} onSelect={setDate} />
+        </div>
 
-      
-      <div className="p-4 rounded-lg shadow-md">
-        <h2 className="text-lg font-semibold mb-3">Incoming Applications</h2>
-        <div className="space-y-3">
-          {applications.map((app) => (
-            <div
-              key={app.id}
-              className="flex justify-between items-center p-2 border-b last:border-b-0 cursor-pointer"
-              onClick={() => handleApplicationClick(app)}
-            >
-              <div className="flex items-center gap-3">
-                <img
-                  src="/Guy 4.png"
-                  alt="Profile"
-                  className="h-10 w-10 rounded-full border border-gray-300"
-                />
-                <div>
-                  <p className="font-medium">{app.name}</p>
-                  <p className="text-xs">{app.position}</p>
-                </div>
-              </div>
-              <p className="text-xs">{app.date}</p>
+        {/* Add Events Section */}
+        <div className="rounded-md border w-fit p-4 flex-1">
+          <h2 className="text-lg font-semibold mb-2">Add Event</h2>
+          <Input
+            placeholder="Event Title"
+            value={eventTitle}
+            onChange={(e) => setEventTitle(e.target.value)}
+          />
+          <Input
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            className="mt-2"
+          />
+          <Button className="mt-2" onClick={handleAddEvent}>
+            Add Event
+          </Button>
+
+          {/* Display Events */}
+          {events.length > 0 && (
+            <div className="mt-4">
+              <h3 className="text-md font-semibold mb-2">Scheduled Events</h3>
+              {events.map((event) => (
+                <Card key={event.id} className="mb-2 flex justify-between items-center p-3">
+                  <CardContent className="flex-1">
+                    <p className="text-sm text-gray-600">
+                      <strong>Date:</strong> {event.date?.toDateString()}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <strong>Time:</strong> {event.time}
+                    </p>
+                    <p>{event.title}</p>
+                  </CardContent>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="ml-2 text-red-500 hover:text-red-700"
+                    onClick={() => handleDeleteEvent(event.id)}
+                  >
+                    <Trash className="w-4 h-4" />
+                  </Button>
+                </Card>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       </div>
 
-     
-      {isModalOpen && selectedApplication && (
-        <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50">
-          <div className="bg-slate-100 text-black p-6 rounded-lg shadow-lg max-w-md w-full">
-            <h2 className="text-lg font-semibold mb-3">Application Details</h2>
-            <div className="space-y-3">
-              <p><strong>Name:</strong> {selectedApplication.name}</p>
-              <p><strong>Position:</strong> {selectedApplication.position}</p>
-              <p><strong>Date Applied:</strong> {selectedApplication.date}</p>
-              <p><strong>Email:</strong> {selectedApplication.email}</p>
-              <p><strong>Phone:</strong> {selectedApplication.phone}</p>
-            </div>
-            <div className="mt-4 flex justify-end">
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                onClick={closeModal}
-              >
-                Close
-              </button>
-            </div>
+      {/* Notes Section */}
+      <div className="flex flex-col border rounded-md p-4 w-full">
+        <h2 className="text-lg font-semibold mb-2">Employer Notes</h2>
+        <Textarea
+          placeholder="Write notes here..."
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          className="h-32"
+        />
+        <Button className="mt-2" onClick={handleSaveNote}>
+          Save Note
+        </Button>
+
+        {/* Display Saved Notes */}
+        {savedNotes.length > 0 && (
+          <div className="mt-4">
+            <h3 className="text-md font-semibold mb-2">Saved Notes</h3>
+            {savedNotes.map((note) => (
+              <Card key={note.id} className="mb-2 flex justify-between items-center p-3">
+                <CardContent className="flex-1">
+                  <p className="text-sm text-gray-600">
+                    <strong>Date:</strong> {note.date?.toDateString()}
+                  </p>
+                  <p>{note.text}</p>
+                </CardContent>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="ml-2 text-red-500 hover:text-red-700"
+                  onClick={() => handleDeleteNote(note.id)}
+                >
+                  <Trash className="w-4 h-4" />
+                </Button>
+              </Card>
+            ))}
           </div>
-        </div>
-      )}
-    </div>
-  )
+        )}
+      </div>
+    </>
+  );
 }
 
-export default Page
+export default Page;
