@@ -3,6 +3,8 @@ from transformers import BertTokenizer, BertModel
 from sklearn.metrics.pairwise import cosine_similarity  # type: ignore
 import pandas as pd
 from lib import db  # Import external DB connection
+import json
+from bson import ObjectId 
 
 class JobMatcher:
     def __init__(self):
@@ -52,19 +54,23 @@ class JobMatcher:
             outputs = self.model(**encodings)
         return outputs.last_hidden_state.mean(dim=1)
 
-    def job_suggestions(self, candidate_description):
-        if self.job_embeddings is None:
-            print("Warning: No job data available for matching. Returning empty results.")
-            return {}
 
-        # Encode the candidate's description
-        candidate_embedding = self.encode_text(candidate_description)
 
-        # Compute similarity between candidate embedding and all job embeddings
-        similarities = cosine_similarity(candidate_embedding, self.job_embeddings).flatten()
+ # Import ObjectId from pymongo
 
-        # Get top 3 job recommendations
-        top_jobs = similarities.argsort()[::-1][:3]
-        job_matches = self.jobs.iloc[top_jobs]['title'].tolist()
+    def fetch_job_descriptions(self):
+        collection = self.db["jobs"]
+        
+        # Fetch all job listings
+        jobs = list(collection.find({}))
 
-        return job_matches
+        if not jobs:
+            print("Warning: No job data retrieved from the database.")
+            return pd.DataFrame(columns=["_id", "title", "description"])
+
+        # Convert `_id` field to string to make it JSON serializable
+        for job in jobs:
+            job["_id"] = str(job["_id"])  # Convert ObjectId to string
+
+        return pd.DataFrame(jobs)
+
