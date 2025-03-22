@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Footer = () => {
+
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
@@ -19,7 +21,7 @@ const Footer = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
-      
+
       const data = await response.json();
       setMessage(data.message);
       setEmail('');
@@ -34,7 +36,7 @@ const Footer = () => {
       
       {/* Top SkillMatch logo section */}
       <div className="flex items-center pl-16 mb-4">
-        <Image src="/skillmatchlogo.png" width={40} height={40} alt="SkillMatch Logo" className="mr-2" />
+        <Image src="/skillmatchlogo.png" width={30} height={30} alt="SkillMatch Logo" className="mr-2" />
         <div className="text-2xl font-bold">SkillMatch</div>
       </div>
       
@@ -43,8 +45,8 @@ const Footer = () => {
         <div className="mb-4 md:mb-0 pl-12">
           <h5 className="font-bold mb-2">Audience</h5>
           <ul>
-            <li><a href="#" className="text-gray-600 hover:text-black text-lg">Employers</a></li>
-            <li><a href="#" className="text-gray-600 hover:text-black text-lg">Candidates</a></li>
+            <li><Link href="/footer_components/employers" className="text-gray-600 hover:text-black text-lg">Employers</Link></li>
+            <li><Link href="/footer_components/candidates" className="text-gray-600 hover:text-black text-lg">Candidates</Link></li>
           </ul>
         </div>
 
@@ -52,8 +54,8 @@ const Footer = () => {
         <div className="mb-4 md:mb-0 pl-12">
           <h5 className="font-bold mb-2">Help</h5>
           <ul>
-            <li><a href="#" className="text-gray-600 hover:text-black text-lg">Customer Support</a></li>
-            <li><a href="#" className="text-gray-600 hover:text-black text-lg">Documentation</a></li>
+            <li><Link href="/footer_components/support" className="text-gray-600 hover:text-black text-lg">Customer Support</Link></li>
+            <li><Link href="/footer_components/documentation" className="text-gray-600 hover:text-black text-lg">Documentation</Link></li>
           </ul>
         </div>
 
@@ -61,8 +63,8 @@ const Footer = () => {
         <div className="mb-4 md:mb-0 pl-12">
           <h5 className="font-bold mb-2">Legal</h5>
           <ul>
-            <li><a href="#" className="text-gray-600 hover:text-black text-lg">Terms of Service</a></li>
-            <li><a href="#" className="text-gray-600 hover:text-black text-lg">Privacy Policy</a></li>
+            <li><Link href="/footer_components/terms" className="text-gray-600 hover:text-black text-lg">Terms of Service</Link></li>
+            <li><Link href="/footer_components/privacy" className="text-gray-600 hover:text-black text-lg">Privacy Policy</Link></li>
           </ul>
         </div>
 
