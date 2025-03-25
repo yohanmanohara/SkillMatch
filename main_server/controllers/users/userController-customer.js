@@ -231,6 +231,41 @@ const resetpassword = async (req, res) => {
 
 }
 
+const appliedjobs = async (req, res) => {
+  const { userId, jobId } = req.body;
+
+  // Validate user ID and job ID
+  if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(jobId)) {
+    return res.status(400).json({ error: 'Invalid user ID or job ID' });
+  }
+
+  try {
+    // Find the user by ID
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Check if job is already applied
+    if (user.appliedjobs.includes(jobId)) {
+      return res.status(400).json({ error: 'Job already applied' });
+    }
+
+    // Add job ID to appliedjobs array
+    user.appliedjobs.push(jobId);
+    await user.save();
+
+    res.status(200).json({ message: 'Job application successful', user });
+  } catch (error) {
+    console.error('Error applying for job:', error);
+    res.status(500).json({ error: 'An error occurred while applying for the job' });
+  }
+};
+
+
+
+
 
 
 
@@ -249,5 +284,6 @@ module.exports = {
     otpfroget,
     updateUser,
     updatePassword,
-    updatecv
+    updatecv,
+    appliedjobs
   };
