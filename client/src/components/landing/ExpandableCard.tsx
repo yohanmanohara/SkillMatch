@@ -7,7 +7,7 @@ import Image from "next/image";
 
 interface JobCardProps {
   job: {
-    id: number;
+    _id: string;
     title: string;
     companyname: string;
     salaryMin: string;
@@ -73,12 +73,12 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const handleApply = () => {
     if (!userData) {
       console.warn("User is not logged in. Redirecting to login page.");
-      router.push(`/login?redirect=/employee/resum?jobId=${job.id}&title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.companyname)}`);
+      router.push(`/login?redirect=/employee/resum?jobId=${job._id}&title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.companyname)}`);
       return;
     }
   
     router.push(
-      `/employee/resum?jobId=${job.id}&title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.companyname)}&userId=${userData.id}&email=${encodeURIComponent(userData.email)}&username=${encodeURIComponent(userData.username)}`
+      `/employee/resum?jobId=${job._id}&title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.companyname)}&userId=${userData.id}&email=${encodeURIComponent(userData.email)}&username=${encodeURIComponent(userData.username)}`
     );
   };
   
