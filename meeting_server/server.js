@@ -1,47 +1,28 @@
-require('dotenv').config()
+const express = require('express');
+const multer = require('multer');
+const mongoose = require('mongoose');
 const cors = require('cors');
-const express = require('express')
-const mongoose = require('mongoose')
-mongoose.set('strictQuery', true);
-// const userRoutes = require('./routes/user');
-// const usejob = require('./routes/job');
-const app = express()
-app.use(cors()); 
-app.use(express.json())
+const dotenv = require('dotenv');
+const savenoteRoutes = require('./Routes/SaveNoteRoutes');
+
+dotenv.config();
+const app = express();
 const port = process.env.PORT || 3003;
+const upload = multer({ storage: multer.memoryStorage() });
 
+app.use(express.json());
+app.use(cors());
 
-
-app.use((req, res, next) => {
-  console.log(req.path, req.method)
-  next()
-})
-
-
-
-// app.use('/api/user', userRoutes);
-
-// app.use('/api/job',usejob);
-  
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`);
-  next();
-});
-
+app.use('/api/savenotes', savenoteRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
-    app.listen(process.env.PORT, () => {
-      console.log('server is running & listening on port', process.env.PORT)
-    })
+    console.log('Connected to MongoDB');
   })
   .catch((error) => {
-    console.log(error)
-  })
+    console.error('Error connecting to MongoDB:', error);
+  });
 
-
-  console.log(`Server is running on port ${process.env.PORT}`);
-
-
-
-
+app.listen(port, () => {
+  console.log(`Server is listening on port: ${port}`);
+});
