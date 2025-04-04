@@ -5,7 +5,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const JobRoutes = require('./routes/JobRoutes');
 const userRoutes = require('./routes/user');
-const { containerClient } = require('./Connnections/azureBlobClient');  // Importing the containerClient
+const { s3Client, bucketName } = require('./Connnections/awsLightsailClient');
 
 dotenv.config();
 const app = express();
@@ -26,13 +26,14 @@ mongoose.connect(process.env.MONGO_URI)
     console.error('Error connecting to MongoDB:', error);
   });
 
-containerClient.getProperties()
-  .then(() => {
-    console.log('Connected to Azure Blob Storage');
-  })
-  .catch((error) => {
-    console.error('Error connecting to Azure Blob Storage:', error);
-  });
+// Test AWS Lightsail connection
+s3Client.listObjectsV2({ Bucket: bucketName }, (err) => {
+  if (err) {
+    console.error('Error connecting to AWS Lightsail:', err);
+  } else {
+    console.log('Connected to AWS Lightsail storage');
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is listening on port: ${port}`);
