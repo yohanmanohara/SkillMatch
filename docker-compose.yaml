@@ -27,8 +27,11 @@ services:
       - JWT_SECRET=secret
       - EMAIL=warushayohan80@gmail.com
       - EMAIL_PASSWORD=wlasedetnswsefnc
-      - AZURE_STORAGE_CONNECTION_STRING=DefaultEndpointsProtocol=https;AccountName=skillmatchstore;AccountKey=gBX0zLqgCypZjpUBZglJhLmkH67Iai69j4VDuQWrx/PH93nsrUElflbCRI+XtYOkAdhkNcsvmMOH+AStayji7A==;EndpointSuffix=core.windows.net
-      - AZURE_CONTAINER_NAME=skillmatch
+      - AWS_LIGHTSAIL_ENDPOINT=https://skillmatchnsbm.s3.ap-southeast-1.amazonaws.com
+      - AWS_ACCESS_KEY_ID=AKIA356SJTRS3SEAKSQI
+      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_REGION=Singapore
+      - AWS_BUCKET_NAME=skillmatchnsbm
     # networks:
     #   - skillmatch-network
     depends_on:
