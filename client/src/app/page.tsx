@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/landing/navbar";
 import Hero from "@/components/landing/hero";
 import Footer from "@/components/layout/footer";
-import Buttonfilter from "@/components/landing/buttonfilter";
+
 import Container from "@/components/common/container";
 import Customerfeedback from "@/components/landing/customerfeedback";
-import Contactus from "@/components/landing/Getintouch";
-import JobDescription from "@/components/JobDescription/JobDescription";
+import {Contactus} from "@/components/landing/Getintouch";
 import LatestJobs from "@/components/LatestJobs/LatestJobs";
-
+import {TeamSection} from "@/components/common/CollaborationCard";
 const Page = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,7 +44,7 @@ const Page = () => {
     <>
       <Navbar />  
       <Hero />
-      <Buttonfilter />
+      
 
       <Container>
         {loading ? <p>Loading jobs...</p> : <LatestJobs jobs={jobs} />}
@@ -58,11 +57,12 @@ const Page = () => {
       <Container>
         <Contactus />
       </Container>
+      <div className="p-12">
 
-      <Container>
-        <JobDescription />
-      </Container>
+      </div>
 
+      <TeamSection /> 
+      
       <Footer />
 
     </>

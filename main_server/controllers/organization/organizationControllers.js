@@ -91,6 +91,15 @@ const addjobs = async (req, res) => {
   const user = await User.findById(id);
   const organizationid =await user.company;
   console.log(organizationid);
+  const updatedOrg = await Organization.findByIdAndUpdate(
+      organizationid,
+      { companyPicUrl: pictureurl }, // Update the picture URL
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedOrg) {
+      return res.status(404).json({ message: 'Organization not found' });
+    }
 
   try {
     const newJob = new Job({
@@ -117,6 +126,7 @@ const addjobs = async (req, res) => {
     if (!org) {
       return res.status(404).json({ message: 'Organization not found' });
     }
+
 
     org.addedjobs.push(newJob._id); 
 
@@ -222,5 +232,85 @@ const createOrganization = async (req, res) => {
     }
   }
 
+  const updatejobs = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updatedJobData = req.body;
+  
+      const updatedJob = await Job.findByIdAndUpdate(id, updatedJobData, {
+        new: true, // Return updated job document
+        runValidators: true, // Validate before updating
+      });
+  
+      if (!updatedJob) {
+        return res.status(404).json({ message: "Job not found" });
+      }
+  
+      res.status(200).json({ success: true, job: updatedJob });
+    } catch (error) {
+      console.error("Update Job Error:", error);
+      res.status(500).json({ message: "Server error" });
+    }
+  };
 
-  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs};
+  const deletejob = async (req, res) => {
+    const { id } = req.query;
+  
+    try {
+      const job = await Job.findById(id);
+      if (!job) {
+        return res.status(404).json({ message: "Job not found" });
+      }
+  
+      const organization = await Organization.findById(job.organization);
+      if (!organization) {
+        return res.status(404).json({ message: "Organization not found" });
+      }
+  
+      organization.addedjobs = organization.addedjobs.filter(jobId => !jobId.equals(id));
+      await organization.save(); 
+  
+      await job.deleteOne();
+  
+      res.status(200).json({ message: "Job deleted successfully" });
+
+  
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error: error.message });
+    }
+  };
+  
+ 
+  
+  const getOrganizationJobs = async (req, res) => {
+    const { id } = req.query;
+    try {
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      const organization = await Organization.findOne({ user: id });
+      if (!organization) {
+        return res.status(404).json({ message: 'Organization not found' });
+      }
+  
+      const { addedjobs } = organization;
+      
+      if (!Array.isArray(addedjobs) || addedjobs.length === 0) {
+        return res.status(404).json({ message: 'No jobs found' });
+      }
+  
+      // Fetch jobs
+      const jobItems = await Job.find({ _id: { $in: addedjobs } });
+      res.status(200).json({ jobItems });
+  
+    } catch (error) {
+      res.status(500).json({ message: 'Error retrieving jobs', error: error.message });
+    }
+  };
+  
+
+
+
+  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs,updatejobs,deletejob,getOrganizationJobs}; // Export the functions to be used in the routes file

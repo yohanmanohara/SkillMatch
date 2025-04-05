@@ -3,7 +3,7 @@ import JobCard from "@/components/landing/ExpandableCard"; // Assuming JobCard i
 
 interface TopJobsProps {
   jobs: {
-    id: number;
+    _id: string;
     title: string;
     companyname: string;
     salaryMin: string;
@@ -28,8 +28,8 @@ const TopJobs: React.FC<TopJobsProps> = ({ jobs }) => {
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-center mb-4">Top 5 Job Listings</h2>
       <div className="grid gap-4">
-        {topJobs.map((job) => (
-          <JobCard key={job.id} job={job} /> // fallback to job.title if id is undefined
+        {topJobs.map((job, index) => (
+          <JobCard key={job._id || index} job={job} /> // fallback to job.title if id is undefined
         ))}
       </div>
     </div>

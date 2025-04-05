@@ -29,7 +29,8 @@
         "./src/app/components/*"
       ]
     },
-    "target": "ES2017"
+    "target": "ES2017",
+    "types": ["node"]
   },
   "include": [
     "next-env.d.ts",
@@ -39,7 +40,7 @@
     "src/data/jobtitles.js",
     "src/components/layouts/cards/SearchComponent.tsx",
     ".next/types/app/(pages)/(dashboard)/employer/settings/profile/page.tsx"
-  ],
+, "src/app/(pages)/documentary/[slug]"  ],
   "exclude": [
     "node_modules"
   ]

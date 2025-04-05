@@ -19,16 +19,25 @@ const {createOrganization} = require('../controllers/organization/organizationCo
 const {getpicture} = require('../controllers/organization/organizationControllers')
 const {addjobs} = require('../controllers/organization/organizationControllers')
 const {fetchjobs} = require('../controllers/organization/organizationControllers')
+const {updatejobs} = require('../controllers/organization/organizationControllers')
+const {deletejob} = require('../controllers/organization/organizationControllers')
+const {updatecv} = require('../controllers/users/userController-customer')
+const {getOrganizationJobs} = require('../controllers/organization/organizationControllers')
+const {appliedjobs} = require('../controllers/users/userController-customer')
 
 const router = express.Router()
 
 router.post('/getorganizationspicture', getpicture)
+
+router.post('/updatecv',updatecv)
 
 router.get('/fetchjobs',fetchjobs)
 
 router.post('/addjobs',addjobs)
 
 router.post('/createorganizations', createOrganization)
+
+router.post('/appliedjobs', appliedjobs)
 
 router.post('/login', loginUser)
 
@@ -40,6 +49,7 @@ router.post('/getusers', getUsers)
 
 router.delete('/deleteuser/:id', deleteUser)
 
+router.delete('/deletejob', deletejob)
 router.patch('/updateuser', updateUser)
 
 router.put('/putactive/:id', putActive)
@@ -48,7 +58,7 @@ router.put('/putemployer/:id', putEmployer)
 
 router.put('/putemployee/:id', putEmployee)
 
-
+router.put('/updatejobs/:id', updatejobs)
 router.put('/putinactive/:id', putInactive)
 
 router.put('/putinactive/:id', putInactive)
@@ -59,7 +69,10 @@ router.get('/admin', verifyTokenadmin);
 
 router.get('/getsingleuser', getsingleuser);
 
-router.get('/getsingleuser', getsingleuser);
+
+
+router.post('/getOrganizationJobs', getOrganizationJobs);
+
 
 router.patch('/updatpassword', updatePassword);
 

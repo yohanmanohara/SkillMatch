@@ -1,105 +1,219 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
-import Phone from "@/../public/phone.png";
-import Address from "@/../public/address.png";
-import Email from "@/../public/email.png";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+
+// Importing icons from React Icons
+import { FaPhoneAlt, FaMapPin, FaEnvelope, FaSpinner, FaPaperPlane } from "react-icons/fa";
 
 const contactDetails = [
-  { id: 1, icon: Phone, label: "PHONE:", value: "+2348141898014" },
-  { id: 2, icon: Address, label: "ADDRESS:", value: "Challenge, Ibadan, Nigeria" },
-  { id: 3, icon: Email, label: "EMAIL:", value: "iremiodeneye126@gmail.com" },
+  { 
+    id: 1, 
+    icon: FaPhoneAlt, 
+    label: "PHONE", 
+    value: "+2348141898014",
+    href: "tel:+2348141898014" 
+  },
+  { 
+    id: 2, 
+    icon: FaMapPin, 
+    label: "ADDRESS", 
+    value: "Challenge, Ibadan, Nigeria",
+    href: "https://maps.google.com?q=Challenge,Ibadan,Nigeria" 
+  },
+  { 
+    id: 3, 
+    icon: FaEnvelope, 
+    label: "EMAIL", 
+    value: "iremiodeneye126@gmail.com",
+    href: "mailto:iremiodeneye126@gmail.com" 
+  },
 ];
 
-function GetInTouch() {
-  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
-  const [status, setStatus] = useState("");
+export function Contactus() {
+  const [formData, setFormData] = useState({ 
+    name: "", 
+    email: "", 
+    subject: "", 
+    message: "" 
+  });
+  const [status, setStatus] = useState<{message: string, type: 'success' | 'error' | ''}>({message: '', type: ''});
 
-  const handleChange = (e: { target: { name: any; value: any; }; }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("Sending...");
+    setStatus({message: "Sending...", type: ''});
 
-    const res = await fetch("/api/email_sending", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const res = await fetch("/api/email_sending", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    if (res.ok) {
-      setStatus("Email sent successfully!");
-      setFormData({ name: "", email: "", subject: "", message: "" });
-    } else {
-      setStatus("Failed to send email.");
+      if (res.ok) {
+        setStatus({message: "Message sent successfully!", type: 'success'});
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        throw new Error("Failed to send message");
+      }
+    } catch (error) {
+      setStatus({message: "Failed to send message. Please try again.", type: 'error'});
     }
-
-    {status && <p className="text-sm mt-2 text-black">{status}</p>} 
   };
 
   return (
-    <div className="flex flex-col lg:flex-row bg-green-200 rounded-md w-auto h-auto p-8 lg:p-24 m-10 gap-8 lg:gap-48 items-center justify-between" id="contact">
-      <div className="flex flex-col lg:w-1/2 w-full">
-        {contactDetails.map(({ id, icon, label, value }) => (
-          <div key={id} className="flex flex-row gap-4 items-center mb-6">
-            <Image src={icon} alt="" width={38} height={38} />
-            <div className="h-12 border-l-2 border-gray-500"></div>
-            <div className="flex flex-col text-gray-900">
-              <div className="font-bold">{label}</div>
-              <div className="text-sm">{value}</div>
+    <section className="w-full py-12 md:py-24 bg-gradient-to-b from-background to-muted/30" id="contact">
+      <div className="container px-4 md:px-6 max-w-7xl">
+        <div className="grid gap-12 lg:grid-cols-2">
+          {/* Contact Information */}
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <Badge 
+                variant="secondary" 
+                className="bg-green-500/10 text-green-600 hover:bg-green-500/20"
+              >
+                Contact Us
+              </Badge>
+              <h2 className="text-4xl font-bold tracking-tight sm:text-5xl bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                Let's Build Something Together
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-xl">
+                Have a project in mind or want to discuss opportunities? Reach out through any of these channels.
+              </p>
+            </div>
+
+            <div className="grid gap-4">
+              {contactDetails.map(({ id, icon: Icon, label, value, href }) => (
+                <a
+                  key={id}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Card className="hover:shadow-md transition-all hover:border-primary/20 group">
+                    <CardContent className="p-6 flex items-center gap-4">
+                      <div className="p-3 rounded-lg bg-primary/5 group-hover:bg-primary/10 transition-colors">
+                        <Icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="space-y-1">
+                        <h3 className="font-medium text-sm text-muted-foreground">{label}</h3>
+                        <p className="text-base font-medium group-hover:text-primary transition-colors">
+                          {value}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </a>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
 
-      <form className="flex flex-col gap-4 lg:w-1/2 w-full" onSubmit={handleSubmit}>
-        <div className="flex flex-col lg:flex-row gap-8">
-          <Input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Name"
-            required
-            className="w-full lg:w-auto text-black" 
-          />
-          <Input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email"
-            required
-            className="w-full lg:w-auto text-black" 
-          />
+          {/* Contact Form */}
+          <div>
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <CardTitle className="text-3xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                  Send us a message
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <label htmlFor="name" className="text-sm font-medium">
+                        Name
+                      </label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Your name"
+                        required
+                        className="h-12"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="text-sm font-medium">
+                        Email
+                      </label>
+                      <Input
+                        id="email"
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Your email"
+                        required
+                        className="h-12"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="subject" className="text-sm font-medium">
+                      Subject
+                    </label>
+                    <Input
+                      id="subject"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      placeholder="Subject"
+                      required
+                      className="h-12"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="message" className="text-sm font-medium">
+                      Message
+                    </label>
+                    <Textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      placeholder="Your message"
+                      className="min-h-[150px]"
+                      required
+                    />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    className="w-full h-12 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium"
+                    disabled={status.message === "Sending..."}
+                  >
+                    {status.message === "Sending..." ? (
+                      <span className="flex items-center gap-2">
+                        <FaSpinner className="h-4 w-4 animate-spin" />
+                        Sending...
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        Send Message <FaPaperPlane className="h-4 w-4" />
+                      </span>
+                    )}
+                  </Button>
+                  {status.message && (
+                    <div className={`rounded-lg p-3 text-center ${
+                      status.type === 'success' ? 'bg-green-50 text-green-800' : 
+                      status.type === 'error' ? 'bg-red-50 text-red-800' : 'bg-muted text-muted-foreground'
+                    }`}>
+                      {status.message}
+                    </div>
+                  )}
+                </form>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-        <Input
-          type="text"
-          name="subject"
-          value={formData.subject}
-          onChange={handleChange}
-          placeholder="Subject"
-          required
-          className="w-full text-black"
-        />
-        <Textarea
-          name="message"
-          value={formData.message}
-          onChange={handleChange}
-          placeholder="Message"
-          className="resize-none w-full text-black" 
-          required
-        />
-        <Button type="submit" className="w-full lg:w-auto">Submit</Button>
-        {status && <p className="text-sm mt-2">{status}</p>}
-      </form>
-    </div>
+      </div>
+    </section>
   );
 }
-
-export default GetInTouch;

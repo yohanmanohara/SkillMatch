@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function SignUpDialog() {
   const [formData, setFormData] = useState({
@@ -32,7 +33,52 @@ export default function SignUpDialog() {
     // Add sign-up logic here, e.g., send formData to an API
     console.log("Sign-up form submitted", formData);
   };
+  const searchParams = useSearchParams();
+  const jobId = searchParams.get("jobId");
 
+
+
+  const applyForJob = async () => {
+    const userId = sessionStorage.getItem("poop"); // Retrieve user ID from sessionStorage
+    const jobId = searchParams.get("jobId"); // Get jobId from URL parameters
+
+    if (!userId || !jobId) {
+        console.error("Missing userId or jobId");
+        alert("Error: User ID or Job ID is missing.");
+        return;
+    }
+
+    console.log("User ID:", userId, "Job ID:", jobId); // Log both IDs for debugging
+
+    try {
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/appliedjobs`, // Updated endpoint
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId, jobId }), // Send userId and jobId in request body
+            }
+        );
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log("Job applied successfully:", data);
+            alert("You have successfully applied for this job!");
+        } else {
+            console.error("Failed to apply for job:", data);
+            alert(data.error || "Failed to apply. Please try again.");
+        }
+    } catch (error) {
+        console.error("Error applying for job:", error);
+        alert("An error occurred. Please try again later.");
+    }
+};
+
+
+ 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -90,7 +136,7 @@ export default function SignUpDialog() {
 
           <AlertDialogFooter>
             <AlertDialogCancel type="button" >Cancel</AlertDialogCancel>
-            <AlertDialogAction type="submit">Submit</AlertDialogAction>
+            <AlertDialogAction type="submit" onClick={applyForJob}>Submit</AlertDialogAction>
           </AlertDialogFooter>
         </form>
       </AlertDialogContent>
