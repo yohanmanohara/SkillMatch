@@ -73,8 +73,9 @@ class JobController extends BaseController {
             if (!req.file) {
                 return res.status(400).json({ error: "No file uploaded" });
             }
-    
+
             console.log("Uploaded file:", req.file);
+
     
             if (!s3Client) {
                 console.error("S3 client is not initialized.");
@@ -85,12 +86,14 @@ class JobController extends BaseController {
             const objectKey = `${id}-${req.file.originalname}`; // Append `id` to make the filename unique
     
             // Check if the file already exists in S3
+
             try {
                 await s3Client.headObject({
                     Bucket: bucketName,
                     Key: objectKey
                 }).promise();
                 
+
                 console.log(`File already exists: ${objectKey}`);
                 const fileUrl = `https://${bucketName}.s3.amazonaws.com/${objectKey}`;
                 console.log(`File uploaded successfully: ${fileUrl}`);
@@ -101,13 +104,16 @@ class JobController extends BaseController {
                     console.log(`File does not exist, uploading: ${objectKey}`);
                 } else {
                     // Some other error occurred (e.g., permission error)
+
                     console.error("Error checking file existence:", error);
                     return res.status(500).json({ 
                         error: "Error checking file existence", 
                         details: error.message 
                     });
                 }
+                // File doesn't exist, proceed with upload
             }
+
     
             // Upload to AWS S3 if the file doesn't exist
             console.log(`Uploading file ${objectKey} to AWS S3...`);
@@ -129,6 +135,7 @@ class JobController extends BaseController {
                 error: "Upload failed", 
                 details: error.message 
             }); // Provide detailed error message in the response
+
         }
     }
      
