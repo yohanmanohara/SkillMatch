@@ -79,7 +79,7 @@ export const UserClient = () => {
           <div className='w-full md:w-1/6'></div>
         </div>
       ) : (
-        <p className="text-center text-red-500">{error}</p>
+        <p className="tjobsext-center text-red-500">{error}</p>
       )}
 
       {!error && totalPages > 1 && (
