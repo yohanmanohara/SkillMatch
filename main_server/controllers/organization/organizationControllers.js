@@ -91,6 +91,15 @@ const addjobs = async (req, res) => {
   const user = await User.findById(id);
   const organizationid =await user.company;
   console.log(organizationid);
+  const updatedOrg = await Organization.findByIdAndUpdate(
+      organizationid,
+      { companyPicUrl: pictureurl }, // Update the picture URL
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedOrg) {
+      return res.status(404).json({ message: 'Organization not found' });
+    }
 
   try {
     const newJob = new Job({
@@ -117,6 +126,7 @@ const addjobs = async (req, res) => {
     if (!org) {
       return res.status(404).json({ message: 'Organization not found' });
     }
+
 
     org.addedjobs.push(newJob._id); 
 

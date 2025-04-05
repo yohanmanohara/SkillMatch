@@ -76,29 +76,35 @@ class JobController extends BaseController {
 
             console.log("Uploaded file:", req.file);
 
-            // Generate unique filename with original extension
-            const fileExtension = req.file.originalname.split('.').pop();
-            const objectKey = `${id}-${uuidv4()}.${fileExtension}`;
+    
+            if (!s3Client) {
+                console.error("S3 client is not initialized.");
+                return res.status(500).json({ error: "AWS S3 client not initialized" });
+            }
+    
+            // Construct the object key using the `id` and the original filename
+            const objectKey = `${id}-${req.file.originalname}`; // Append `id` to make the filename unique
+    
+            // Check if the file already exists in S3
 
-            const params = {
-                Bucket: bucketName,
-                Key: objectKey,
-                Body: req.file.buffer,
-                ContentType: req.file.mimetype,
-                ACL: 'public-read' // Adjust based on your requirements
-            };
-
-            // Check if file exists (optional)
             try {
                 await s3Client.headObject({
                     Bucket: bucketName,
                     Key: objectKey
                 }).promise();
                 
-                const url = `https://${bucketName}.${process.env.AWS_LIGHTSAIL_ENDPOINT}/${objectKey}`;
-                return res.status(200).json({ url });
+
+                console.log(`File already exists: ${objectKey}`);
+                const fileUrl = `https://${bucketName}.s3.amazonaws.com/${objectKey}`;
+                console.log(`File uploaded successfully: ${fileUrl}`);
+                return res.status(200).json({ url: fileUrl }); // Return the existing URL
             } catch (error) {
-                if (error.code !== 'NotFound') {
+                if (error.code === 'NotFound') {
+                    // File does not exist, proceed to upload it
+                    console.log(`File does not exist, uploading: ${objectKey}`);
+                } else {
+                    // Some other error occurred (e.g., permission error)
+
                     console.error("Error checking file existence:", error);
                     return res.status(500).json({ 
                         error: "Error checking file existence", 
@@ -108,22 +114,31 @@ class JobController extends BaseController {
                 // File doesn't exist, proceed with upload
             }
 
-            // Upload to Lightsail bucket
-            console.log(`Uploading file ${objectKey} to AWS Lightsail...`);
-            const uploadResult = await s3Client.upload(params).promise();
-
-            console.log(`File uploaded successfully: ${uploadResult.Location}`);
-            return res.status(200).json({ url: uploadResult.Location });
-
+    
+            // Upload to AWS S3 if the file doesn't exist
+            console.log(`Uploading file ${objectKey} to AWS S3...`);
+            const uploadResult = await s3Client.upload({
+                Bucket: bucketName,
+                Key: objectKey,
+                Body: req.file.buffer,
+                ContentType: req.file.mimetype
+            }).promise();
+    
+            const fileUrl = uploadResult.Location; // Get the uploaded file URL
+            console.log(`File uploaded successfully: ${fileUrl}`);
+    
+            return res.status(200).json({ url: fileUrl });
+    
         } catch (error) {
-            console.error("Upload Error:", error);
+            console.error("Upload Error:", error); // Log the full error stack
             return res.status(500).json({ 
                 error: "Upload failed", 
                 details: error.message 
-            });
+            }); // Provide detailed error message in the response
+
         }
     }
-    
+     
 
 
     async getSingleJob(req, res) {
