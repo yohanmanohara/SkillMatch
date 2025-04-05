@@ -18,8 +18,10 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
+import { Loader2 } from "lucide-react"; 
+
 export default function TabsDemo() {
 
   // User interface for type-checking
@@ -33,8 +35,12 @@ export default function TabsDemo() {
     city: string;
     status: string;
   }
-
+  const previewUrl = "/avatadefault.jpg";
+  const [pictureurl, setpictureurl] =useState("");
+   const [picture, setPicture] = useState("");
+     const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
   const userId = sessionStorage.getItem('poop'); // Replace 'poop' with the correct session key.
 
   useEffect(() => {
@@ -182,9 +188,28 @@ export default function TabsDemo() {
           <Card>
             <CardHeader>
               <CardTitle>Edit Your User Details</CardTitle>
-              <Avatar className="rounded-full h-[100px] w-[100px] overflow-hidden">
-                <AvatarImage src="/avatadefault.jpg" alt="User Avatar" />
-              </Avatar>
+              
+              <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
+      <AvatarImage src={picture ? picture : previewUrl} alt="User Avatar" />
+      </Avatar>
+      <Input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} />
+      <div className="flex gap-5"> 
+        <Button variant="secondary" onClick={handleFileUpload} >
+        {loading ? (
+        <Loader2 className="animate-spin w-5 h-5" />
+      ) : uploaded ? (
+        "Need Tochage Uploaded picture"
+      ) : (
+        "Upload"
+      )}
+      </Button> 
+      <Button onClick={handleClear} variant="outline">
+          Clear
+        </Button>
+      </div>
+     
+
+
               <CardDescription>
                 Make changes to your account here. Click save when you&apos;re done.
               </CardDescription>

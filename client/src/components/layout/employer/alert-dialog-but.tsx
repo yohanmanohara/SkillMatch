@@ -181,6 +181,7 @@ export default function JobForm() {
   
       if (response.ok) {
         console.log("Form submitted successfully:", data);
+        window.location.reload();
       } else {
         console.error("Error submitting form:", data);
       }
