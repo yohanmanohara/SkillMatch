@@ -39,54 +39,95 @@ const feedbacks = [
 
 const Client_Feedback = () => {
   return (
-    <div className="w-full px-4 py-10 md:py-16" id="faq">
+    <div className="w-full px-4 py-16 md:py-24" id="faq">
       {/* What do we offer section */}
-      <div className="flex flex-col items-center justify-center">
-        <div className="font-bold text-2xl md:text-3xl text-center">
-          What do we offer?
-        </div>
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-gradient-to-r from-green-500 to-green-600 bg-clip-text mb-4">
+            What do we offer?
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Premium features designed to enhance your experience
+          </p>
 
-        {/* Flex container updated to center align items */}
-        <div className="flex flex-col sm:flex-row gap-8 sm:gap-20 my-9 ">
-          <div className="flex flex-row font-bold gap-4 items-center">
-            <Image src={Security} alt="Security" width={40} height={40} />
-            <div>Security Guarantee</div>
-          </div>
-
-          <div className="flex flex-row font-bold gap-4 items-center">
-            <Image src={Invest} alt="Investing" width={40} height={40} />
-            <div>Investing</div>
-          </div>
-
-          <div className="flex flex-row font-bold gap-4 items-center">
-            <Image src={Multiple} alt="Multiple Method" width={40} height={40} />
-            <div>Multiple Method</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Client Feedback Section */}
-      <div className="flex flex-wrap gap-6 justify-center">
-        {feedbacks.map(({ id, feedback, name, title, humanIcon, commaIcon }) => (
-          <div
-            key={id}
-            className="flex flex-col items-start justify-center gap-6 text-black border-0 rounded-xl w-full sm:w-[300px] md:w-[350px] bg-[#BEF4CE] px-6 py-4"
-          >
-            <Image src={commaIcon} alt="Comma" />
-            <div className="text-sm md:text-base">{feedback}</div>
-            <div className="flex items-center gap-3">
-              <Image src={humanIcon} alt="User Icon" width={40} height={40} />
-              <div className="flex flex-col">
-                <div className="font-bold">{name}</div>
-                <div className="text-sm">{title}</div>
+          {/* Features grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-12 w-full">
+            {[
+              { icon: Security, title: "Security Guarantee", description: "Bank-level encryption and protection" },
+              { icon: Invest, title: "Smart Investing", description: "AI-powered investment strategies" },
+              { icon: Multiple, title: "Multiple Methods", description: "Diverse options for every need" }
+            ].map((feature, index) => (
+              <div 
+                key={index}
+                className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-green-500"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="p-3 rounded-lg bg-green-50">
+                    <Image 
+                      src={feature.icon} 
+                      alt={feature.title} 
+                      width={32} 
+                      height={32}
+                      className="text-green-500"
+                    />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-800">{feature.title}</h3>
+                </div>
+                <p className="text-gray-600 text-sm">{feature.description}</p>
               </div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
 
-      {/* FAQ Section */}
-      <Faq />
+        {/* Client Feedback Section */}
+        <div className="mb-24">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              What our clients say
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Trusted by professionals across industries
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {feedbacks.map(({ id, feedback, name, title, humanIcon, commaIcon }) => (
+              <div
+                key={id}
+                className="relative bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group transform hover:scale-105"
+              >
+                <div className="absolute top-6 right-6 opacity-20 group-hover:opacity-40 transition-opacity">
+                  <Image 
+                    src={commaIcon} 
+                    alt="Quote" 
+                    width={40} 
+                    height={40}
+                  />
+                </div>
+                <p className="text-gray-700 mb-6 relative z-10">{feedback}</p>
+                <div className="flex items-center gap-4">
+                  <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
+                    <Image 
+                      src={humanIcon} 
+                      alt={name} 
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-800">{name}</h4>
+                    <p className="text-sm text-gray-500">{title}</p>
+                  </div>
+                </div>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* FAQ Section */}
+        <Faq />
+      </div>
     </div>
   );
 };

@@ -143,9 +143,8 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
             </div>
           </div>
 
-          <div className="mt-4 px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-lg">
-            <p className="text-primary font-medium text-center">{formatSalary()}</p>
-          </div>
+           <Badge variant="secondary" className="h-10">{formatSalary()}</Badge>
+          
 
           <div className="mt-6 w-full space-y-2">
             <Button 
@@ -312,7 +311,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
       </div>
 
       {/* Footer with Employment Types */}
-      <CardFooter className="p-4 bg-gray-50 dark:bg-gray-800/50 flex flex-wrap gap-2">
+      <CardFooter className="p-4 bg-green-400 dark:bg-gray-800/50 flex flex-wrap gap-2">
         {job.employmentTypes.map((tag, index) => (
           <Badge 
             key={index} 
