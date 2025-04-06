@@ -119,26 +119,26 @@ export const navItemempy: NavItem[] = [//employer view
       { title: 'Candidates', href: '/employer/hiring/candidates' },
     ],
    
-    icon: 'spinner',
+    icon: 'profile',
     
   },
 
   {
     title: 'Interviews',
     href: '/employer/interview',
-    icon: 'spinner',
+    icon: 'post',
     label: 'profile'
   },
   {
     title: 'Manage',
     href: '/employer/manage',
-    icon: 'spinner',
+    icon: 'employee',
     label: 'profile'
   },
   {
     title: 'Support',
     href: '/employer/support',
-    icon: 'media',
+    icon: 'spinner',
     label: 'profile'
   },
  
@@ -146,7 +146,7 @@ export const navItemempy: NavItem[] = [//employer view
   {
     title: 'Settings',
     href: '/employer/settings',
-    icon: 'car',
+    icon: 'profile',
     label: 'settings'
   },
  
