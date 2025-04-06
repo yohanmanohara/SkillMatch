@@ -111,6 +111,7 @@ export const navItemempy: NavItem[] = [//employer view
  
   
   {
+
     title: 'Jobs',
     href: '/employer/hiring/jobs',
     icon: 'post',
@@ -121,6 +122,7 @@ export const navItemempy: NavItem[] = [//employer view
     href: '/employer/hiring/candidates',
     icon: 'post',
     label: 'profile'
+
   },
 
 
