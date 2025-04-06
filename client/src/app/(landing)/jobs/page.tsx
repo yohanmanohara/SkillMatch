@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
+import Navbar from "../../../components/landing/navbar";
 import {
   Pagination,
   PaginationContent,
@@ -150,19 +151,23 @@ const JobListingPage = () => {
   );
 
   return (
-    <div className="flex min-h-screen ">
-      {/* Mobile Filter Sheet */}
-      <div className="md:hidden fixed bottom-6 right-6 z-50">
+    <>
+  
+    <Navbar />  
+    <div className="flex pt-20 md:pt-24 md:p-44 ">
+   
+      <div className="md:hidden right-6 z-50">
         <Sheet>
           <SheetTrigger asChild>
             <Button 
               variant="default" 
               size="icon" 
-              className="rounded-full shadow-lg h-12 w-12"
+              className="rounded-full shadow-lg h-12 w-12"  
             >
               <SlidersHorizontal className="h-5 w-5" />
             </Button>
           </SheetTrigger>
+          
           <SheetContent side="bottom" className="h-[85vh] rounded-t-2xl">
             <ScrollArea className="h-full pr-4">
               <div className="space-y-6 py-4">
@@ -199,12 +204,7 @@ const JobListingPage = () => {
                     />
                   </div>
                 </div>
-                <Button 
-                  className="w-full mt-4"
-                  onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}))}
-                >
-                  Apply Filters
-                </Button>
+               
               </div>
             </ScrollArea>
           </SheetContent>
@@ -212,8 +212,8 @@ const JobListingPage = () => {
       </div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden md:block w-72 p-6">
-        <Card className="sticky top-6 p-6 space-y-8">
+      <div className="hidden md:block pt-6 w-72 pl-6">
+        <Card className="sticky top-24 p-6 space-y-8">
           <h3 className="text-lg font-bold">Filters</h3>
           
           <FilterSection 
@@ -259,11 +259,12 @@ const JobListingPage = () => {
 
       {/* Main Content */}
       <div className="flex-1 p-6">
-        <div className="max-w-4xl mx-auto">
+        <div className=" mx-auto">
           
           
-          <Card className="flex flex-col md:flex-row gap-2 mb-8 p-4">
-            <div className="relative flex-1">
+        <Card className="flex flex-col   justify-center z-10 md:flex-row gap-2 mb-8 p-4">
+
+            <div className="relative  flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
@@ -290,7 +291,7 @@ const JobListingPage = () => {
           </Card>
 
           
-
+          <div>
           <div className="space-y-4 mb-8">
             {currentJobs.length > 0 ? (
               <LatestJobs jobs={currentJobs} />
@@ -340,14 +341,17 @@ const JobListingPage = () => {
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
+            
           )}
+          </div>
         </div>
       </div>
     </div>
+    </>
   );
 };
 
-// Reusable filter section component
+
 const FilterSection = ({
   title,
   options,

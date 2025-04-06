@@ -94,7 +94,7 @@ const Client_Feedback = () => {
             {feedbacks.map(({ id, feedback, name, title, humanIcon, commaIcon }) => (
               <div
                 key={id}
-                className="relative bg-green-300 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group transform hover:scale-105"
+                className="relative bg-green-400 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group transform hover:scale-105"
               >
                 <div className="absolute top-6 right-6 opacity-20 group-hover:opacity-40 transition-opacity">
                   <Image 
