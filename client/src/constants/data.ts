@@ -110,18 +110,19 @@ export const navItemempy: NavItem[] = [//employer view
   },
  
   
- 
-
   {
-    title: 'Hiring',
-    subItems: [
-      { title: 'Jobs', href: '/employer/hiring/jobs' },
-      { title: 'Candidates', href: '/employer/hiring/candidates' },
-    ],
-   
-    icon: 'profile',
-    
+    title: 'Jobs',
+    href: '/employer/hiring/jobs',
+    icon: 'post',
+    label: 'profile'
   },
+  {
+    title: 'Candidates',
+    href: '/employer/hiring/candidates',
+    icon: 'post',
+    label: 'profile'
+  },
+
 
   {
     title: 'Interviews',
