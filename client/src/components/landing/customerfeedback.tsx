@@ -43,49 +43,49 @@ const Client_Feedback = () => {
       {/* What do we offer section */}
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-gradient-to-r from-green-500 to-green-600 bg-clip-text mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-gradient-to-r from-white to-green-600 bg-clip-text mb-4">
             What do we offer?
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="max-w-2xl mx-auto  from-white to-green-600">
             Premium features designed to enhance your experience
           </p>
 
-          {/* Features grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-12 w-full">
-            {[
-              { icon: Security, title: "Security Guarantee", description: "Bank-level encryption and protection" },
-              { icon: Invest, title: "Smart Investing", description: "AI-powered investment strategies" },
-              { icon: Multiple, title: "Multiple Methods", description: "Diverse options for every need" }
-            ].map((feature, index) => (
-              <div 
-                key={index}
-                className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-green-500"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 rounded-lg bg-green-50">
-                    <Image 
-                      src={feature.icon} 
-                      alt={feature.title} 
-                      width={32} 
-                      height={32}
-                      className="text-green-500"
-                    />
+            {/* Features grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-12 w-full">
+              {[
+                { icon: Security, title: "Security Guarantee", description: "Bank-level encryption and protection" },
+                { icon: Invest, title: "Smart Investing", description: "AI-powered investment strategies" },
+                { icon: Multiple, title: "Multiple Methods", description: "Diverse options for every need" }
+              ].map((feature, index) => (
+                <div 
+                  key={index}
+                  className=" p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-green-300 hover:border-green-500"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="p-3 rounded-lg bg-green-300">
+                      <Image 
+                        src={feature.icon} 
+                        alt={feature.title} 
+                        width={32} 
+                        height={32}
+                        className="text-green-500"
+                      />
+                    </div>
+                    <h3 className="text-lg font-semibold  dark:text-gray-300">{feature.title}</h3>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-800">{feature.title}</h3>
+                  <p className=" dark:text-gray-300 text-sm">{feature.description}</p>
                 </div>
-                <p className="text-gray-600 text-sm">{feature.description}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Client Feedback Section */}
+        
         <div className="mb-24">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-gradient-to-r from-white to-green-600 bg-clip-text mb-4">
               What our clients say
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className=" from-white to-green-600 max-w-2xl mx-auto">
               Trusted by professionals across industries
             </p>
           </div>
@@ -94,7 +94,7 @@ const Client_Feedback = () => {
             {feedbacks.map(({ id, feedback, name, title, humanIcon, commaIcon }) => (
               <div
                 key={id}
-                className="relative bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group transform hover:scale-105"
+                className="relative bg-green-300 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group transform hover:scale-105"
               >
                 <div className="absolute top-6 right-6 opacity-20 group-hover:opacity-40 transition-opacity">
                   <Image 
