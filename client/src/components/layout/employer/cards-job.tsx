@@ -16,7 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";  // Import DialogTitle for accessibility
 import EditJobDialog from "@/components/layout/employer/edit-job-dialog";
 
 interface JobCardProps {
@@ -143,9 +143,8 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
             </div>
           </div>
 
-           <Badge variant="secondary" className="h-10">{formatSalary()}</Badge>
+          <Badge variant="secondary" className="h-10">{formatSalary()}</Badge>
           
-
           <div className="mt-6 w-full space-y-2">
             <Button 
               variant="outline" 
@@ -326,11 +325,12 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[700px]">
+          {/* Ensure DialogTitle is present for accessibility */}
+          <DialogTitle>Edit Job</DialogTitle>
           <EditJobDialog
             job={job}
             onSave={handleSave}
-            onClose={() => setIsEditDialogOpen(false)}
-          />
+            onClose={() => setIsEditDialogOpen(false)} isOpen={false}          />
         </DialogContent>
       </Dialog>
 
