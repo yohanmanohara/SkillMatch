@@ -28,6 +28,7 @@ const Page: React.FC<PageProps> = ({ page }) => {
       title: 'Candidates',
       description: 'Discover job opportunities and connect with top employers on our platform.',
     },
+
     success: {
       title: 'Success Stories',
       description: 'Read real stories from candidates and companies who found the perfect match on SkillMatch.',
@@ -59,14 +60,17 @@ const Page: React.FC<PageProps> = ({ page }) => {
     privacy: {
       title: 'Privacy Policy',
       description: 'Learn how we collect, use, and protect your personal information.',
+
     },
     terms: {
       title: 'Terms of Service',
       description: 'Review our terms and conditions to understand the use of our services.',
     },
+
     cookies: {
       title: 'Cookie Policy',
       description: 'Understand how we use cookies to enhance your experience.',
+
     },
   };
 

@@ -43,6 +43,7 @@ const Client_Feedback = () => {
       {/* What do we offer section */}
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
+
           <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-gradient-to-r from-green-500 to-green-600 bg-clip-text mb-4">
             What do we offer?
           </h2>
@@ -86,6 +87,7 @@ const Client_Feedback = () => {
               What our clients say
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
+
               Trusted by professionals across industries
             </p>
           </div>
@@ -94,7 +96,9 @@ const Client_Feedback = () => {
             {feedbacks.map(({ id, feedback, name, title, humanIcon, commaIcon }) => (
               <div
                 key={id}
+
                 className="relative bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group transform hover:scale-105"
+
               >
                 <div className="absolute top-6 right-6 opacity-20 group-hover:opacity-40 transition-opacity">
                   <Image 

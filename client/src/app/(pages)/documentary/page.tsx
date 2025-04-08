@@ -2,6 +2,19 @@
 import React, { useState, Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ChevronRight, Menu, Home } from "lucide-react";
+import { cn } from "@/lib/utils";
+import Navbar from "@/components/landing/navbar";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 type ContentKey = keyof typeof documentaryContent;
 
@@ -9,6 +22,7 @@ const documentaryContent = {
   'getting-started': {
     title: 'Getting Started',
     content: (
+
       <div className="space-y-6">
         <div>
           <h3 className="text-xl font-semibold">1. Creating an Account</h3>
@@ -17,10 +31,12 @@ const documentaryContent = {
           </p>
           <ul className="list-disc list-inside mt-2">
             <li> Click on the <strong>Sign Up</strong> button at the top-right corner of the homepage.</li>
+
             <li>Enter your <strong>name, email, and a strong password</strong>.</li>
             <li>Verify your email by clicking the link sent to your inbox.</li>
             <li>Once verified, log in and complete your profile.</li>
           </ul>
+
           <p className="mt-2">
             A well-filled profile increases your chances of networking and job opportunities.
           </p>
@@ -45,11 +61,13 @@ const documentaryContent = {
             Once logged in, you will land on your <strong>Dashboard</strong>, where you can:
           </p>
           <ul className="list-disc list-inside mt-2">
+
             <li>Browse job listings relevant to your skills.</li>
             <li>Apply for jobs with a single click.</li>
             <li>Manage applications and track your submissions.</li>
             <li>Update your job postings (if you are an employer).</li>
           </ul>
+
           <p className="mt-2">
             Explore the menu to access features like account settings, notifications, and saved jobs.
           </p>
@@ -88,10 +106,12 @@ const documentaryContent = {
             If you encounter any issues:
           </p>
           <ul className="list-disc list-inside mt-2">
+
             <li>Check the FAQs for quick solutions.</li>
             <li>Contact support for personalized assistance.</li>
             <li>Visit the Help Center for detailed guides.</li>
           </ul>
+
         </div>
       </div>
     ),
@@ -99,6 +119,7 @@ const documentaryContent = {
   'account': {
     title: 'Account Setup',
     content: (
+
       <div className="space-y-6">
         <p>
           Setting up your account is the first step to getting the most out of our platform. A complete and accurate account ensures that you can fully engage with all the features, such as applying for jobs, posting listings, and connecting with the community.
@@ -118,12 +139,14 @@ const documentaryContent = {
         <p>
           Need help with your account setup? Don&rsquo;t hesitate to check our FAQs or reach out to support if you encounter any issues.
         </p>
+
       </div>
     ),
   },
   'faq': {
     title: 'Frequently Asked Questions',
     content: (
+
       <div className="space-y-6">
         <div>
           <h3 className="text-xl font-semibold">1. Why can&apos;t I upload my photo?</h3>
@@ -178,12 +201,14 @@ const documentaryContent = {
             <li>Make the necessary changes and click &quot;Save&quot;.</li>
           </ul>
         </div>
+
       </div>
     ),
   },
   'security': {
     title: 'Security Settings',
     content: (
+
       <div className="space-y-6">
         <div>
           <h3 className="text-xl font-semibold">1. How do I change my password?</h3>
@@ -211,12 +236,48 @@ const documentaryContent = {
             <li>Once 2FA is enabled, you&apos;ll be required to enter a code from your authentication app each time you log in.</li>
           </ul>
         </div>
+
+      <div className="space-y-8">
+        <section>
+          <h2 className="text-2xl font-semibold">Account Security</h2>
+          
+          <div className="mt-6 space-y-8">
+            <div>
+              <h3 className="text-xl font-semibold">1. Changing Your Password</h3>
+              <p className="mt-2 text-muted-foreground">
+                To change your password:
+              </p>
+              <ul className="mt-2 space-y-2 list-disc pl-6">
+                <li>Log in to your account</li>
+                <li>Go to account settings</li>
+                <li>Click "Change Password"</li>
+                <li>Enter current and new password</li>
+                <li>Click "Save" to confirm</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold">2. Two-Factor Authentication</h3>
+              <p className="mt-2 text-muted-foreground">
+                Enable 2FA for extra security:
+              </p>
+              <ul className="mt-2 space-y-2 list-disc pl-6">
+                <li>Go to account settings</li>
+                <li>Navigate to "Security" section</li>
+                <li>Click "Enable 2FA"</li>
+                <li>Set up with an authentication app</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
       </div>
     ),
   },
   'community': {
     title: 'Community Guidelines',
     content: (
+
       <div className="space-y-6">
         <div>
           <h3 className="text-xl font-semibold">1. Be Respectful</h3>
@@ -296,20 +357,24 @@ const Sidebar = ({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
         </ul>
       </div>
     </>
+
   );
 };
 
 const DocumentaryPage = () => {
   const searchParams = useSearchParams();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showMenuButton, setShowMenuButton] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
 
   const content = (searchParams.get("content") as ContentKey) || "getting-started";
   const activeContent = documentaryContent[content] || documentaryContent["getting-started"];
 
   useEffect(() => {
     const handleScroll = () => {
+
       if (window.scrollY > lastScrollY) {
         // If scrolling down, hide the menu button
         setShowMenuButton(false);
@@ -344,13 +409,16 @@ const DocumentaryPage = () => {
       <div className="md:ml-72 p-6 max-w-4xl w-full mx-auto pt-16">
         <h1 className="text-3xl font-bold">{activeContent.title}</h1>
         <div className="mt-4 text-lg">{activeContent.content}</div>
+
       </div>
     </div>
   );
 };
 
 const SuspenseWrapper = () => (
+
   <Suspense fallback={<div>Loading...</div>}>
+
     <DocumentaryPage />
   </Suspense>
 );

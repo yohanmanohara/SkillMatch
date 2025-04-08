@@ -9,7 +9,9 @@ import Container from "@/components/common/container";
 import Customerfeedback from "@/components/landing/customerfeedback";
 import {Contactus} from "@/components/landing/Getintouch";
 import LatestJobs from "@/components/LatestJobs/LatestJobs";
+
 import {TeamSection} from "@/components/common/CollaborationCard";
+
 const Page = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,6 +49,7 @@ const Page = () => {
       
 
       <Container>
+      <h2 className="text-2xl font-bold text-center mb-4">Top 5 Job Listings</h2>
         {loading ? <p>Loading jobs...</p> : <LatestJobs jobs={jobs} />}
       </Container>
 
@@ -62,6 +65,7 @@ const Page = () => {
       </div>
 
       <TeamSection /> 
+
       
       <Footer />
 

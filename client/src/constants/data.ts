@@ -72,7 +72,7 @@ export const navItem: NavItem[] = [//customer view
   },
   {
     title: 'Jobs',
-    href: '/employee/jobs',
+    href: '/jobs',
     icon: 'spinner',
     label: 'profile'
   },
@@ -110,35 +110,38 @@ export const navItemempy: NavItem[] = [//employer view
   },
  
   
- 
-
   {
-    title: 'Hiring',
-    subItems: [
-      { title: 'Jobs', href: '/employer/hiring/jobs' },
-      { title: 'Candidates', href: '/employer/hiring/candidates' },
-    ],
-   
-    icon: 'spinner',
-    
+
+    title: 'Jobs',
+    href: '/employer/hiring/jobs',
+    icon: 'post',
+    label: 'profile'
   },
+  {
+    title: 'Candidates',
+    href: '/employer/hiring/candidates',
+    icon: 'post',
+    label: 'profile'
+
+  },
+
 
   {
     title: 'Interviews',
     href: '/employer/interview',
-    icon: 'spinner',
+    icon: 'post',
     label: 'profile'
   },
   {
     title: 'Manage',
     href: '/employer/manage',
-    icon: 'spinner',
+    icon: 'employee',
     label: 'profile'
   },
   {
     title: 'Support',
     href: '/employer/support',
-    icon: 'media',
+    icon: 'spinner',
     label: 'profile'
   },
  
@@ -146,7 +149,7 @@ export const navItemempy: NavItem[] = [//employer view
   {
     title: 'Settings',
     href: '/employer/settings',
-    icon: 'car',
+    icon: 'profile',
     label: 'settings'
   },
  

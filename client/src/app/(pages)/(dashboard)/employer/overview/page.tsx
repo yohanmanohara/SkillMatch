@@ -1,5 +1,6 @@
 "use client";
 
+
 import React, { useState, useEffect } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,15 +10,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Trash } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 
+
 function Page() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("");
   const [notes, setNotes] = useState("");
   const [eventTitle, setEventTitle] = useState("");
+
   const [savedNotes, setSavedNotes] = useState<{ id?: number; date: Date | undefined; text: string }[]>([]);
   const [events, setEvents] = useState<{ date: Date | undefined; time: string; title: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const userId = sessionStorage.getItem("poop");
+
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -25,6 +29,7 @@ function Page() {
 
       try {
         const token = sessionStorage.getItem("token");
+
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/meeting_server/api/savenotes?userId=${userId}`, {
           method: "GET",
@@ -47,6 +52,7 @@ function Page() {
 
         setSavedNotes(formattedNotes);
       } catch (error: unknown) {
+
         if (error instanceof Error) {
           console.error("Error fetching notes:", error.message);
           toast({
@@ -62,6 +68,7 @@ function Page() {
             variant: "destructive",
           });
         }
+
       }
     };
 
@@ -69,6 +76,7 @@ function Page() {
   }, [userId]);
 
   const handleSaveNote = async () => {
+
     if (notes.trim() === "") return;
     if (!userId) {
       toast({

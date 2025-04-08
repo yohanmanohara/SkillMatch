@@ -36,7 +36,7 @@ export default function TabsDemo() {
   }
 
   const [user, setUser] = useState<User | null>(null);
-  const userId = sessionStorage.getItem('poop'); // Replace 'poop' with the correct session key.
+  const userId = sessionStorage.getItem('poop'); 
 
   useEffect(() => {
     const fetchUser = async () => {
