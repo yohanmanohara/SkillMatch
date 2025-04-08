@@ -18,7 +18,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Textarea } from "@/components/ui/textarea"
 export default function TabsDemo() {
@@ -34,9 +34,15 @@ export default function TabsDemo() {
     city: string;
     status: string;
   }
-
+  const[SelectedFile,setSelectedFile]=useState("");
   const [user, setUser] = useState<User | null>(null);
   const userId = sessionStorage.getItem('poop'); 
+  const [error,setError]=useState("");
+  const [uploaded, setuploaded] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [picture, setPicture] = useState("");
+  const previewUrl = "/avatadefault.jpg";
+  const [pictureurl, setpictureurl] =useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -106,9 +112,64 @@ export default function TabsDemo() {
       
     }
   };
+  const checkImageDimensions = (file: File): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        resolve(img.width === 826 && img.height === 826);
+      };
+      img.onerror = () => resolve(false);
+      img.src = URL.createObjectURL(file);
+    });
+  };
+  const  handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+  
+    if (!file) return;
+  
+    const validTypes = ["image/png", "image/jpeg"];
+  
+    if (!validTypes.includes(file.type)) {
+      toast({
+        title: "Error",
+        description: "Only PNG and JPEG files are allowed.",
+      });
+  
+      // setSelectedFile(null);
+      // handleClear();
+      return;
+    }
+  
+    const isValidSize = await checkImageDimensions(file);
+    if (!isValidSize) {
+      setError("Image must be exactly 826×826 pixels.");
+      toast({
+        title: "File requirements",
+        description: "Image must be exactly 826×826 pixels.",
+      });
+      
+      handleClear();
+      return;
+    }
+  
+    const reader = new FileReader();
+    reader.onloadend = () => {
+    };
+    reader.readAsDataURL(file);
+  
+    // setSelectedFile(file);
+    setPicture(URL.createObjectURL(file));
+  };
 
+  const handleClear = () => { 
 
-
+    setPicture("");
+    // setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setuploaded(false);
+  }
 
   const haddlepasswordupdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -170,9 +231,13 @@ export default function TabsDemo() {
           <Card>
             <CardHeader>
               <CardTitle>Edit Your User Details</CardTitle>
-              <Avatar className="rounded-full h-[100px] w-[100px] overflow-hidden">
-                <AvatarImage src="/avatadefault.jpg" alt="User Avatar" />
-              </Avatar>
+              <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
+                <AvatarImage src={picture ? picture : previewUrl} alt="User Avatar" />
+               </Avatar>
+               <Input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} />
+
+
+
               <CardDescription>
                 Make changes to your account here. Click save when you&apos;re done.
               </CardDescription>
