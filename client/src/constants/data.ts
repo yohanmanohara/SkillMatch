@@ -2,6 +2,7 @@ import { NavItemadmin, NavItem, } from '@/types';
 import { on } from 'events';
 
 export type User = {
+  userPicUrl: string | undefined;
   _id: string;
   username: string;
   email: string;

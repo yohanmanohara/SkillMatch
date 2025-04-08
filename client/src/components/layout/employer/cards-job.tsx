@@ -17,7 +17,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 import EditJobDialog from "@/components/layout/employer/edit-job-dialog";
 
@@ -334,8 +334,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
           <EditJobDialog
             job={job}
             onSave={handleSave}
-            onClose={() => setIsEditDialogOpen(false)}
-          />
+            onClose={() => setIsEditDialogOpen(false)} isOpen={false}          />
 
           {/* Ensure DialogTitle is present for accessibility */}
           <DialogTitle>Edit Job</DialogTitle>

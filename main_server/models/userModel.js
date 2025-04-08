@@ -9,6 +9,10 @@ const userSchema = new Schema({
     autoIncrement: true,
     unique: true
   },
+  userPicUrl: {
+    type: String,
+    required: false,
+  },
  
   email: {
     type: String,
