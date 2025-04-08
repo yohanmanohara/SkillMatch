@@ -1,45 +1,27 @@
 "use client";
 
+
 import React, { useState, useEffect } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Trash, Plus, Loader2, Calendar as CalendarIcon, Clock } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Trash } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
-type Note = {
-  id?: number;
-  date: Date | undefined;
-  text: string;
-};
-
-type Event = {
-  date: Date | undefined;
-  time: string;
-  title: string;
-};
 
 function Page() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("");
   const [notes, setNotes] = useState("");
   const [eventTitle, setEventTitle] = useState("");
-  const [savedNotes, setSavedNotes] = useState<Note[]>([]);
-  const [events, setEvents] = useState<Event[]>([]);
+
+  const [savedNotes, setSavedNotes] = useState<{ id?: number; date: Date | undefined; text: string }[]>([]);
+  const [events, setEvents] = useState<{ date: Date | undefined; time: string; title: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(false);
-  const userId = sessionStorage.getItem("userId");
+  const userId = sessionStorage.getItem("poop");
+
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -48,16 +30,14 @@ function Page() {
       try {
         const token = sessionStorage.getItem("token");
 
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/meeting_server/api/savenotes?userId=${userId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/meeting_server/api/savenotes?userId=${userId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch notes");
@@ -72,12 +52,23 @@ function Page() {
 
         setSavedNotes(formattedNotes);
       } catch (error: unknown) {
-        console.error("Error fetching notes:", error);
-        toast({
-          title: "Error",
-          description: error instanceof Error ? error.message : "Failed to load saved notes.",
-          variant: "destructive",
-        });
+
+        if (error instanceof Error) {
+          console.error("Error fetching notes:", error.message);
+          toast({
+            title: "Error",
+            description: error.message || "Failed to load saved notes.",
+            variant: "destructive",
+          });
+        } else {
+          console.error("Unexpected error:", error);
+          toast({
+            title: "Error",
+            description: "An unknown error occurred while fetching notes.",
+            variant: "destructive",
+          });
+        }
+
       }
     };
 
@@ -85,15 +76,8 @@ function Page() {
   }, [userId]);
 
   const handleSaveNote = async () => {
-    if (notes.trim() === "") {
-      toast({
-        title: "Warning",
-        description: "Note cannot be empty",
-        variant: "default",
-      });
-      return;
-    }
 
+    if (notes.trim() === "") return;
     if (!userId) {
       toast({
         title: "Error",
@@ -107,108 +91,110 @@ function Page() {
 
     try {
       const token = sessionStorage.getItem("token");
+
       const noteData = {
         notes: notes,
         date: date?.toISOString(),
         userId: userId,
       };
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/meeting_server/api/savenotes`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(noteData),
-        }
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/meeting_server/api/savenotes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(noteData),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to save note");
       }
 
       const savedNote = await response.json();
+
       setSavedNotes([...savedNotes, { id: savedNote.id, date, text: notes }]);
+
       setNotes("");
-      
       toast({
         title: "Success",
         description: "Note saved successfully.",
       });
     } catch (error: unknown) {
-      console.error("Error saving note:", error);
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to save note.",
-        variant: "destructive",
-      });
+      if (error instanceof Error) {
+        console.error("Error saving note:", error.message);
+        toast({
+          title: "Error",
+          description: error.message || "Failed to save note.",
+          variant: "destructive",
+        });
+      } else {
+        console.error("Unexpected error:", error);
+        toast({
+          title: "Error",
+          description: "An unknown error occurred while saving the note.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleDeleteNote = async (noteId: number) => {
+  const handleDeleteNote = async (index: number) => {
+    const noteToDelete = savedNotes[index];
+
     try {
       const token = sessionStorage.getItem("token");
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/meeting_server/api/savenotes/${noteId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+
+      console.log("Attempting to delete note:", noteToDelete);
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/meeting_server/api/savenotes/${noteToDelete.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const responseBody = await response.text();
+      console.log("Delete response status:", response.status);
+      console.log("Delete response body:", responseBody);
 
       if (!response.ok) {
-        throw new Error(`Failed to delete note: ${await response.text()}`);
+        throw new Error(`Failed to delete note: ${responseBody}`);
       }
 
-      setSavedNotes(savedNotes.filter(note => note.id !== noteId));
+      setSavedNotes(savedNotes.filter((_, i) => i !== index));
+
       toast({
         title: "Success",
         description: "Note deleted successfully.",
       });
     } catch (error: unknown) {
-      console.error("Error deleting note:", error);
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to delete note.",
-        variant: "destructive",
-      });
+      if (error instanceof Error) {
+        console.error("Error deleting note:", error.message);
+        toast({
+          title: "Error",
+          description: error.message || "Failed to delete note.",
+          variant: "destructive",
+        });
+      } else {
+        console.error("Unexpected error:", error);
+        toast({
+          title: "Error",
+          description: "An unknown error occurred while deleting the note.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
   const handleAddEvent = () => {
-    if (eventTitle.trim() === "") {
-      toast({
-        title: "Warning",
-        description: "Event title cannot be empty",
-        variant: "default",
-      });
-      return;
-    }
-
-    if (time.trim() === "") {
-      toast({
-        title: "Warning",
-        description: "Please select a time for your event",
-        variant: "default",
-      });
-      return;
-    }
-
+    if (eventTitle.trim() === "" || time.trim() === "") return;
     setEvents([...events, { date, time, title: eventTitle }]);
     setEventTitle("");
     setTime("");
-    
-    toast({
-      title: "Event Added",
-      description: "Your event has been scheduled",
-    });
   };
 
   const handleDeleteEvent = (index: number) => {
@@ -216,182 +202,71 @@ function Page() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Schedule & Notes</h1>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Calendar Section */}
-        <Card className="p-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CalendarIcon className="w-5 h-5" />
-              Calendar
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Calendar 
-              mode="single" 
-              selected={date} 
-              onSelect={setDate} 
-              className="rounded-md border"
-            />
-          </CardContent>
-        </Card>
+    <>
+      <div className="flex gap-6 mt-4 mb-10">
+        <div className="rounded-md border w-fit p-4">
+          <Calendar mode="single" selected={date} onSelect={setDate} />
+        </div>
 
-        {/* Events Section */}
-        <Card className="p-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="w-5 h-5" />
-              Schedule Event
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Input 
-              placeholder="Event Title" 
-              value={eventTitle} 
-              onChange={(e) => setEventTitle(e.target.value)}
-              className="w-full"
-            />
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="relative">
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
-                  )}
-                  onClick={() => setShowCalendar(!showCalendar)}
-                >
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
-                </Button>
-                {showCalendar && (
-                  <div className="absolute z-10 mt-1 bg-white border rounded-md shadow-lg">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={(selectedDate) => {
-                        setDate(selectedDate);
-                        setShowCalendar(false);
-                      }}
-                      initialFocus
-                    />
-                  </div>
-                )}
-              </div>
-
-              <Select onValueChange={setTime} value={time}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select time" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Array.from({ length: 24 }).map((_, i) => {
-                    const hour = i % 12 || 12;
-                    const ampm = i < 12 ? "AM" : "PM";
-                    const timeValue = `${i.toString().padStart(2, '0')}:00`;
-                    return (
-                      <SelectItem key={i} value={timeValue}>
-                        {`${hour}:00 ${ampm}`}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <Button 
-              onClick={handleAddEvent}
-              className="w-full"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Event
-            </Button>
-          </CardContent>
+        <div className="rounded-md border w-fit p-4 flex-1">
+          <h2 className="text-lg font-semibold mb-2">Add Event</h2>
+          <Input placeholder="Event Title" value={eventTitle} onChange={(e) => setEventTitle(e.target.value)} />
+          <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="mt-2" />
+          <Button className="mt-2" onClick={handleAddEvent}>
+            Add Event
+          </Button>
 
           {events.length > 0 && (
-            <CardFooter className="flex flex-col items-start gap-2 pt-6">
-              <h3 className="text-lg font-semibold">Scheduled Events</h3>
-              <div className="w-full space-y-2">
-                {events.map((event, index) => (
-                  <Card key={index} className="flex justify-between items-center p-3">
-                    <CardContent className="p-3 flex-1">
-                      <p className="font-medium">{event.title}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {event.date?.toDateString()} at {event.time}
-                      </p>
-                    </CardContent>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      onClick={() => handleDeleteEvent(index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <Trash className="w-4 h-4" />
-                    </Button>
-                  </Card>
-                ))}
-              </div>
-            </CardFooter>
-          )}
-        </Card>
-      </div>
-
-      {/* Notes Section */}
-      <Card className="mt-8 p-6">
-        <CardHeader>
-          <CardTitle>Notes</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Textarea 
-            placeholder="Write your notes here..." 
-            value={notes} 
-            onChange={(e) => setNotes(e.target.value)} 
-            className="min-h-[150px]"
-          />
-          <Button 
-            onClick={handleSaveNote} 
-            disabled={isLoading}
-            className="w-full sm:w-auto"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              "Save Note"
-            )}
-          </Button>
-        </CardContent>
-
-        {savedNotes.length > 0 && (
-          <CardFooter className="flex flex-col items-start gap-2 pt-6">
-            <h3 className="text-lg font-semibold">Saved Notes</h3>
-            <div className="w-full space-y-2">
-              {savedNotes.map((note, index) => (
-                <Card key={note.id || index} className="flex justify-between items-center p-3">
-                  <CardContent className="p-3 flex-1">
-                    <p className="font-medium">{note.text}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {note.date?.toDateString()}
+            <div className="mt-4">
+              <h3 className="text-md font-semibold mb-2">Scheduled Events</h3>
+              {events.map((event, index) => (
+                <Card key={index} className="mb-2 flex justify-between items-center p-3">
+                  <CardContent className="flex-1">
+                    <p className="text-sm text-gray-600">
+                      <strong>Date:</strong> {event.date?.toDateString()}
                     </p>
+                    <p className="text-sm text-gray-600">
+                      <strong>Time:</strong> {event.time}
+                    </p>
+                    <p>{event.title}</p>
                   </CardContent>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={() => note.id && handleDeleteNote(note.id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
+                  <Button variant="outline" size="icon" className="ml-2 text-red-500 hover:text-red-700" onClick={() => handleDeleteEvent(index)}>
                     <Trash className="w-4 h-4" />
                   </Button>
                 </Card>
               ))}
             </div>
-          </CardFooter>
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-col border rounded-md p-4 w-full">
+        <h2 className="text-lg font-semibold mb-2">Employer Notes</h2>
+        <Textarea placeholder="Write notes here..." value={notes} onChange={(e) => setNotes(e.target.value)} className="h-32" />
+        <Button className="mt-2" onClick={handleSaveNote} disabled={isLoading}>
+          {isLoading ? "Saving..." : "Save Note"}
+        </Button>
+
+        {savedNotes.length > 0 && (
+          <div className="mt-4">
+            <h3 className="text-md font-semibold mb-2">Saved Notes</h3>
+            {savedNotes.map((note, index) => (
+              <Card key={index} className="mb-2 flex justify-between items-center p-3">
+                <CardContent className="flex-1">
+                  <p className="text-sm text-gray-600">
+                    <strong>Date:</strong> {note.date?.toDateString()}
+                  </p>
+                  <p>{note.text}</p>
+                </CardContent>
+                <Button variant="outline" size="icon" className="ml-2 text-red-500 hover:text-red-700" onClick={() => handleDeleteNote(index)}>
+                  <Trash className="w-4 h-4" />
+                </Button>
+              </Card>
+            ))}
+          </div>
         )}
-      </Card>
-    </div>
+      </div>
+    </>
   );
 }
 

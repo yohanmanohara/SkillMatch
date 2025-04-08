@@ -10,6 +10,7 @@ import Customerfeedback from "@/components/landing/customerfeedback";
 import {Contactus} from "@/components/landing/Getintouch";
 import LatestJobs from "@/components/LatestJobs/LatestJobs";
 
+import {TeamSection} from "@/components/common/CollaborationCard";
 
 const Page = () => {
   const [jobs, setJobs] = useState([]);
@@ -63,7 +64,7 @@ const Page = () => {
 
       </div>
 
-      
+      <TeamSection /> 
 
       
       <Footer />

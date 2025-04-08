@@ -26,23 +26,25 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-interface Job {
-  _id: string;
-  title: string;
-  location: string;
-  companyname: string;
-  salaryMin: string;
-  posted: string;
-  expirienceduration: string;
-  expiredate: string;
-  educationlevel: string;
-  requirements: string;
-  benefits: string;
-  desirable: string;
-  description: string[];
-  employmentTypes: string[];
-  pictureurl: string;
-}
+
+const JobListingPage = () => {
+  interface Job {
+    _id: string;
+    title: string;
+    location: string;
+    companyname: string;
+    salaryMin: string;
+    posted: string;
+    expirienceduration: string;
+    expiredate: string;
+    educationlevel: string;
+    requirements: string;
+    benefits: string;
+    desirable: string;
+    description: string[];
+    employmentTypes: string[];
+    pictureurl: string;
+  }
 
 const JobListingPage = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -211,50 +213,15 @@ const JobListingPage = () => {
         </Sheet>
       </div>
 
-      {/* Desktop Sidebar */}
-      <div className="hidden md:block pt-6 w-72 pl-6">
-        <Card className="sticky top-24 p-6 space-y-8">
-          <h3 className="text-lg font-bold">Filters</h3>
-          
-          <FilterSection 
-            title="Employment Type"
-            options={allEmploymentTypes}
-            selected={employmentTypes}
-            onChange={setEmploymentTypes}
-          />
-          
-          <Separator />
-          
-          <FilterSection 
-            title="Experience Level"
-            options={allExperienceLevels}
-            selected={experienceLevels}
-            onChange={setExperienceLevels}
-          />
-          
-          <Separator />
-          
-          <div className="space-y-3">
-            <h4 className="text-sm font-medium">Salary Range (per year)</h4>
-            <div className="flex items-center gap-3">
-              <Input 
-                type="number" 
-                placeholder="Min" 
-                value={salaryRange[0]}
-                onChange={(e) => setSalaryRange([parseInt(e.target.value) || 0, salaryRange[1]])}
-                className="h-9"
-              />
-              <span className="text-muted-foreground">to</span>
-              <Input 
-                type="number" 
-                placeholder="Max" 
-                value={salaryRange[1]}
-                onChange={(e) => setSalaryRange([salaryRange[0], parseInt(e.target.value) || 100000])}
-                className="h-9"
-              />
-            </div>
-          </div>
-        </Card>
+
+      <div className="grid gap-4">
+        {currentJobs.length > 0 ? (
+          currentJobs.map((job, index) => (
+            <JobCard key={job._id || index } job={job} />
+          ))
+        ) : (
+          <p className="text-gray-500 text-center">No jobs found.</p>
+        )}
       </div>
 
       {/* Main Content */}

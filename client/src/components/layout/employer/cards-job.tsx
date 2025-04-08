@@ -16,7 +16,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";  // Import DialogTitle for accessibility
+
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+
 import EditJobDialog from "@/components/layout/employer/edit-job-dialog";
 
 interface JobCardProps {
@@ -66,6 +68,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
         }
       );
 
+
       if (!res.ok) throw new Error("Failed to delete the job");
       onDelete(job._id);
     } catch (error) {
@@ -92,6 +95,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+
 
   const getTimeRemaining = (expireDate: string) => {
     const today = new Date();
@@ -143,8 +147,9 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
             </div>
           </div>
 
-          <Badge variant="secondary" className="h-10">{formatSalary()}</Badge>
-          
+
+           <Badge variant="secondary" className="h-10">{formatSalary()}</Badge>
+
           <div className="mt-6 w-full space-y-2">
             <Button 
               variant="outline" 
@@ -325,12 +330,20 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[700px]">
+
+          <EditJobDialog
+            job={job}
+            onSave={handleSave}
+            onClose={() => setIsEditDialogOpen(false)}
+          />
+
           {/* Ensure DialogTitle is present for accessibility */}
           <DialogTitle>Edit Job</DialogTitle>
           <EditJobDialog
             job={job}
             onSave={handleSave}
             onClose={() => setIsEditDialogOpen(false)} isOpen={false}          />
+
         </DialogContent>
       </Dialog>
 

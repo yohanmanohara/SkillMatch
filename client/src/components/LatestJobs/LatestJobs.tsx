@@ -29,7 +29,9 @@ const TopJobs: React.FC<TopJobsProps> = ({ jobs }) => {
      
       <div className="grid gap-4">
         {topJobs.map((job, index) => (
-          <JobCard key={job._id || index} job={job} /> 
+
+          <JobCard key={job._id || index} job={job} /> // fallback to job.title if id is undefined
+
         ))}
       </div>
     </div>
