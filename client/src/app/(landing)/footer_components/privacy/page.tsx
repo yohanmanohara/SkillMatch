@@ -1,14 +1,10 @@
-'use client';
-
-import React from 'react';
-
-const Privacy = () => {
+export default function Page() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#92EDAD] text-black p-6">
-      <h1 className="text-3xl font-bold mb-4">Privacy Policy</h1>
-      <p className="text-lg">We value your privacy. Read our policy to understand how we handle data.</p>
+    <div className="bg-[#92EDAD] min-h-screen flex flex-col items-center justify-center p-8">
+      <h1 className="text-4xl font-bold mb-4">Privacy Policy</h1>
+      <p className="text-lg text-gray-700 text-center max-w-2xl">
+        Understand how we handle and protect your personal information.
+      </p>
     </div>
   );
-};
-
-export default Privacy;
+}

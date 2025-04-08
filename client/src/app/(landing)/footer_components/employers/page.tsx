@@ -1,14 +1,10 @@
-'use client';
-
-import React from 'react';
-
-const Employers = () => {
+export default function Page() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#92EDAD] text-black p-6">
-      <h1 className="text-3xl font-bold mb-4">Employers</h1>
-      <p className="text-lg">Welcome to the Employers page! Here, you can find details about hiring and recruitment.</p>
+    <div className="bg-[#92EDAD] min-h-screen flex flex-col items-center justify-center p-8">
+      <h1 className="text-4xl font-bold mb-4">Employers</h1>
+      <p className="text-lg text-gray-700 text-center max-w-2xl">
+        Discover and connect with top candidates for your open roles.
+      </p>
     </div>
   );
-};
-
-export default Employers;
+}

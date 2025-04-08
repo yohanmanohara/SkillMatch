@@ -28,21 +28,45 @@ const Page: React.FC<PageProps> = ({ page }) => {
       title: 'Candidates',
       description: 'Discover job opportunities and connect with top employers on our platform.',
     },
+    success: {
+      title: 'Success Stories',
+      description: 'Read real stories from candidates and companies who found the perfect match on SkillMatch.',
+    },
     support: {
-      title: 'Customer Support',
+      title: 'Help Center',
       description: 'Need help? Our support team is here to assist you with any inquiries.',
     },
-    documentation: {
-      title: 'Documentation',
-      description: 'Find guides, API references, and tutorials to help you navigate our platform.',
+    docs: {
+      title: 'API Documentation',
+      description: 'Find guides, API references, and tutorials to help you integrate with our platform.',
+    },
+    community: {
+      title: 'Community',
+      description: 'Join our growing community to share, learn, and collaborate with others in the industry.',
+    },
+    about: {
+      title: 'About Us',
+      description: 'Learn more about SkillMatch, our mission, and our journey so far.',
+    },
+    careers: {
+      title: 'Careers',
+      description: 'We’re hiring! Explore open roles and become a part of our dynamic team.',
+    },
+    blog: {
+      title: 'Blog',
+      description: 'Get the latest updates, tips, and insights from our team and community.',
+    },
+    privacy: {
+      title: 'Privacy Policy',
+      description: 'Learn how we collect, use, and protect your personal information.',
     },
     terms: {
       title: 'Terms of Service',
       description: 'Review our terms and conditions to understand the use of our services.',
     },
-    privacy: {
-      title: 'Privacy Policy',
-      description: 'Learn how we collect, use, and protect your personal information.',
+    cookies: {
+      title: 'Cookie Policy',
+      description: 'Understand how we use cookies to enhance your experience.',
     },
   };
 

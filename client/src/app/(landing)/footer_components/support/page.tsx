@@ -1,14 +1,10 @@
-'use client';
-
-import React from 'react';
-
-const Support = () => {
+export default function Page() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#92EDAD] text-black p-6">
-      <h1 className="text-3xl font-bold mb-4">Customer Support</h1>
-      <p className="text-lg">Need help? Our support team is here to assist you with any queries.</p>
+    <div className="bg-[#92EDAD] min-h-screen flex flex-col items-center justify-center p-8">
+      <h1 className="text-4xl font-bold mb-4">Help Center</h1>
+      <p className="text-lg text-gray-700 text-center max-w-2xl">
+        Need help? Our team is here to support you with anything you need.
+      </p>
     </div>
   );
-};
-
-export default Support;
+}
