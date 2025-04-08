@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react"; 
 import {
   Tabs,
   TabsContent,
@@ -33,16 +34,94 @@ export default function TabsDemo() {
     country: string;
     city: string;
     status: string;
+    userPicUrl: string;
   }
-  const[SelectedFile,setSelectedFile]=useState("");
   const [user, setUser] = useState<User | null>(null);
   const userId = sessionStorage.getItem('poop'); 
   const [error,setError]=useState("");
   const [uploaded, setuploaded] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [picture, setPicture] = useState("");
+  const [userpicture, setuserPicture] = useState("");
   const previewUrl = "/avatadefault.jpg";
   const [pictureurl, setpictureurl] =useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleFileUpload = async () => {
+    setLoading(true);
+  
+    if (!selectedFile) {
+      toast({
+        title: "File requirements",
+        description: "select file to upload",
+      });
+      setLoading(false);
+      return;
+    }
+  
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(selectedFile.type)) {
+      toast({
+        title: "File requirements",
+        description: "Only JPG and PNG files are allowed.",
+      });
+      setLoading(false);
+      return;
+    }
+  
+
+    const isValidSize = await checkImageDimensions(selectedFile);
+    if (!isValidSize) {
+      setError("Image must be exactly 826×826 pixels.");
+      toast({
+        title: "File requirements",
+        description: "Image must be exactly 826×826 pixels..",
+      });
+      setLoading(false);
+      return;
+    }
+  
+    const formDataUpload = new FormData();
+    formDataUpload.append("file", selectedFile);
+  
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/file/fileupload/?id=${userId}`,
+        {
+          method: "POST",
+          body: formDataUpload,
+        }
+      );
+      const data = await response.json();
+  
+      if (response.ok) {
+        setuserPicture(data.url);
+        setuploaded(true);
+        setLoading(false);
+        
+        // setFormData((prevData) => ({ ...prevData, pictureurl: data.url }));
+        setpictureurl(data.url);
+        toast({
+          title: "File uploaded",
+          description: "File uploaded successfully.",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: data.error || "Failed to upload file.",
+        });
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast({
+        title: "Error",
+        description: "Failed to upload file.",
+      });
+      setLoading(false);
+    }
+  };
+  
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -53,6 +132,8 @@ export default function TabsDemo() {
           });
           const data = await res.json();
           setUser(data);
+          setuserPicture(data.userPicUrl);
+         
         } catch (error) {
           console.error("Failed to fetch user:", error);
         }
@@ -60,15 +141,15 @@ export default function TabsDemo() {
     };
     fetchUser();
   }, [userId]);
+
   const router = useRouter();  
 
   const handleProfile = async (e: React.FormEvent<HTMLFormElement>) => {
+    
     e.preventDefault();
     
-  
     try {
       const formData = new FormData(e.currentTarget);
-  
       const updatedUser = {
         username: formData.get('username'),
         email: formData.get('email'),
@@ -78,9 +159,10 @@ export default function TabsDemo() {
         country: formData.get('country'),
         city: formData.get('city'),
         status: formData.get('status'),
+        userPicUrl: pictureurl,
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updateusser/?id=${userId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updateuser/?id=${userId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -96,8 +178,6 @@ export default function TabsDemo() {
           description:errorData.error || "Failed to update user. Please try again..",
         });
       }
-  
-  
       router.refresh();
       window.location.reload();
       toast({
@@ -112,6 +192,7 @@ export default function TabsDemo() {
       
     }
   };
+  
   const checkImageDimensions = (file: File): Promise<boolean> => {
     return new Promise((resolve) => {
       const img = new Image();
@@ -122,6 +203,7 @@ export default function TabsDemo() {
       img.src = URL.createObjectURL(file);
     });
   };
+
   const  handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
   
@@ -135,8 +217,8 @@ export default function TabsDemo() {
         description: "Only PNG and JPEG files are allowed.",
       });
   
-      // setSelectedFile(null);
-      // handleClear();
+      setSelectedFile(null);
+      handleClear();
       return;
     }
   
@@ -157,19 +239,23 @@ export default function TabsDemo() {
     };
     reader.readAsDataURL(file);
   
-    // setSelectedFile(file);
-    setPicture(URL.createObjectURL(file));
+    setSelectedFile(file);
+    setuserPicture(URL.createObjectURL(file));
   };
+
+
 
   const handleClear = () => { 
 
-    setPicture("");
-    // setSelectedFile(null);
+    setuserPicture("");
+    setSelectedFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
     setuploaded(false);
   }
+
+
 
   const haddlepasswordupdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -232,16 +318,29 @@ export default function TabsDemo() {
             <CardHeader>
               <CardTitle>Edit Your User Details</CardTitle>
               <Avatar className="rounded-full h-[120px] w-[120px] overflow-hidden">
-                <AvatarImage src={picture ? picture : previewUrl} alt="User Avatar" />
+                <AvatarImage src={userpicture ? user?.userPicUrl || previewUrl : previewUrl} alt="User Avatar" />
                </Avatar>
                <Input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} />
-
-
-
               <CardDescription>
                 Make changes to your account here. Click save when you&apos;re done.
               </CardDescription>
             </CardHeader>
+            <div className="flex pl-10 gap-5"> 
+        <Button variant="secondary" onClick={handleFileUpload} >
+        {loading ? (
+        <Loader2 className="animate-spin w-5 h-5" />
+      ) : uploaded ? (
+        "Need Tochage Uploaded picture"
+      ) : (
+        "Upload"
+      )}
+      </Button> 
+      <Button onClick={handleClear} variant="outline">
+          Clear
+        </Button>
+      </div>
+     
+            
 
             <form onSubmit={handleProfile}>
               <CardContent className="space-y-2">

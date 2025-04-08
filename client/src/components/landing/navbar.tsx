@@ -19,6 +19,7 @@ const NavigationBar = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [roled, setRoled] = useState<string | null>(null);
+  const [userPicture, setuserPicture] = useState<string | null>(null);
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedUserId = sessionStorage.getItem('poop');
@@ -41,6 +42,7 @@ const NavigationBar = () => {
         });
         const data = await res.json();
         setUser(data);
+        setuserPicture(data.userPicUrl);
       }
     };
 
@@ -86,11 +88,11 @@ const NavigationBar = () => {
                         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                           <Avatar>
                             <AvatarImage
-                              src="/avatadefault.jpg"
-                              alt="User Avatar"
-                              width={24}
-                              height={24}
-                            />
+                               src={userPicture ? user?.userPicUrl : "/avatadefault.jpg"}
+                               alt="User Avatar"
+                               width={24}  // Use exact sizes for consistency
+                               height={24}
+                           />
                           </Avatar>
                         </Button>
                       </DropdownMenuTrigger>
