@@ -9,9 +9,7 @@ const PORT = process.env.PORT || 3001;
 const client = 'http://localhost:3000';
 const api_gateway = 'http://api_gateway:3001';
 const main_server = 'http://main_server:3002';
-const meeting_server = 'http://meeting_server:3003';
-const headhunting_server = 'http://localhost:5000';
-const job_suggestion_server = 'http://localhost:5001';
+const flask_server = 'http://localhost:5000';
 
 
 
@@ -33,29 +31,14 @@ app.use('/main_server', createProxyMiddleware({
   },
 }));
 
-app.use('/meeting_server', createProxyMiddleware({
-  target: meeting_server,
+app.use('/flask_server', createProxyMiddleware({
+  target: flask_server,
   changeOrigin: true,
   pathRewrite: {
-    '^/meeting_server': '', 
+    '^/flask_server': '', 
   },
 }));
 
-app.use('/headhunting_server', createProxyMiddleware({
-  target: headhunting_server,
-  changeOrigin: true,
-  pathRewrite: {
-    '^/headhunting_server': '', 
-  },
-}));
-
-app.use('/job_suggestion_server', createProxyMiddleware({
-  target: job_suggestion_server,
-  changeOrigin: true,
-  pathRewrite: {
-    '^/job_suggestion_server': '', 
-  },
-}));
 
 
 app.listen(PORT, () => {
