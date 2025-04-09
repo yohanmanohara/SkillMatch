@@ -50,7 +50,7 @@ const Footer = () => {
       title: 'Resources',
       links: [
         { name: 'Help Center', href: '/support', id: 'support' },
-        { name: 'API Docs', href: '/docs', id: 'docs' },
+        { name: 'API Docs', href: '/documentation', id: 'docs' },  // <- updated
         { name: 'Community', href: '/community', id: 'community' },
       ],
     },
@@ -94,7 +94,7 @@ const Footer = () => {
             <p className="text-gray-400 text-sm leading-relaxed">
               Revolutionizing talent acquisition through AI-powered matching technology.
             </p>
-            
+
             {/* Social Media */}
             <div className="flex space-x-4 pt-2">
               {socialMedia.map((social, index) => (
@@ -163,7 +163,7 @@ const Footer = () => {
             <h3 className="text-lg font-medium text-gray-300 tracking-wider">
               Stay Updated
             </h3>
-            
+
             {isSubscribed ? (
               <div className="p-4 rounded-lg bg-gradient-to-r from-[#92EDAD]/10 to-[#4CAF50]/10 border border-[#92EDAD]/20">
                 <div className="flex items-center">
