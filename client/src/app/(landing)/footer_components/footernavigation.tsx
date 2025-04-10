@@ -28,10 +28,9 @@ const Page: React.FC<PageProps> = ({ page }) => {
       title: 'Candidates',
       description: 'Discover job opportunities and connect with top employers on our platform.',
     },
-
     success: {
       title: 'Success Stories',
-      description: 'Read real stories from candidates and companies who found the perfect match on SkillMatch.',
+      description: 'Explore stories of successful matches between employers and candidates.',
     },
     support: {
       title: 'Help Center',
@@ -39,38 +38,35 @@ const Page: React.FC<PageProps> = ({ page }) => {
     },
     docs: {
       title: 'API Documentation',
-      description: 'Find guides, API references, and tutorials to help you integrate with our platform.',
+      description: 'Find guides, API references, and tutorials to help you integrate and use our platform.',
     },
     community: {
       title: 'Community',
-      description: 'Join our growing community to share, learn, and collaborate with others in the industry.',
+      description: 'Join our vibrant community to connect, learn, and grow together.',
     },
     about: {
       title: 'About Us',
-      description: 'Learn more about SkillMatch, our mission, and our journey so far.',
+      description: 'Learn more about our mission, values, and the team behind SkillMatch.',
     },
     careers: {
       title: 'Careers',
-      description: 'We’re hiring! Explore open roles and become a part of our dynamic team.',
+      description: 'Join our team and help shape the future of job matching and recruitment.',
     },
     blog: {
       title: 'Blog',
-      description: 'Get the latest updates, tips, and insights from our team and community.',
-    },
-    privacy: {
-      title: 'Privacy Policy',
-      description: 'Learn how we collect, use, and protect your personal information.',
-
+      description: 'Read insights, news, and updates from the SkillMatch team.',
     },
     terms: {
       title: 'Terms of Service',
       description: 'Review our terms and conditions to understand the use of our services.',
     },
-
+    privacy: {
+      title: 'Privacy Policy',
+      description: 'Learn how we collect, use, and protect your personal information.',
+    },
     cookies: {
       title: 'Cookie Policy',
-      description: 'Understand how we use cookies to enhance your experience.',
-
+      description: 'Understand how we use cookies and how they impact your experience.',
     },
   };
 

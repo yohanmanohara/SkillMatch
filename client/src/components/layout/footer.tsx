@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -8,6 +8,11 @@ const Footer = () => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [year, setYear] = useState<number | null>(null);
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -216,7 +221,7 @@ const Footer = () => {
             </Link>
           </div>
           <div>
-            <p>© {new Date().getFullYear()} SkillMatch. All rights reserved.</p>
+            <p>© {year ?? '...'} SkillMatch. All rights reserved.</p>
           </div>
         </div>
       </div>
