@@ -64,8 +64,7 @@ const Page = () => {
 
       </div>
 
-      <TeamSection /> 
-
+      
       
       <Footer />
 
