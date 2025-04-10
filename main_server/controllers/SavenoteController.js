@@ -1,4 +1,4 @@
-const SavenoteModel = require('../Models/Savenote');
+const SavenoteModel = require('../models/Savenote');
 const BaseController = require('./BaseController');
 
 class SavenoteController extends BaseController {
