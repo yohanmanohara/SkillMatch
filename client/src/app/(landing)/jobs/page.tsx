@@ -15,7 +15,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useRouter } from "next/navigation";
-import { SlidersHorizontal, Search, Loader2 } from "lucide-react";
+import { SlidersHorizontal, Search, Loader2, X } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -26,25 +26,23 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-
-const JobListingPage = () => {
-  interface Job {
-    _id: string;
-    title: string;
-    location: string;
-    companyname: string;
-    salaryMin: string;
-    posted: string;
-    expirienceduration: string;
-    expiredate: string;
-    educationlevel: string;
-    requirements: string;
-    benefits: string;
-    desirable: string;
-    description: string[];
-    employmentTypes: string[];
-    pictureurl: string;
-  }
+interface Job {
+  _id: string;
+  title: string;
+  location: string;
+  companyname: string;
+  salaryMin: string;
+  posted: string;
+  expirienceduration: string;
+  expiredate: string;
+  educationlevel: string;
+  requirements: string;
+  benefits: string;
+  desirable: string;
+  description: string[];
+  employmentTypes: string[];
+  pictureurl: string;
+}
 
 const JobListingPage = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -131,6 +129,12 @@ const JobListingPage = () => {
   const handleNext = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
   const handlePrevious = () => currentPage > 1 && setCurrentPage(currentPage - 1);
 
+  const clearAllFilters = () => {
+    setEmploymentTypes([]);
+    setExperienceLevels([]);
+    setSalaryRange([0, 100000]);
+  };
+
   if (loading) return (
     <div className="flex justify-center items-center h-screen">
       <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -154,84 +158,12 @@ const JobListingPage = () => {
 
   return (
     <>
-  
-    <Navbar />  
-    <div className="flex pt-20 md:pt-24 md:p-44 ">
-   
-      <div className="md:hidden right-6 z-50">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button 
-              variant="default" 
-              size="icon" 
-              className="rounded-full shadow-lg h-12 w-12"  
-            >
-              <SlidersHorizontal className="h-5 w-5" />
-            </Button>
-          </SheetTrigger>
-          
-          <SheetContent side="bottom" className="h-[85vh] rounded-t-2xl">
-            <ScrollArea className="h-full pr-4">
-              <div className="space-y-6 py-4">
-                <h3 className="text-xl font-bold">Filters</h3>
-                <FilterSection 
-                  title="Employment Type"
-                  options={allEmploymentTypes}
-                  selected={employmentTypes}
-                  onChange={setEmploymentTypes}
-                />
-                <FilterSection 
-                  title="Experience Level"
-                  options={allExperienceLevels}
-                  selected={experienceLevels}
-                  onChange={setExperienceLevels}
-                />
-                <div className="space-y-3">
-                  <h4 className="text-sm font-medium">Salary Range (per year)</h4>
-                  <div className="flex items-center gap-3">
-                    <Input 
-                      type="number" 
-                      placeholder="Min" 
-                      value={salaryRange[0]}
-                      onChange={(e) => setSalaryRange([parseInt(e.target.value) || 0, salaryRange[1]])}
-                      className="h-10"
-                    />
-                    <span className="text-muted-foreground">to</span>
-                    <Input 
-                      type="number" 
-                      placeholder="Max" 
-                      value={salaryRange[1]}
-                      onChange={(e) => setSalaryRange([salaryRange[0], parseInt(e.target.value) || 100000])}
-                      className="h-10"
-                    />
-                  </div>
-                </div>
-               
-              </div>
-            </ScrollArea>
-          </SheetContent>
-        </Sheet>
-      </div>
-
-
-      <div className="grid gap-4">
-        {currentJobs.length > 0 ? (
-          currentJobs.map((job, index) => (
-            <JobCard key={job._id || index } job={job} />
-          ))
-        ) : (
-          <p className="text-gray-500 text-center">No jobs found.</p>
-        )}
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 p-6">
-        <div className=" mx-auto">
-          
-          
-        <Card className="flex flex-col   justify-center z-10 md:flex-row gap-2 mb-8 p-4">
-
-            <div className="relative  flex-1">
+      <Navbar />  
+      <div className="flex flex-col md:flex-row pt-20 md:pt-24 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24">
+        {/* Mobile Search Header */}
+        <div className="md:hidden mb-4">
+          <Card className="flex flex-col gap-3 p-4">
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
@@ -241,7 +173,7 @@ const JobListingPage = () => {
                 className="pl-10 h-11"
               />
             </div>
-            <div className="relative flex-1">
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
@@ -251,25 +183,191 @@ const JobListingPage = () => {
                 className="pl-10 h-11"
               />
             </div>
-            <Button className="h-11 px-6">
+            <Button className="h-11">
               <Search className="mr-2 h-4 w-4" />
               Search
             </Button>
           </Card>
+        </div>
+
+        {/* Desktop Sidebar - Left */}
+        <div className="hidden md:block w-64 lg:w-72 xl:w-80 pr-6  lg:pr-8 shrink-0">
+          
+          <div className="sticky top-28 space-y-6">
+            <Card className="p-6 h-full flex flex-col gap-7">
+            <div className="flex gap-4 justify-between items-center">
+              <h3 className="text-lg lg:text-xl font-bold">Filters</h3>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={clearAllFilters}
+                className="text-primary hover:text-primary"
+              >
+                Clear all
+              </Button>
+            </div>
+            
+            <FilterSection 
+              title="Employment Type"
+              options={allEmploymentTypes}
+              selected={employmentTypes}
+              onChange={setEmploymentTypes}
+            />
+            
+            <FilterSection 
+              title="Experience Level"
+              options={allExperienceLevels}
+              selected={experienceLevels}
+              onChange={setExperienceLevels}
+            />
+            
+            <div className="space-y-3">
+              <h4 className="text-sm font-medium">Salary Range (per year)</h4>
+              <div className="flex items-center gap-3">
+                <Input 
+                  type="number" 
+                  placeholder="Min" 
+                  value={salaryRange[0]}
+                  onChange={(e) => setSalaryRange([parseInt(e.target.value) || 0, salaryRange[1]])}
+                  className="h-10"
+                />
+                <span className="text-muted-foreground">to</span>
+                <Input 
+                  type="number" 
+                  placeholder="Max" 
+                  value={salaryRange[1]}
+                  onChange={(e) => setSalaryRange([salaryRange[0], parseInt(e.target.value) || 100000])}
+                  className="h-10"
+                />
+              </div>
+            </div>
+            </Card>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1">
+          {/* Desktop Search Bar */}
+          <div className="hidden md:block mb-6">
+            <Card className="flex flex-row gap-3 p-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Job title or company..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-10 h-11"
+                />
+              </div>
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Location..."
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  className="pl-10 h-11"
+                />
+              </div>
+              <Button className="h-11 px-6">
+                <Search className="mr-2 h-4 w-4" />
+                Search
+              </Button>
+            </Card>
+          </div>
+
+          {/* Mobile Filter Button */}
+
+          <div className="md:hidden flex justify-between items-center mb-4">
+        
+            <h2 className="text-xl font-bold">Job Listings</h2>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="gap-2"
+                >
+                  <SlidersHorizontal className="h-4 w-4" />
+                  Filters
+                </Button>
+              </SheetTrigger>
+              
+              <SheetContent side="right" className="w-full sm:w-96">
+                <div className="flex flex-col h-full">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-bold">Filters</h3>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={clearAllFilters}
+                      className="text-primary hover:text-primary"
+                    >
+                      Clear all
+                    </Button>
+                  </div>
+                  <ScrollArea className="flex-1 pr-4">
+                    <div className="space-y-6 pb-4">
+                      <FilterSection 
+                        title="Employment Type"
+                        options={allEmploymentTypes}
+                        selected={employmentTypes}
+                        onChange={setEmploymentTypes}
+                      />
+                      <FilterSection 
+                        title="Experience Level"
+                        options={allExperienceLevels}
+                        selected={experienceLevels}
+                        onChange={setExperienceLevels}
+                      />
+                      <div className="space-y-3">
+                        <h4 className="text-sm font-medium">Salary Range (per year)</h4>
+                        <div className="flex items-center gap-3">
+                          <Input 
+                            type="number" 
+                            placeholder="Min" 
+                            value={salaryRange[0]}
+                            onChange={(e) => setSalaryRange([parseInt(e.target.value) || 0, salaryRange[1]])}
+                            className="h-10"
+                          />
+                          <span className="text-muted-foreground">to</span>
+                          <Input 
+                            type="number" 
+                            placeholder="Max" 
+                            value={salaryRange[1]}
+                            onChange={(e) => setSalaryRange([salaryRange[0], parseInt(e.target.value) || 100000])}
+                            className="h-10"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </ScrollArea>
+                  <div className="pt-4 border-t">
+                    <SheetTrigger asChild>
+                      <Button className="w-full">Show results</Button>
+                    </SheetTrigger>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+            
+          </div>
 
           
-          <div>
+
+          {/* Job Listings */}
           <div className="space-y-4 mb-8">
             {currentJobs.length > 0 ? (
               <LatestJobs jobs={currentJobs} />
             ) : (
-              <Card className="p-8 text-center">
+              <Card className="p-6 sm:p-8 text-center">
                 <h3 className="text-lg font-medium mb-2">No jobs found</h3>
                 <p className="text-muted-foreground">Try adjusting your search filters</p>
               </Card>
             )}
           </div>
 
+          {/* Pagination */}
           {filteredJobs.length > jobsPerPage && (
             <Pagination className="mt-8">
               <PaginationContent>
@@ -308,16 +406,12 @@ const JobListingPage = () => {
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
-            
           )}
-          </div>
         </div>
       </div>
-    </div>
     </>
   );
 };
-
 
 const FilterSection = ({
   title,

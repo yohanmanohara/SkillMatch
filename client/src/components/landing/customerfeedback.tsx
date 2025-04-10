@@ -60,10 +60,10 @@ const Client_Feedback = () => {
             ].map((feature, index) => (
               <div 
                 key={index}
-                className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-green-500"
+                className="bg-green-500 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border hover:border-green-500"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 rounded-lg bg-green-50">
+                  <div className="p-3 rounded-lg bg-green-500">
                     <Image 
                       src={feature.icon} 
                       alt={feature.title} 
@@ -97,7 +97,7 @@ const Client_Feedback = () => {
               <div
                 key={id}
 
-                className="relative bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group transform hover:scale-105"
+                className="relative bg-green-500 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group transform hover:scale-105"
 
               >
                 <div className="absolute top-6 right-6 opacity-20 group-hover:opacity-40 transition-opacity">
