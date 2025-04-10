@@ -25,10 +25,14 @@ export  function UserNav() {
     country: string;
     city: string;
     status: string;
+    userPicUrl?: string; // Add this property to match the fetched data
   }
 
   const [user, setUser] = useState<User | null>(null);
   const userId = sessionStorage.getItem('poop'); 
+  const [userPicture, setuserPicture] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -38,6 +42,7 @@ export  function UserNav() {
         });
         const data = await res.json();
         setUser(data);
+        setuserPicture(data.userPicUrl);
         
       }
     };
@@ -57,13 +62,13 @@ export  function UserNav() {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar >
-              <AvatarImage
-                  src="/avatadefault.jpg"  
-                  alt="User Avatar"
-                  
-                  width={24}  // Use exact sizes for consistency
-                  height={24}
-              /> 
+            <AvatarImage
+    src={userPicture ? user?.userPicUrl : "/avatadefault.jpg"}
+    alt="User Avatar"
+    width={24}  // Use exact sizes for consistency
+    height={24}
+/>
+
             </Avatar>
           
           </Button>

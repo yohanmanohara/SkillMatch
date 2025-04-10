@@ -77,6 +77,9 @@ export default function JobForm() {
       console.error("Error fetching organization picture:", error);
     }
   };
+
+
+  
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
@@ -497,6 +500,8 @@ export default function JobForm() {
       <AvatarImage src={picture ? picture : previewUrl} alt="User Avatar" />
       </Avatar>
       <Input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef} />
+
+
       <div className="flex gap-5"> 
         <Button variant="secondary" onClick={handleFileUpload} >
         {loading ? (
