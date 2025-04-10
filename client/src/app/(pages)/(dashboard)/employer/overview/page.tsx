@@ -31,7 +31,7 @@ function Page() {
         const token = sessionStorage.getItem("token");
 
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/meeting_server/api/savenotes?userId=${userId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/savenotes?userId=${userId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -98,7 +98,7 @@ function Page() {
         userId: userId,
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/meeting_server/api/savenotes`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/savenotes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -149,7 +149,7 @@ function Page() {
 
       console.log("Attempting to delete note:", noteToDelete);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/meeting_server/api/savenotes/${noteToDelete.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/savenotes/${noteToDelete.id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
