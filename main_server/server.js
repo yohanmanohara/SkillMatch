@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const JobRoutes = require('./routes/JobRoutes');
 const userRoutes = require('./routes/user');
 const { s3Client, bucketName } = require('./Connnections/awsLightsailClient');
+const savenoteRoutes = require('./routes/SaveNoteRoutes');
 
 dotenv.config();
 const app = express();
@@ -17,6 +18,7 @@ app.use(cors());
 
 app.use('/api/file', upload.single('file'), JobRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/savenotes', savenoteRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
