@@ -60,22 +60,7 @@ const Page: React.FC<PageProps> = ({ page }) => {
       description: 'Read insights, news, and updates from the SkillMatch team.',
 
     },
-    community: {
-      title: 'Community',
-      description: 'Join our growing community to share, learn, and collaborate with others in the industry.',
-    },
-    about: {
-      title: 'About Us',
-      description: 'Learn more about SkillMatch, our mission, and our journey so far.',
-    },
-    careers: {
-      title: 'Careers',
-      description: 'We’re hiring! Explore open roles and become a part of our dynamic team.',
-    },
-    blog: {
-      title: 'Blog',
-      description: 'Get the latest updates, tips, and insights from our team and community.',
-    },
+    
     privacy: {
       title: 'Privacy Policy',
       description: 'Learn how we collect, use, and protect your personal information.',
@@ -90,10 +75,6 @@ const Page: React.FC<PageProps> = ({ page }) => {
       title: 'Cookie Policy',
       description: 'Understand how we use cookies to enhance your experience.',
 
-    },
-    cookies: {
-      title: 'Cookie Policy',
-      description: 'Understand how we use cookies and how they impact your experience.',
     },
   };
 
