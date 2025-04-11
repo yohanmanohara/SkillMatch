@@ -22,6 +22,7 @@ interface JobData {
 
 interface TopJobsProps {
   jobs: {
+    salaryMax(salaryMax: any): string | number | undefined;
     _id: string;
     title: string;
     companyname: string;
