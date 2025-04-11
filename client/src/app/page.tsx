@@ -11,6 +11,7 @@ import {Contactus} from "@/components/landing/Getintouch";
 import LatestJobs from "@/components/LatestJobs/LatestJobs";
 
 import {TeamSection} from "@/components/common/CollaborationCard";
+import ChatbotPage from "@/components/landing/chatbot";
 
 const Page = () => {
   const [jobs, setJobs] = useState([]);
@@ -64,7 +65,7 @@ const Page = () => {
 
       </div>
 
-      
+      <ChatbotPage />
       
       <Footer />
 
