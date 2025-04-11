@@ -22,11 +22,11 @@ interface JobData {
 
 interface TopJobsProps {
   jobs: {
-    salaryMax(salaryMax: any): string | number | undefined;
     _id: string;
     title: string;
     companyname: string;
     salaryMin: string;
+    salaryMax: string | number;
     location: string;
     posted: string;
     expirienceduration: string;
