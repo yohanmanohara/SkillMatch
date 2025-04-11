@@ -29,21 +29,32 @@ import { cn } from "@/lib/utils";
 interface Job {
   _id: string;
   title: string;
-  location: string;
   companyname: string;
   salaryMin: string;
+  salaryMax?: string;  // Add this optional field
+  location: string;
   posted: string;
   expirienceduration: string;
   expiredate: string;
   educationlevel: string;
-  requirements: string;
-  benefits: string;
-  desirable: string;
-  description: string[];
+  requirements: string | string[];
+  benefits: string | string[];
+  desirable: string | string[];
+  description: string | string[];
   employmentTypes: string[];
   pictureurl: string;
 }
 
+const normalizeJobForLatestJobs = (job: Job) => {
+  return {
+    ...job,
+    salaryMax: (salaryMax: any) => job.salaryMax || undefined, // Match the expected function type
+    requirements: Array.isArray(job.requirements) ? job.requirements : [job.requirements],
+    benefits: Array.isArray(job.benefits) ? job.benefits : [job.benefits],
+    desirable: Array.isArray(job.desirable) ? job.desirable : [job.desirable],
+    description: Array.isArray(job.description) ? job.description : [job.description]
+  };
+};
 const JobListingPage = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
@@ -357,15 +368,15 @@ const JobListingPage = () => {
 
           {/* Job Listings */}
           <div className="space-y-4 mb-8">
-            {currentJobs.length > 0 ? (
-              <LatestJobs jobs={currentJobs} />
-            ) : (
-              <Card className="p-6 sm:p-8 text-center">
-                <h3 className="text-lg font-medium mb-2">No jobs found</h3>
-                <p className="text-muted-foreground">Try adjusting your search filters</p>
-              </Card>
-            )}
-          </div>
+  {currentJobs.length > 0 ? (
+    <LatestJobs jobs={currentJobs.map(normalizeJobForLatestJobs)} />
+  ) : (
+    <Card className="p-6 sm:p-8 text-center">
+      <h3 className="text-lg font-medium mb-2">No jobs found</h3>
+      <p className="text-muted-foreground">Try adjusting your search filters</p>
+    </Card>
+  )}
+</div>
 
           {/* Pagination */}
           {filteredJobs.length > jobsPerPage && (
