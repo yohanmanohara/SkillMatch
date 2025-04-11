@@ -333,13 +333,12 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[700px]">
 
-          <EditJobDialog
-            job={job}
-            onSave={handleSave}
-
-            onClose={() => setIsEditDialogOpen(false)}
-          />
-
+        <EditJobDialog
+      job={job}
+      onSave={handleSave}
+      onClose={() => setIsEditDialogOpen(false)}
+      isOpen={isEditDialogOpen}  // Add this required prop
+    />
 
           {/* Ensure DialogTitle is present for accessibility */}
           <DialogTitle>Edit Job</DialogTitle>
@@ -357,7 +356,9 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the "{job.title}" position at {job.companyname}. This action cannot be undone.
+            <p>
+  This will permanently delete the &quot;{job.title}&quot; position at {job.companyname}. This action cannot be undone.
+</p>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -82,7 +82,7 @@ export function Contactus() {
                 Contact Us
               </Badge>
               <h2 className="text-4xl font-bold tracking-tight sm:text-5xl bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-                Let's Build Something Together
+                Let&apos;s Build Something Together
               </h2>
               <p className="text-lg text-muted-foreground max-w-xl">
                 Have a project in mind or want to discuss opportunities? Reach out through any of these channels.

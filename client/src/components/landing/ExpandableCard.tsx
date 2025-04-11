@@ -13,11 +13,11 @@ interface JobCardProps {
     _id: string;
     title: string;
     companyname: string;
-    salaryMin: number;
-    salaryMax: number;
+    salaryMin: number | string;  // Allow both types
+    salaryMax?: number | string;
     location: string;
     posted: string;
-    expirienceduration: number;
+    expirienceduration: number | string;
     expiredate: string;
     educationlevel: string;
     requirements: string[];
@@ -26,7 +26,7 @@ interface JobCardProps {
     description: string;
     employmentTypes: string[];
     pictureurl: string;
-    organization: string;
+    organization?: string;
   };
   userType: 'employer' | 'employee';
   onDelete?: (jobId: string) => void;

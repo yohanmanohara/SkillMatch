@@ -1,14 +1,9 @@
 // client/next.config.js
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
     domains: ['lh3.googleusercontent.com'],
   },
-  webpackDevMiddleware: (config) => {
-    config.watchOptions = {
-      poll: 1000,
-      aggregateTimeout: 300,
-    };
-    return config;
-  },
-  
 };
+
+module.exports = nextConfig;
