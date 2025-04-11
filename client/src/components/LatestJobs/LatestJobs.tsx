@@ -27,6 +27,7 @@ interface TopJobsProps {
     title: string;
     companyname: string;
     salaryMin: string;
+    salaryMax: string | number;
     location: string;
     posted: string;
     expirienceduration: string;

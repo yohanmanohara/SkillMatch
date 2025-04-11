@@ -48,7 +48,9 @@ interface Job {
 const normalizeJobForLatestJobs = (job: Job) => {
   return {
     ...job,
-    salaryMax: (salaryMax: any) => job.salaryMax || undefined, // Match the expected function type
+
+    salaryMax: job.salaryMax || undefined, // Ensure salaryMax is a value, not a function
+
     requirements: Array.isArray(job.requirements) ? job.requirements : [job.requirements],
     benefits: Array.isArray(job.benefits) ? job.benefits : [job.benefits],
     desirable: Array.isArray(job.desirable) ? job.desirable : [job.desirable],
