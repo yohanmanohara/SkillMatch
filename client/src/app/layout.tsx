@@ -1,12 +1,11 @@
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
-import "../styles/spiner.css"
+import "../styles/spiner.css";
 import localFont from "next/font/local";
-import  {ThemeProvider}  from "@/components/layout/ThemeToggle/theme-provider";
+import { ThemeProvider } from "@/components/layout/ThemeToggle/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
-
+import FloatingChatbot from "@/components/landing/chatbot"; // ✅ Import chatbot
 
 // Load local fonts
 const geistSans = localFont({
@@ -20,17 +19,14 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
+
 export const metadata: Metadata = {
-  title: "SkillMatch", // Set your site name
+  title: "SkillMatch",
   icons: {
-    icon: "/favicon.png", // Replace with the path to your favicon
+    icon: "/favicon.png",
   },
 };
 
-
-
-
-// RootLayout component for the entire application
 export default function RootLayout({
   children,
 }: {
@@ -38,16 +34,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-        >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
           <Toaster />
+          <FloatingChatbot /> {/* ✅ Renders chatbot on all pages */}
         </ThemeProvider>
       </body>
     </html>

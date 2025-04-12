@@ -12,6 +12,7 @@ import LatestJobs from "@/components/LatestJobs/LatestJobs";
 
 import {TeamSection} from "@/components/common/CollaborationCard";
 
+
 const Page = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,7 +65,7 @@ const Page = () => {
 
       </div>
 
-      
+    
       
       <Footer />
 
