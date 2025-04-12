@@ -58,21 +58,26 @@ export default function FloatingChatbot() {
       </Button>
 
       {isOpen && (
-        <div className="fixed bottom-20 right-4 w-80 bg-black border border-gray-300 rounded-lg shadow-lg z-50">
+        <div className="fixed bottom-20 sm:right-4 right-2 w-[90vw] max-w-sm bg-black border border-gray-300 rounded-lg shadow-lg z-50 max-h-[70vh] flex flex-col">
           <div className="bg-black text-white text-center py-2 rounded-t-lg">🤖 Chatbot</div>
-          <div className="p-4 h-64 overflow-y-auto space-y-2">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`inline-block max-w-[80%] px-3 py-2 rounded-2xl text-white ${
-                  msg.sender === 'user' ? 'bg-green-500 self-end ml-auto' : 'bg-green-700 self-start mr-auto'
-                }`}
-              >
-                {msg.text}
-              </div>
-            ))}
-            {loading && <p className="text-gray-400 text-sm">Bot is typing...</p>}
-          </div>
+          <div className="p-4 h-64 md:h-72 overflow-y-auto space-y-2 flex flex-col">
+  {messages.map((msg, index) => (
+    <div
+      key={index}
+      className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+    >
+      <div
+        className={`inline-block max-w-[80%] px-3 py-2 rounded-2xl text-white ${
+          msg.sender === 'user' ? 'bg-green-500' : 'bg-green-700'
+        }`}
+      >
+        {msg.text}
+      </div>
+    </div>
+  ))}
+  {loading && <p className="text-gray-400 text-sm">Bot is typing...</p>}
+</div>
+
           <div className="flex items-center p-2 border-t border-gray-300">
             <input
               type="text"
