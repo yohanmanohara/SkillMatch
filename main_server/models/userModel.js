@@ -61,9 +61,10 @@ const userSchema = new Schema({
       required: true
     },
   
-    cvUrl: { 
-      type: String,
-      required: false
+ cvUrl: { 
+     type: [String],
+      required: false,
+      default: [],
     },
 
   appliedjobs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Job' ,required: false}],

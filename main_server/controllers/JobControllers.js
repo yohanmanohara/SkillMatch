@@ -2,66 +2,102 @@ const JobModel = require('../models/jobModel');
 const userModel = require('../models/userModel');
 const BaseController = require('./BaseController');
 const { s3Client, bucketName } = require('../Connnections/awsLightsailClient');
-const { v4: uuidv4 } = require('uuid');
-
-const { validationResult, query } = require('express-validator');
 
 
 class cvController extends BaseController {
-  
     async cvUpload(req, res) {
-        const { id } = req.query; 
+        const { id } = req.query;
         console.log('File received:', req.file);
-        console.log('Request body:', req.body);
-          console.log('Query parameters:', req.query);        
+        console.log('Query parameters:', req.query);
+
         try {
             if (!req.file) {
                 return res.status(400).json({ error: "No file uploaded" });
             }
-    
-            console.log("Uploaded file:", req.file);
-    
-            if (!containerClient) {
-                console.error("Container client is not initialized.");
-                return res.status(500).json({ error: "Azure container client not initialized" });
+
+            if (!s3Client) {
+                console.error("S3 client is not initialized.");
+                return res.status(500).json({ error: "AWS S3 client not initialized" });
             }
-    
-            const blobName = `${id}-${req.file.originalname}`; 
-            const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    
+
+            // Always use the same key for each user to prevent duplicates
+            const objectKey = `resume/${id}-${req.file.originalname}`;
+
+            // First delete any existing resume for this user
             try {
-                await blockBlobClient.getProperties();
-                console.log(`File already exists: ${blobName}`);
-                return res.status(200).json({ url: blockBlobClient.url }); 
-            } catch (error) {
-                if (error.statusCode === 404) {
-                    console.log(`File does not exist, uploading: ${blobName}`);
-                } else {
-                    console.error("Error checking file existence:", error);
-                    return res.status(500).json({ error: "Error checking file existence", details: error.message });
+                await s3Client.deleteObject({
+                    Bucket: bucketName,
+                    Key: objectKey
+                }).promise();
+                console.log(`Deleted previous resume for user ${id}`);
+            } catch (deleteError) {
+                if (deleteError.code !== 'NoSuchKey') {
+                    console.error("Error deleting previous resume:", deleteError);
+                    throw deleteError;
                 }
+                // No previous file exists, which is fine
             }
-    
-            console.log(`Uploading file ${blobName} to Azure Blob Storage...`);
-            await blockBlobClient.uploadData(req.file.buffer, {
-                blobHTTPHeaders: { blobContentType: req.file.mimetype },
+
+            // Upload the new resume
+            console.log(`Uploading resume for user ${id} to S3...`);
+            const uploadResult = await s3Client.upload({
+                Bucket: bucketName,
+                Key: objectKey,
+                Body: req.file.buffer,
+                ContentType: req.file.mimetype,
+                ACL: 'private', // Set to private for security
+                Metadata: {
+                    originalname: req.file.originalname,
+                    uploadedAt: new Date().toISOString(),
+                    userId: id
+                }
+            }).promise();
+
+            console.log(`Resume uploaded successfully for user ${id}`);
+            return res.status(200).json({ 
+                url: uploadResult.Location,
+                key: objectKey
             });
-    
-            const fileUrl = blockBlobClient.url; 
-            console.log(`File uploaded successfully: ${fileUrl}`);
-    
-            return res.status(200).json({ url: fileUrl });
-    
+
         } catch (error) {
-            console.error("Upload Error:", error); 
-            return res.status(500).json({ error: "Upload failed", details: error.message }); 
+            console.error("Upload Error:", error);
+            return res.status(500).json({ 
+                error: "Upload failed", 
+                details: error.message 
+            });
         }
-       
     }
 
+    async getResume(req, res) {
+        const { id } = req.query;
+            
+        try {
+            if (!s3Client) {
+                return res.status(500).json({ error: "AWS S3 client not initialized" });
+            }
 
+            const objectKey = `resume/${id}-${req.file.originalname}`;
+            
+            const url = s3Client.getSignedUrl('getObject', {
+                Bucket: bucketName,
+                Key: objectKey,
+                Expires: 3600 // 1 hour
+            });
+
+            return res.status(200).json({ url });
+
+        } catch (error) {
+            if (error.code === 'NoSuchKey') {
+                return res.status(404).json({ error: "Resume not found" });
+            }
+            console.error("Error getting resume:", error);
+            return res.status(500).json({ 
+                error: "Failed to get resume", 
+                details: error.message 
+            });
+        }
+    }
 }
-
 
 class JobController extends BaseController {
     constructor() {

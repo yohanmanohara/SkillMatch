@@ -5,44 +5,59 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const otpStore = {};
-
-
 const updatecv = async (req, res) => {
   const { id } = req.query;
-  const { formdataurl } = req.body;
+  const { url } = req.body;
 
-  // Validate the user ID
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: 'User ID is not valid' });
+    return res.status(400).json({ error: 'Invalid user ID format' });
   }
 
   try {
-    // Find the user by ID
+    // First make sure the user exists
     const user = await userModel.findById(id);
-
-    // Check if user exists
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Check if formdataurl exists and is an object with a `url` field
-    if (formdataurl && formdataurl.url) {
-      // Extract the URL from the object
-      user.cvUrl = formdataurl.url; // Assign the actual URL string to cvUrl
-    } else {
-      return res.status(400).json({ error: 'Invalid CV URL provided' });
+    if (!url || typeof url !== 'string' || !url.startsWith('http')) {
+      return res.status(400).json({ error: 'Invalid URL format' });
     }
+
+    // Ensure cvUrl is always an array
+    if (!Array.isArray(user.cvUrl)) {
+      user.cvUrl = [];
+    }
+
+    // Check if URL already exists in the array
+    if (user.cvUrl.includes(url)) {
+      return res.status(200).json({ 
+        message: 'CV URL already exists', 
+        cvUrls: user.cvUrl 
+      });
+    }
+
+    // Add new URL to the array
+    user.cvUrl.push(url);
 
     // Save the updated user
     await user.save();
 
-    res.status(200).json({ message: 'CV uploaded and user updated', user });
+    return res.status(200).json({ 
+      message: 'CV URL added successfully', 
+      cvUrls: user.cvUrl 
+    });
 
   } catch (error) {
-    console.error('Error during CV update:', error);
-    res.status(500).json({ error: 'An error occurred while uploading the CV' });
+    console.error('CV update error:', error);
+    return res.status(500).json({ 
+      error: 'Failed to update CV URL',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };
+
+
 
 const updateUser = async (req, res) => {
   const { id } = req.query;
