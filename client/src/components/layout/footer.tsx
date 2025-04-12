@@ -55,7 +55,7 @@ const Footer = () => {
       title: 'Resources',
       links: [
         { name: 'Help Center', href: '/support', id: 'support' },
-        { name: 'API Docs', href: '/documentation', id: 'docs' },  // <- updated
+        { name: 'API Docs', href: '/docs', id: 'docs' },
         { name: 'Community', href: '/community', id: 'community' },
       ],
     },
