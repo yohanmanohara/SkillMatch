@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
@@ -6,6 +7,7 @@ import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/layout/ThemeToggle/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import FloatingChatbot from "@/components/landing/chatbot"; // ✅ Import chatbot
+import ChatbotIframe from "@/components/landing/ChatbotIframe"; // ✅ Import ChatbotIframe
 
 // Load local fonts
 const geistSans = localFont({
@@ -38,7 +40,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
           <Toaster />
-          <FloatingChatbot /> {/* ✅ Renders chatbot on all pages */}
+          <ChatbotIframe />
         </ThemeProvider>
       </body>
     </html>
