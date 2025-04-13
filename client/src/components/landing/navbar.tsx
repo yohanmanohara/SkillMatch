@@ -49,6 +49,15 @@ const NavigationBar = () => {
     fetchUsers();
   }, [userId]);
 
+  const haddlepost = () => {
+    if (user?.role === 'Employer') {
+      window.location.href = '/employer/hiring/jobs';
+    } else if (user?.role === 'Employee') {
+      window.location.href = '/employee/createOrganization';
+    } 
+  }
+  
+
   const haddle = () => {
     if (user?.role === 'Employer') {
       window.location.href = '/employer/overview';
@@ -66,7 +75,7 @@ const NavigationBar = () => {
         </div>
         <div className='hidden lg:block'>
           <ul className="flex justify-center items-center space-x-8">
-            <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/jobsearch'}>+ Post a Job</Link></li>
+            <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><p onClick={haddlepost}>+ Post a Job</p></li>
             <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/jobs'}>Jobs</Link></li>
             <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/#contact'}>Contact US</Link></li>
             <li className="text-primary-0 hover:text-gray-300 cursor-pointer"><Link href={'/#faq'}>FAQ</Link></li>
