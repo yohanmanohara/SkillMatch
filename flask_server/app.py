@@ -1,5 +1,7 @@
 from flask import Flask, jsonify
 from models import JobMatcher  # Import the updated JobMatcher model
+from models import job_suggestion  # Import the updated JobMatcher model
+from models import candidate_suggestion  # Import the updated JobMatcher model
 
 app = Flask(__name__)
 
