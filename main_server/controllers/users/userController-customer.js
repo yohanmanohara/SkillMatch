@@ -248,32 +248,26 @@ const resetpassword = async (req, res) => {
 }
 
 const appliedjobs = async (req, res) => {
-  const { userId, jobId } = req.body;
+  const { userId, jobId, cvUrl } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(jobId)) {
-    return res.status(400).json({ error: 'Invalid user ID or job ID' });
-  }
 
   try {
-    // Check if user exists
     const user = await userModel.findById(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Check if job already applied (in either collection)
     const existingApplication = await AppliedJob.findOne({ userId, jobId });
     if (existingApplication || user.appliedjobs.includes(jobId)) {
       return res.status(400).json({ error: 'Job already applied' });
     }
 
-    // Add to user's applied jobs array
     user.appliedjobs.push(jobId);
     
-    // Create new AppliedJob document
     const newApplication = new AppliedJob({
       userId,
       jobId,
+      cvUrl,
       status: 'applied'
     });
 
