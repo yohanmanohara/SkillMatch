@@ -521,7 +521,6 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
           </div>
         </div>
 
-        {/* Footer with Employment Types */}
         <CardFooter className="p-4 bg-green-400 dark:bg-gray-800/50 flex flex-wrap gap-2">
           {job.employmentTypes.map((tag, index) => (
             <Badge 
@@ -549,10 +548,10 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 opacity-30" />
             <DialogHeader className="relative px-6 pt-6">
-              <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+              <DialogTitle className="text-2xl font-bold ">
                 Apply for {job.title}
               </DialogTitle>
-              <DialogDescription className="text-gray-600 dark:text-gray-400">
+              <DialogDescription className="">
                 Submit your application for this position at{" "}
                 <span className="font-medium text-primary">{job.companyname}</span>
               </DialogDescription>
@@ -562,8 +561,8 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
           <div className="px-6 pb-6 space-y-6">
             <div className="space-y-4">
               {/* File Upload Card */}
-              <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-4 transition-all hover:border-primary/50 focus-within:border-primary/50">
-                <Label htmlFor="cv" className="block mb-2 font-medium text-gray-900 dark:text-white">
+              <div className="border-2 border-dashed rounded-lg p-4 transition-all hover:border-primary/50 focus-within:border-primary/50">
+                <Label htmlFor="cv" className="block mb-2 font-medium">
                   Upload CV (PDF)
                 </Label>
                 <div className="flex flex-col items-center justify-center space-y-2">
@@ -577,13 +576,13 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
                   />
                   <label
                     htmlFor="cv"
-                    className={`flex flex-col items-center justify-center w-full py-4 px-4 rounded-md cursor-pointer ${isUploading || isApplying ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-50 dark:hover:bg-gray-900"}`}
+                    className={`flex flex-col items-center justify-center w-full py-4 px-4 rounded-md cursor-pointer ${isUploading || isApplying ? "opacity-50 cursor-not-allowed" : ""}`}
                   >
                     <UploadCloud className="w-8 h-8 mb-2 text-primary" />
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm">
                       <span className="font-medium text-primary">Click to upload</span> or drag and drop
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-500">
+                    <p className="text-xs ">
                       PDF only (max. 5MB)
                     </p>
                   </label>
@@ -598,7 +597,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
   
               {userData?.cvUrl && userData.cvUrl.length > 0 && (
                 <div className="space-y-3">
-                  <Label className="block font-medium text-gray-900 dark:text-white">
+                  <Label className="block font-medium">
                     Select an existing CV
                   </Label>
                   <div className="space-y-2">
@@ -625,7 +624,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
                           </div>
                           <label
                             htmlFor={`cv-${index}`}
-                            className="text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
+                            className="text-sm font-medium  cursor-pointer"
                           >
                             CV {index + 1}
                           </label>
@@ -647,7 +646,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
             </div>
           </div>
 
-          <DialogFooter className="px-6 py-4 bg-gray-50 dark:bg-gray-900/50 border-t">
+          <DialogFooter className="px-6 py-4 dark:bg-gray-900/50 border-t">
             <div className="flex w-full justify-end space-x-3">
               <Button
                 variant="outline"
