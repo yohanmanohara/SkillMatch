@@ -19,7 +19,7 @@ export const UserClient = () => {
   const [error, setError] = useState("");
   const userId = sessionStorage.getItem('poop');
   const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage = 5;
+  const jobsPerPage = 20;
 
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;

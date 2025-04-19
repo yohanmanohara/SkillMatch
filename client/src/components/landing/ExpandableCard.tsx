@@ -521,7 +521,6 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
           </div>
         </div>
 
-        {/* Footer with Employment Types */}
         <CardFooter className="p-4 bg-green-400 dark:bg-gray-800/50 flex flex-wrap gap-2">
           {job.employmentTypes.map((tag, index) => (
             <Badge 
