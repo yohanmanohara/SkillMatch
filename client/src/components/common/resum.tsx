@@ -26,7 +26,6 @@ const ResumeManager = () => {
   const [error, setError] = useState<string | null>(null);
   const userId = typeof window !== 'undefined' ? sessionStorage.getItem('poop') : null;
 
-  // Fetch user's CV on component mount
   useEffect(() => {
     const fetchCV = async () => {
       if (!userId) return;
@@ -66,7 +65,6 @@ const ResumeManager = () => {
 
     try {
       setIsLoading(true);
-      // First update the user record to remove the CV URL
       const updateResponse = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updatecv/?id=${userId}`,
         {
@@ -82,7 +80,6 @@ const ResumeManager = () => {
         throw new Error('Failed to remove CV reference');
       }
 
-      // Then delete the actual file
       const deleteResponse = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/file/deletecv/?id=${userId}`,
         {
@@ -94,7 +91,6 @@ const ResumeManager = () => {
         throw new Error('Failed to delete CV file');
       }
 
-      // Clear local state
       setCv(null);
       setError(null);
     } catch (error) {
@@ -331,32 +327,6 @@ const AddCVDialog = ({ cv, onUploadSuccess }: { cv: { url: string; name: string;
 
       if (!updateResponse.ok) {
         throw new Error("Failed to update user record");
-      }
-
-      // If jobId exists, apply for the job
-      if (jobId) {
-        const title = searchParams.get("title");
-        const company = searchParams.get("company");
-        
-        const applyResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/appliedjobs`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ 
-              userId, 
-              jobId,
-              title,
-              company
-            }),
-          }
-        );
-
-        if (!applyResponse.ok) {
-          throw new Error("Failed to apply for job");
-        }
       }
 
       alert(jobId 
