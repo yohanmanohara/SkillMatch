@@ -1,3 +1,12 @@
+import torch
+from transformers import BertTokenizer, BertModel
+from sklearn.metrics.pairwise import cosine_similarity
+import pandas as pd
+from lib import db  # Assuming db is a module that handles database connections
+
+
+
+
 class JobMatcher:
     def __init__(self):
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
