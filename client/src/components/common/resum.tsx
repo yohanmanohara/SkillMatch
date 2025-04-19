@@ -113,8 +113,7 @@ const ResumeManager = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Your CV</h2>
+      <div className="flex justify-end items-center">
         <AddCVDialog cv={cv} onUploadSuccess={() => window.location.reload()} />
       </div>
 

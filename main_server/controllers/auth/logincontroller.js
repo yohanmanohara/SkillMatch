@@ -7,7 +7,7 @@ const { route } = require('../../routes/user');
 
 
 const loginUser = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password ,redirect} = req.body;
   
  
     if (!email || !password) {
@@ -61,16 +61,18 @@ const loginUser = async (req, res) => {
         const token = jwt.sign({ email: user.email,id: user._id,role:"Employee" },process.env.JWT_SECRET, { expiresIn: '24h' });
       res.cookie('token', token, { httpOnly: true, maxAge: 86400000 });
      
-        res.status(200).json({
-          message: 'Login successful',
-          redirectUrl: `/employee/overview`,
-          user: { email: user.email ,
-                  id: user._id.toString(),
-          },
-          token,
-          role,
-          
-        });
+
+      res.status(200).json({  
+        message: 'Login successful',
+        redirectUrl: redirect || "/employee/overview",
+        user: { 
+          email: user.email,
+          id: user._id.toString(),
+        },
+        token,
+        role,
+      });
+      
 
       }
       else if(role.role=="Employer")
@@ -78,9 +80,10 @@ const loginUser = async (req, res) => {
         const token = jwt.sign({ email: user.email,id: user._id,role:"Employer" },process.env.JWT_SECRET, { expiresIn: '24h' });
       res.cookie('token', token, { httpOnly: true, maxAge: 86400000 });
      
+
         res.status(200).json({
           message: 'Login successful',
-          redirectUrl: `/employer/overview`,
+          redirectUrl: redirect || "/employer/overview",
           user: { email: user.email ,
                   id: user._id.toString(),
           },

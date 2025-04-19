@@ -36,9 +36,15 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey: string;
+  defaultPageSize?: number;
 }
 
-export function DataTable<TData, TValue>({ columns, data, searchKey }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ 
+  columns, 
+  data, 
+  searchKey,
+  defaultPageSize = 20 // Increased from default 10 to 20
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -55,12 +61,22 @@ export function DataTable<TData, TValue>({ columns, data, searchKey }: DataTable
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    state: { sorting, columnFilters, columnVisibility, rowSelection },
+    initialState: {
+      pagination: {
+        pageSize: defaultPageSize,
+      },
+    },
+    state: { 
+      sorting, 
+      columnFilters, 
+      columnVisibility, 
+      rowSelection 
+    },
   });
 
   return (
     <div className='w-full'>
-      <div className='flex items-center py-4'>
+      <div className='flex items-center justify-between py-4'>
         <Input
           placeholder={`Search ${searchKey}...`}
           value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
@@ -69,21 +85,21 @@ export function DataTable<TData, TValue>({ columns, data, searchKey }: DataTable
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='outline' className='ml-auto'>
-              Columns <ChevronDown />
-            </Button>
+           
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
-            {table.getAllColumns().filter((column) => column.getCanHide()).map((column) => (
-              <DropdownMenuCheckboxItem
-                key={column.id}
-                className='capitalize'
-                checked={column.getIsVisible()}
-                onCheckedChange={(value) => column.toggleVisibility(!!value)}
-              >
-                {column.id}
-              </DropdownMenuCheckboxItem>
-            ))}
+            {table.getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className='capitalize'
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -105,7 +121,9 @@ export function DataTable<TData, TValue>({ columns, data, searchKey }: DataTable
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))
@@ -119,17 +137,51 @@ export function DataTable<TData, TValue>({ columns, data, searchKey }: DataTable
           </TableBody>
         </Table>
       </div>
-      <div className='flex items-center justify-end space-x-2 py-4'>
-        <div className='flex-1 text-sm text-muted-foreground'>
-          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
+      <div className='flex items-center justify-between py-4'>
+        <div className='text-sm text-muted-foreground'>
+          Showing {table.getRowModel().rows.length} of{' '}
+          {table.getFilteredRowModel().rows.length} row(s)
+          {table.getFilteredSelectedRowModel().rows.length > 0 && (
+            <>
+              {' '}({table.getFilteredSelectedRowModel().rows.length} selected)
+            </>
+          )}
         </div>
-        <div className='space-x-2'>
-          <Button variant='outline' size='sm' onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-            Previous
-          </Button>
-          <Button variant='outline' size='sm' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-            Next
-          </Button>
+        <div className='flex items-center space-x-6 lg:space-x-8'>
+          <div className='flex items-center space-x-2'>
+            <p className='text-sm font-medium'>Rows per page</p>
+            <select
+              value={table.getState().pagination.pageSize}
+              onChange={(e) => {
+                table.setPageSize(Number(e.target.value));
+              }}
+              className='h-8 rounded-md border border-input bg-background px-2 py-1 text-sm'
+            >
+              {[10, 20, 30, 40, 50,100,200,300,400].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  {pageSize}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className='flex space-x-2'>
+            <Button
+              variant='outline'
+              size='sm'
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
+            <Button
+              variant='outline'
+              size='sm'
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
         </div>
       </div>
     </div>
