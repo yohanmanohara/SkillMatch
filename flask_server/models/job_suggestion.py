@@ -1,9 +1,3 @@
-import torch  # type: ignore
-from transformers import BertTokenizer, BertModel
-from sklearn.metrics.pairwise import cosine_similarity  # type: ignore
-import pandas as pd
-from lib import db  # Import external DB connection
-
 class JobMatcher:
     def __init__(self):
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -53,12 +47,12 @@ class JobMatcher:
             outputs = self.model(**encodings)
         return outputs.last_hidden_state.mean(dim=1)
 
-    def match_candidates(self):
+    def suggest_jobs(self):
         if self.job_embeddings is None:
-            print("Warning: No job data available for matching. Returning empty results.")
+            print("Warning: No job data available for suggestions. Returning empty results.")
             return {}
 
-        candidate_matches = {}
+        job_suggestions = {}
 
         for _, candidate in self.candidates.iterrows():
             candidate_id, resume_text = candidate["candidate_id"], candidate["description"]
@@ -71,8 +65,10 @@ class JobMatcher:
             # Compute similarity between candidate embedding and all job embeddings
             similarities = cosine_similarity(candidate_embedding, self.job_embeddings).flatten()
             
-            # Get top 3 job recommendations
-            top_jobs = similarities.argsort()[::-1][:3]
-            candidate_matches[candidate_id] = self.jobs.iloc[top_jobs]['title'].tolist()
+            # Get top 3 job recommendations based on similarity
+            top_jobs = similarities.argsort()[::-1][:3]  # Get indices of top 3 jobs
+            recommended_jobs = self.jobs.iloc[top_jobs]['title'].tolist()
+
+            job_suggestions[candidate_id] = recommended_jobs
         
-        return candidate_matches
+        return job_suggestions
