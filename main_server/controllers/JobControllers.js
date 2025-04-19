@@ -9,56 +9,59 @@ class cvController extends BaseController {
         const { id } = req.query;
         console.log('File received:', req.file);
         console.log('Query parameters:', req.query);
-
+    
         try {
             if (!req.file) {
                 return res.status(400).json({ error: "No file uploaded" });
             }
-
+    
             if (!s3Client) {
                 console.error("S3 client is not initialized.");
                 return res.status(500).json({ error: "AWS S3 client not initialized" });
             }
+    
+            const prefix = `resume/${id}-`;
+            const listedObjects = await s3Client.listObjectsV2({
+                Bucket: bucketName,
+                Prefix: prefix
+            }).promise();
+    
+            if (listedObjects.Contents.length > 0) {
+                // If there are existing resumes for this user, return the first one
+                const existingKey = listedObjects.Contents[0].Key;
+                const existingUrl = `https://${bucketName}.s3.amazonaws.com/${existingKey}`;
+                console.log(`Resume already exists for user ${id}, returning URL.`);
+                console.log(`File URL: ${existingUrl}`);
 
-            // Always use the same key for each user to prevent duplicates
-            const objectKey = `resume/${id}-${req.file.originalname}`;
-
-            // First delete any existing resume for this user
-            try {
-                await s3Client.deleteObject({
-                    Bucket: bucketName,
-                    Key: objectKey
-                }).promise();
-                console.log(`Deleted previous resume for user ${id}`);
-            } catch (deleteError) {
-                if (deleteError.code !== 'NoSuchKey') {
-                    console.error("Error deleting previous resume:", deleteError);
-                    throw deleteError;
-                }
-                // No previous file exists, which is fine
+                return res.status(200).json({ 
+                    url: existingUrl,
+                    key: existingKey 
+                });
             }
-
-            // Upload the new resume
-            console.log(`Uploading resume for user ${id} to S3...`);
+    
+            // No existing file found — proceed to upload
+            const objectKey = `resume/${id}-${req.file.originalname}`;
+            console.log(`Uploading new resume for user ${id} to S3...`);
             const uploadResult = await s3Client.upload({
                 Bucket: bucketName,
                 Key: objectKey,
                 Body: req.file.buffer,
                 ContentType: req.file.mimetype,
-                ACL: 'private', // Set to private for security
+                ACL: 'private',
                 Metadata: {
                     originalname: req.file.originalname,
                     uploadedAt: new Date().toISOString(),
                     userId: id
                 }
             }).promise();
-
+    
             console.log(`Resume uploaded successfully for user ${id}`);
+            console.log(`File URL: ${uploadResult.Location}`);
             return res.status(200).json({ 
                 url: uploadResult.Location,
-                key: objectKey
+                key: objectKey 
             });
-
+    
         } catch (error) {
             console.error("Upload Error:", error);
             return res.status(500).json({ 
@@ -67,6 +70,9 @@ class cvController extends BaseController {
             });
         }
     }
+    
+    
+
 
     async getResume(req, res) {
         const { id } = req.query;

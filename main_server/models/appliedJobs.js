@@ -19,7 +19,11 @@ const appliedJobSchema = new mongoose.Schema({
     type: String,
     enum: ['applied', 'interviewed', 'offered', 'rejected'],
     default: 'applied'
-  }
+  },
+  cvUrl : {
+    type: String,
+    required: true  
+  },
  
 });
 
