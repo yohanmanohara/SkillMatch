@@ -7,13 +7,15 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronDown, ChevronUp, Briefcase, MapPin, DollarSign, Clock, GraduationCap, Check, Pencil, Trash2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
+
 
 interface JobCardProps {
   job: {
     _id: string;
     title: string;
     companyname: string;
-    salaryMin: number | string;  // Allow both types
+    salaryMin: number | string;  
     salaryMax?: number | string;
     location: string;
     posted: string;
@@ -28,6 +30,7 @@ interface JobCardProps {
     pictureurl: string;
     organization?: string;
   };
+
   userType: 'employer' | 'employee';
   onDelete?: (jobId: string) => void;
   onEdit?: (updatedJob: any) => void;
@@ -35,14 +38,20 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) => {
   const [expanded, setExpanded] = useState(false);
-  const [userData, setUserData] = useState<{ id: string; email: string; username: string } | null>(null);
+  const [userData, setUserData] = useState<{ 
+    id: string; 
+    email: string; 
+    username: string;
+    appliedjobs?: string[];
+  } | null>(null);
+  const [isApplying, setIsApplying] = useState(false);
   const router = useRouter();
   const previewUrl = "/avatadefault.jpg";
   const picture = job.pictureurl || previewUrl;
+  const userId = typeof window !== 'undefined' ? sessionStorage.getItem("poop") : null;
 
   useEffect(() => {
-    if (userType === 'employee') {
-      const userId = sessionStorage.getItem("userId");
+   
       if (!userId) return;
 
       const fetchUserData = async () => {
@@ -50,12 +59,18 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getsingleuser/?id=${userId}`
           );
+          if (!response.ok) {
+            throw new Error('Failed to fetch user data');
+          }
+         
           if (response.ok) {
             const data = await response.json();
+            console.log("User data:", data);
             setUserData({
               id: data.id,
               email: data.email,
               username: data.username,
+              appliedjobs: data.appliedjobs || []
             });
           }
         } catch (error) {
@@ -64,26 +79,85 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
       };
 
       fetchUserData();
-    }
-  }, [userType]);
+    
+  }, [userType, userId]);
 
   const toggleExpand = () => setExpanded(!expanded);
-
-  const handleApply = () => {
-    if (!userData) {
-      router.push(`/login?redirect=/jobs/${job._id}`);
+  
+  const handleApply = async () => {
+    if (!userId) {
+      toast({
+        title: "Login Required",
+        description: "You need to login to apply for this job",
+        variant: "destructive",
+      });
+      router.push(`/login`);
       return;
     }
-    router.push(
-      `/employee/resume?jobId=${job._id}&title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.companyname)}&userId=${userData.id}&email=${encodeURIComponent(userData.email)}&username=${encodeURIComponent(userData.username)}`
-    );
+  
+    setIsApplying(true);
+    try {
+      // Check if already applied
+      if (userData?.appliedjobs?.includes(job._id)) {
+        toast({
+          title: "Already Applied",
+          description: "You have already applied for this job",
+        });
+        return;
+      }
+  
+      // Make API call to apply
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/appliedjobs`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: userId,
+            jobId: job._id,
+          }),
+        }
+      );
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        // Update local state
+        if (userData) {
+          setUserData({
+            ...userData,
+            appliedjobs: [...(userData.appliedjobs || []), job._id]
+          });
+        }
+        
+        toast({
+          title: "Application Successful",
+          description: "Your job application was submitted!",
+        });
+        
+      } else {
+        throw new Error(result.message || "Failed to apply for job");
+      }
+  
+    } catch (error) {
+      console.error('Error applying for job:', error);
+      toast({
+        title: "Application Failed",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsApplying(false);
+    }
   };
 
   const formatSalary = () => {
     if (job.salaryMin && job.salaryMax) {
-      return `$${job.salaryMin.toLocaleString()} - $${job.salaryMax.toLocaleString()}`;
+      return `Rs .${job.salaryMin.toLocaleString()} - Rs .${job.salaryMax.toLocaleString()}`;
     }
-    return job.salaryMin ? `$${job.salaryMin.toLocaleString()}` : "Negotiable";
+    return job.salaryMin ? `Rs .${job.salaryMin.toLocaleString()}` : "Negotiable";
   };
 
   const formatDate = (dateString: string) => {
@@ -102,6 +176,8 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
     if (diffDays === 1) return "Expires tomorrow";
     return `Expires in ${diffDays} days`;
   };
+
+  const hasApplied = userData?.appliedjobs?.includes(job._id);
 
   return (
     <Card className="w-full max-w-6xl mx-auto my-4 group hover:shadow-lg transition-all duration-300 border border-green-500 dark:border-gray-800 rounded-xl overflow-hidden">
@@ -168,12 +244,27 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
             </div>
           ) : (
             <Button 
-              variant="default" 
-              className="mt-6 w-full"
-              onClick={handleApply}
-            >
-              Apply Now
-            </Button>
+  variant="outline"
+  size="sm"
+  className={`mt-6 w-full gap-2 ${
+    hasApplied 
+      ? "text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 border-red-500" 
+      : ""
+  }`}
+  onClick={handleApply}
+  disabled={isApplying || hasApplied}
+>
+  {isApplying ? (
+    "Applying..."
+  ) : hasApplied ? (
+    <>
+      <Check className="h-4 w-4" />
+      Applied
+    </>
+  ) : (
+    "Apply Now"
+  )}
+</Button>
           )}
         </div>
 
@@ -193,7 +284,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
                   <span className="truncate">{job.location}</span>
                 </div>
                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <DollarSign className="h-4 w-4 flex-shrink-0" />
+                
                   <span className="truncate">{formatSalary()}</span>
                 </div>
               </div>

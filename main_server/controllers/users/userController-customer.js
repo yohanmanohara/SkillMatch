@@ -1,5 +1,6 @@
 
 const userModel = require('../../models/userModel')
+const AppliedJob = require('../../models/appliedJobs')
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -14,7 +15,7 @@ const updatecv = async (req, res) => {
   }
 
   try {
-    // First make sure the user exists
+
     const user = await userModel.findById(id);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -249,29 +250,41 @@ const resetpassword = async (req, res) => {
 const appliedjobs = async (req, res) => {
   const { userId, jobId } = req.body;
 
-  // Validate user ID and job ID
   if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(jobId)) {
     return res.status(400).json({ error: 'Invalid user ID or job ID' });
   }
 
   try {
-    // Find the user by ID
+    // Check if user exists
     const user = await userModel.findById(userId);
-
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Check if job is already applied
-    if (user.appliedjobs.includes(jobId)) {
+    // Check if job already applied (in either collection)
+    const existingApplication = await AppliedJob.findOne({ userId, jobId });
+    if (existingApplication || user.appliedjobs.includes(jobId)) {
       return res.status(400).json({ error: 'Job already applied' });
     }
 
-    // Add job ID to appliedjobs array
+    // Add to user's applied jobs array
     user.appliedjobs.push(jobId);
-    await user.save();
+    
+    // Create new AppliedJob document
+    const newApplication = new AppliedJob({
+      userId,
+      jobId,
+      status: 'applied'
+    });
 
-    res.status(200).json({ message: 'Job application successful', user });
+    // Save both operations
+    await Promise.all([user.save(), newApplication.save()]);
+
+    res.status(200).json({ 
+      message: 'Job application successful', 
+      user,
+      application: newApplication 
+    });
   } catch (error) {
     console.error('Error applying for job:', error);
     res.status(500).json({ error: 'An error occurred while applying for the job' });

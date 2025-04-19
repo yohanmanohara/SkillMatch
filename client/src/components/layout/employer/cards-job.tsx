@@ -88,9 +88,9 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
 
   const formatSalary = () => {
     if (job.salaryMin && job.salaryMax) {
-      return `$${job.salaryMin.toLocaleString()} - $${job.salaryMax.toLocaleString()}`;
+      return `Rs .${job.salaryMin.toLocaleString()} - Rs .${job.salaryMax.toLocaleString()}`;
     }
-    return job.salaryMin ? `$${job.salaryMin.toLocaleString()}` : "Negotiable";
+    return job.salaryMin ? `Rs .${job.salaryMin.toLocaleString()}` : "Negotiable";
   };
 
   const formatDate = (dateString: string) => {
@@ -191,7 +191,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onDelete, onEdit }) => {
                   <span>{job.location}</span>
                 </div>
                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <DollarSign className="h-4 w-4" />
+                  
                   <span>{formatSalary()}</span>
                 </div>
               </div>

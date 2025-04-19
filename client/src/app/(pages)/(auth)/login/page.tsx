@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Image from 'next/image';
 import Link from 'next/link';
-
+import { useRouter, useSearchParams } from "next/navigation";
 const FormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email" }),
   password: z.string().min(6, { message: "Password must be at least 6 characters" }),
@@ -25,11 +25,14 @@ const FormSchema = z.object({
 export default function UltraModernLogin() {
   const [loading, setLoading] = React.useState(false);
   const [isHovering, setIsHovering] = React.useState(false);
-
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect');
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: { email: "", password: "" },
   });
+ 
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setLoading(true);
@@ -37,7 +40,15 @@ export default function UltraModernLogin() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          redirect,
+        })
+        
+        
+       
+
+
       });
       
       const result = await response.json();
