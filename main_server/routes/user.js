@@ -24,6 +24,7 @@ const {deletejob} = require('../controllers/organization/organizationControllers
 const {updatecv} = require('../controllers/users/userController-customer')
 const {getOrganizationJobs} = require('../controllers/organization/organizationControllers')
 const {appliedjobs} = require('../controllers/users/userController-customer')
+const {getappliedjobs} = require('../controllers/users/userController-customer')
 const {chatWithBot} = require('../controllers/chatbotController')
 
 const router = express.Router()
@@ -39,6 +40,9 @@ router.post('/addjobs',addjobs)
 router.post('/createorganizations', createOrganization)
 
 router.post('/appliedjobs', appliedjobs)
+
+router.post('/getappliedjobs', getappliedjobs)
+
 router.post('/chatwithbot', chatWithBot)
 
 router.post('/login', loginUser)

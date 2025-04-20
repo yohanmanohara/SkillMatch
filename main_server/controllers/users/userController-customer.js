@@ -1,10 +1,13 @@
 
 const userModel = require('../../models/userModel')
+const Organization = require('../../models/organizationModel')
 const AppliedJob = require('../../models/appliedJobs')
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const jobModel = require('../../models/jobModel');
+const { console } = require('inspector/promises');
 const otpStore = {};
 const updatecv = async (req, res) => {
   const { id } = req.query;
@@ -285,24 +288,57 @@ const appliedjobs = async (req, res) => {
   }
 };
 
+const getappliedjobs = async (req, res) => {
+  const { userId } = req.query;
+
+  try {
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
 
 
+    const company = await Organization.findById(user.company);
+    if (!company) {
+      return res.status(404).json({ error: 'Company not found' });
+    }
+
+    const appliedJobs = await AppliedJob.find({
+      jobId: { $in: company.addedjobs.map(id => new mongoose.Types.ObjectId(id)) }
+    });
 
 
+    const jobDetails = await jobModel.find({
+      _id: { $in: appliedJobs.map(job => job.jobId) }
+    });
+    res.status(200).json({ 
 
+      appliedJobs,
+      user,
+      jobDetails
+    
+    });
 
-
-
-
-
-
-
-
+  } catch (error) {
+    console.error('Error fetching applied jobs:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'Error fetching applied jobs', 
+      error: error.message 
+    });
+  }
+};
 
   
+
 module.exports = {
     getsingleuser,
     resetpassword,
+    getappliedjobs,
     otpfroget,
     updateUser,
     updatePassword,
