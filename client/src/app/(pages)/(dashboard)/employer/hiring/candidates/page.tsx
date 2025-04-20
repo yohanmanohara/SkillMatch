@@ -4,14 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { DataTable } from '@/components/ui/data-table'; 
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import { ArrowUpDown, MoreHorizontal, Filter } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
 import { toast } from '@/components/ui/use-toast';
 
@@ -91,7 +92,33 @@ export default function Candidates() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [positionFilters, setPositionFilters] = useState<string[]>([]);
+  const [selectedPosition, setSelectedPosition] = useState<string | null>(null);
   const userId = sessionStorage.getItem('userId') || sessionStorage.getItem('poop');
+
+  const handleExportCSV = () => {
+    const csvRows = [
+      ['Name', 'Email', 'Position', 'Company', 'Status', 'Applied Date', 'CV URL'].join(','),
+      ...filteredCandidates.map((candidate) =>
+        [
+          candidate.name,
+          candidate.email,
+          candidate.jobTitle,
+          candidate.company,
+          candidate.status,
+          candidate.appliedDate,
+          candidate.cvUrl,
+        ].join(',')
+      ),
+    ];
+
+    const csvData = csvRows.join('\n');
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'candidates.csv';
+    link.click();
+  };
 
   useEffect(() => {
     const fetchCandidates = async () => {
@@ -116,7 +143,6 @@ export default function Candidates() {
         }
         
         const data: APIResponse = await res.json();
-        console.log('API Response:', data);
 
         const transformedCandidates = data.appliedJobs.map((job: AppliedJob) => {
           const jobDetail = data.jobDetails.find(detail => detail._id === job.jobId);
@@ -139,6 +165,12 @@ export default function Candidates() {
         });
 
         setCandidates(transformedCandidates);
+        
+        // Extract unique job titles for filters
+        const uniquePositions = Array.from(
+          new Set(transformedCandidates.map(candidate => candidate.jobTitle))
+        );
+        setPositionFilters(uniquePositions);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An unknown error occurred');
       } finally {
@@ -148,6 +180,15 @@ export default function Candidates() {
 
     fetchCandidates();
   }, [userId]);
+
+  // Filter candidates based on selected position
+  const filteredCandidates = selectedPosition
+    ? candidates.filter(candidate => candidate.jobTitle === selectedPosition)
+    : candidates;
+
+  const handlePositionFilter = (position: string | null) => {
+    setSelectedPosition(position);
+  };
 
   const handleViewCV = (cvUrl: string) => {
     try {
@@ -172,27 +213,6 @@ export default function Candidates() {
   };
 
   const columns: ColumnDef<Candidate>[] = [
-    {
-      id: 'select',
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-          className="translate-y-[2px]"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-          className="translate-y-[2px]"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
     {
       accessorKey: 'name',
       header: ({ column }) => (
@@ -324,7 +344,36 @@ export default function Candidates() {
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
+          {/* Position Filter Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <Filter className="h-4 w-4" />
+                {selectedPosition ? `Position: ${selectedPosition}` : 'Filter by Position'}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Filter Positions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem 
+                onClick={() => handlePositionFilter(null)}
+                className={!selectedPosition ? 'bg-accent' : ''}
+              >
+                All Positions
+              </DropdownMenuItem>
+              {positionFilters.map(position => (
+                <DropdownMenuItem
+                  key={position}
+                  onClick={() => handlePositionFilter(position)}
+                  className={selectedPosition === position ? 'bg-accent' : ''}
+                >
+                  {position}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <Button variant="outline" size="sm" onClick={handleExportCSV}>
             Export
           </Button>
         </div>
@@ -332,7 +381,7 @@ export default function Candidates() {
       
       <DataTable 
         columns={columns} 
-        data={candidates} 
+        data={filteredCandidates} 
         searchKey="name"
       />
     </div>
