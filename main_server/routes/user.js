@@ -25,9 +25,16 @@ const {updatecv} = require('../controllers/users/userController-customer')
 const {getOrganizationJobs} = require('../controllers/organization/organizationControllers')
 const {appliedjobs} = require('../controllers/users/userController-customer')
 const {getappliedjobs} = require('../controllers/users/userController-customer')
-const {chatWithBot} = require('../controllers/chatbotController')
-
+const {sortCandidates} = require('../controllers/candidatesController')
+const {rejectCandidates} = require('../controllers/candidatesController')
+const {unsortcandidates} = require('../controllers/candidatesController')
+const {processcandidates} = require('../controllers/candidatesController')
 const router = express.Router()
+
+router.post('/candidates/process', processcandidates)
+router.post('/candidates/unsort', unsortcandidates)
+router.post('/candidates/reject', rejectCandidates)
+router.post('/candidates/sort', sortCandidates)
 
 router.post('/getorganizationspicture', getpicture)
 
@@ -43,7 +50,6 @@ router.post('/appliedjobs', appliedjobs)
 
 router.post('/getappliedjobs', getappliedjobs)
 
-router.post('/chatwithbot', chatWithBot)
 
 router.post('/login', loginUser)
 

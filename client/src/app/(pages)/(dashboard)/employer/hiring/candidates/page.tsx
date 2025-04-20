@@ -5,6 +5,7 @@ import { DataTable } from '@/components/ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import SortedCandidates  from '@/components/layout/employer/sortedcandidates';
 import { ArrowUpDown, MoreHorizontal, Filter } from 'lucide-react';
 import {
   DropdownMenu,
@@ -15,6 +16,7 @@ import {
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
 import { toast } from '@/components/ui/use-toast';
+import { Sort } from '@mui/icons-material';
 
 interface AppliedJob {
   _id: string;
@@ -61,7 +63,7 @@ interface Candidate {
   email: string;
   jobTitle: string;
   company: string;
-  status: 'applied' | 'interviewed' | 'offered' | 'rejected' | 'new' | 'processed';
+  status: 'applied' | 'interviewed' | 'offered' | 'rejected' | 'new' | 'processed'|'sorted' | 'unsorted';
   appliedDate: string;
   cvUrl: string;
   contactNumber?: string;
@@ -77,6 +79,8 @@ const statusVariantMap: Record<Candidate['status'], 'default' | 'destructive' | 
   rejected: 'destructive',
   new: 'secondary',
   processed: 'default',
+  sorted: 'default',
+  unsorted: 'outline',
 };
 
 const isValidUrl = (url: string) => {
@@ -95,6 +99,7 @@ export default function Candidates() {
   const [positionFilters, setPositionFilters] = useState<string[]>([]);
   const [selectedPosition, setSelectedPosition] = useState<string | null>(null);
   const userId = sessionStorage.getItem('userId') || sessionStorage.getItem('poop');
+  const [sortedButton, setSortedButton] = useState(false);
 
   const handleExportCSV = () => {
     const csvRows = [
@@ -181,11 +186,15 @@ export default function Candidates() {
     fetchCandidates();
   }, [userId]);
 
-  // Filter candidates based on selected position
-  const filteredCandidates = selectedPosition
-    ? candidates.filter(candidate => candidate.jobTitle === selectedPosition)
-    : candidates;
+ 
 
+  const filteredCandidates = (selectedPosition
+    ? candidates.filter(candidate => candidate.jobTitle === selectedPosition)
+    : candidates
+  ).filter(candidate => sortedButton 
+    ? ['applied', 'interviewed', 'processed', 'offered', 'rejected', 'sorted'].includes(candidate.status)
+    : true
+  );
   const handlePositionFilter = (position: string | null) => {
     setSelectedPosition(position);
   };
@@ -284,7 +293,98 @@ export default function Candidates() {
       cell: ({ row }) => {
         const candidate = row.original;
 
+        
+        const handleSortCandidate = async (candidateId: string) => {
+          try {
+          
+            setCandidates(prev => prev.map(c => 
+              c.id === candidateId ? { ...c, status: 'sorted' } : c
+            ));
+        
+            console.log('Sorting candidate:', candidateId);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/candidates/sort`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ 
+                candidateId,
+              }),
+            });
+        
+            if (!response.ok) {
+              throw new Error('Failed to sort candidate');
+            }
+        
+            toast({
+              title: 'Candidate sorted',
+              description: 'The candidate has been marked as sorted',
+            });
+          } catch (error) {
+            // Revert on error
+            setCandidates(prev => prev.map(c => 
+              c.id === candidateId ? { ...c, status: 'applied' } : c
+            ));
+            toast({
+              title: 'Error',
+              description: 'Failed to sort candidate',
+              variant: 'destructive',
+            });
+          }
+        };      
+
+        const handleRejectCandidate = async (candidateId: string) => {
+          try {
+            // const rejectionReason = prompt('Please enter rejection reason:') || 'No reason provided';
+            
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/candidates/reject`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+              },
+              body: JSON.stringify({ 
+                candidateId,
+                // rejectionReason 
+              })
+            });
+        
+            const data = await response.json();
+        
+            if (!response.ok) {
+              throw new Error(data.message || 'Failed to reject candidate');
+            }
+        
+            // Update local state
+            setCandidates(prev => prev.map(c => 
+              c.id === candidateId ? { 
+                ...c, 
+                status: 'rejected',
+                // rejectionReason 
+              } : c
+            ));
+        
+            toast({
+              title: 'Success',
+              description: 'Application rejected successfully!',
+              variant: 'default',
+            });
+        
+          } catch (error) {
+            console.error('Rejection failed:', error);
+            toast({
+              title: 'Error',
+              description: error instanceof Error ? error.message : 'Failed to reject application',
+              variant: 'destructive',
+            });
+          }
+        };
+        
+
         return (
+
+
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
@@ -307,23 +407,41 @@ export default function Candidates() {
                   Copy phone number
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem 
-                className="text-green-600 focus:text-green-600"
-                onSelect={(e) => e.preventDefault()}
-              >
-                Process application
-              </DropdownMenuItem>
-              <DropdownMenuItem 
-                className="text-red-600 focus:text-red-600"
-                onSelect={(e) => e.preventDefault()}
-              >
-                Reject application
-              </DropdownMenuItem>
+
+           {(candidate.status === 'applied' || candidate.status ==='unsorted') && (
+            <div>
+                  <DropdownMenuItem 
+                   className="text-green-600 focus:text-green-600"
+                   onSelect={(e) => {
+                    e.preventDefault();
+                   handleSortCandidate(candidate.id);
+                 }}
+                   >
+                 Sort the candidates
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+  className="text-red-600 focus:text-red-600"
+  onSelect={(e) => {
+    e.preventDefault();
+    handleRejectCandidate(candidate.id);
+  }}
+>
+  Reject application
+</DropdownMenuItem>
+
+                </div>    
+              )}
+
+           
+
+    
             </DropdownMenuContent>
           </DropdownMenu>
         );
       },
     },
+
+    
   ];
 
   if (loading) {
@@ -334,11 +452,35 @@ export default function Candidates() {
     return <div className="p-6 text-red-500">Error: {error}</div>;
   }
 
+  function toggleFavorite(candidateId: string): void {
+    throw new Error('Function not implemented.');
+  }
+
   return (
-    <div className="p-6 space-y-4">
+    <>
+
+    {
+      sortedButton ?(
+   
+    <SortedCandidates
+    candidates={candidates}
+    filteredCandidates={filteredCandidates.filter(c => 
+      ['interviewed', 'processed', 'offered', 'rejected', 'sorted'].includes(c.status)
+    )}
+    positionFilters={positionFilters}
+    selectedPosition={selectedPosition}
+    handlePositionFilter={handlePositionFilter}
+    handleExportCSV={handleExportCSV}
+    setSortedButton={setSortedButton}
+    toggleFavorite={toggleFavorite}
+    handleViewCV={handleViewCV}
+  />
+      ):(
+
+        <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Job Applications</h1>
+          <h1 className="text-2xl font-bold tracking-tight">All Candidates</h1>
           <p className="text-muted-foreground">
             Manage your job applications and status
           </p>
@@ -369,12 +511,15 @@ export default function Candidates() {
                 >
                   {position}
                 </DropdownMenuItem>
-              ))}
+              ))}     
             </DropdownMenuContent>
           </DropdownMenu>
 
           <Button variant="outline" size="sm" onClick={handleExportCSV}>
             Export
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setSortedButton(true)}>
+            Sorted Candidates
           </Button>
         </div>
       </div>
@@ -385,5 +530,12 @@ export default function Candidates() {
         searchKey="name"
       />
     </div>
+
+      )
+    }
+
+    
+    </>
+
   );
 }
