@@ -43,6 +43,7 @@ interface JobDetail {
 }
 
 interface UserData {
+  username: string;
   _id: string;
   firstname: string;
   lastname: string;
@@ -52,6 +53,7 @@ interface UserData {
 }
 
 interface APIResponse {
+  applieduser: any;
   appliedJobs: AppliedJob[];
   user: UserData;
   jobDetails: JobDetail[];
@@ -148,14 +150,17 @@ export default function Candidates() {
         }
         
         const data: APIResponse = await res.json();
+        console.log('API Response:', data);
 
         const transformedCandidates = data.appliedJobs.map((job: AppliedJob) => {
           const jobDetail = data.jobDetails.find(detail => detail._id === job.jobId);
-          const user = data.user;
+          const user = data.applieduser.find((user: { _id: string; }) => user._id === job.userId);
+          
+
 
           return {
             id: job._id,
-            name: `${user.firstname} ${user.lastname}`,
+            name: user.username,
             email: user.email,
             jobTitle: jobDetail?.title || `Job ${job.jobId.slice(-4)}`,
             company: jobDetail?.companyname || 'Unknown Company',
@@ -402,6 +407,13 @@ export default function Candidates() {
               >
                 View CV
               </DropdownMenuItem>
+              <DropdownMenuItem 
+               className="text-green-600 focus:text-green-600"
+                    >
+             Show Job Details
+            </DropdownMenuItem>
+
+            
               {candidate.contactNumber && (
                 <DropdownMenuItem onClick={() => candidate.contactNumber && navigator.clipboard.writeText(candidate.contactNumber)}>
                   Copy phone number
@@ -420,14 +432,14 @@ export default function Candidates() {
                  Sort the candidates
                 </DropdownMenuItem>
                 <DropdownMenuItem 
-  className="text-red-600 focus:text-red-600"
-  onSelect={(e) => {
-    e.preventDefault();
-    handleRejectCandidate(candidate.id);
-  }}
->
-  Reject application
-</DropdownMenuItem>
+                 className="text-red-600 focus:text-red-600"
+                       onSelect={(e) => {
+                       e.preventDefault();
+                     handleRejectCandidate(candidate.id);
+                       }}
+                        >
+                Reject application
+                 </DropdownMenuItem>
 
                 </div>    
               )}

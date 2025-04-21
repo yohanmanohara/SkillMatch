@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@calcom/embed-react": "^1.5.2",
     "@dnd-kit/core": "6.1.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",

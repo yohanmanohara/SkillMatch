@@ -35,6 +35,7 @@ export default function TabsDemo() {
     city: string;
     status: string;
     userPicUrl: string;
+    calUsername: string;
   }
   const [user, setUser] = useState<User | null>(null);
   const userId = sessionStorage.getItem('poop'); 
@@ -43,7 +44,7 @@ export default function TabsDemo() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [userpicture, setuserPicture] = useState("");
   const previewUrl = "/avatadefault.jpg";
-  const [pictureurl, setpictureurl] =useState("");
+  // const [pictureurl, setpictureurl] =useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -99,8 +100,8 @@ export default function TabsDemo() {
         setuploaded(true);
         setLoading(false);
         
-        // setFormData((prevData) => ({ ...prevData, pictureurl: data.url }));
-        setpictureurl(data.url);
+        // // setFormData((prevData) => ({ ...prevData, pictureurl: data.url }));
+        // setpictureurl(data.url);
         toast({
           title: "File uploaded",
           description: "File uploaded successfully.",
@@ -132,7 +133,9 @@ export default function TabsDemo() {
           });
           const data = await res.json();
           setUser(data);
+          console.log(data)
           setuserPicture(data.userPicUrl);
+         
          
         } catch (error) {
           console.error("Failed to fetch user:", error);
@@ -147,10 +150,10 @@ export default function TabsDemo() {
   const handleProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     
     e.preventDefault();
-    
     try {
       const formData = new FormData(e.currentTarget);
       const updatedUser = {
+
         username: formData.get('username'),
         email: formData.get('email'),
         firstname: formData.get('firstname'),
@@ -159,7 +162,8 @@ export default function TabsDemo() {
         country: formData.get('country'),
         city: formData.get('city'),
         status: formData.get('status'),
-        userPicUrl: pictureurl,
+        userPicUrl: userpicture,
+        calUsername: formData.get('calUsername'),
       };
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updateuser/?id=${userId}`, {
@@ -193,6 +197,8 @@ export default function TabsDemo() {
     }
   };
   
+  console.log("dw",userpicture);
+
   const checkImageDimensions = (file: File): Promise<boolean> => {
     return new Promise((resolve) => {
       const img = new Image();
@@ -375,6 +381,10 @@ export default function TabsDemo() {
                 <div className="space-y-1">
                   <Label htmlFor="status">Status</Label>
                   <Input id="status" name="status" defaultValue={user?.status} readOnly />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="status">calUsername</Label>
+                  <Input id="calUsername" name="calUsername" defaultValue={user?.calUsername}  />
                 </div>
               </CardContent>
               <CardFooter>

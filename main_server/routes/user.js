@@ -29,12 +29,18 @@ const {sortCandidates} = require('../controllers/candidatesController')
 const {rejectCandidates} = require('../controllers/candidatesController')
 const {unsortcandidates} = require('../controllers/candidatesController')
 const {processcandidates} = require('../controllers/candidatesController')
+const {getcaluser} = require('../controllers/cal_controller')
+const {update_cal} = require('../controllers/cal_controller')
+
 const router = express.Router()
 
 router.post('/candidates/process', processcandidates)
 router.post('/candidates/unsort', unsortcandidates)
 router.post('/candidates/reject', rejectCandidates)
 router.post('/candidates/sort', sortCandidates)
+
+router.post('/caluser', getcaluser)
+router.post('/updatecal',update_cal)
 
 router.post('/getorganizationspicture', getpicture)
 
