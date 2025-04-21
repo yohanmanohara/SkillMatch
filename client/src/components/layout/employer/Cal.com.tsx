@@ -27,8 +27,7 @@ const CalSetupForm = ({ userId, setCurrentUser, setShowCalSetup, setIsCalEmbedOp
     }
 
     setIsLoading(true);
-    console.log('Submitting Cal.com username:', calUsername);
-    console.log('User ID:', userId);
+   
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updatecal?userId=${userId}`, {
 
@@ -38,7 +37,7 @@ const CalSetupForm = ({ userId, setCurrentUser, setShowCalSetup, setIsCalEmbedOp
       });
 
       const data = await response.json();
-      console.log('Response data:', data);
+    
 
       if (!response.ok) {
         throw new Error(data.message || 'Failed to update Cal.com settings');
