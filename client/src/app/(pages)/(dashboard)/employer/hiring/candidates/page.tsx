@@ -150,6 +150,7 @@ export default function Candidates() {
         }
         
         const data: APIResponse = await res.json();
+        console.log('API Response:', data);
 
         const transformedCandidates = data.appliedJobs.map((job: AppliedJob) => {
           const jobDetail = data.jobDetails.find(detail => detail._id === job.jobId);
