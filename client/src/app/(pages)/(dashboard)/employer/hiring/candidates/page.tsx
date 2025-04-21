@@ -306,7 +306,6 @@ export default function Candidates() {
               c.id === candidateId ? { ...c, status: 'sorted' } : c
             ));
         
-            console.log('Sorting candidate:', candidateId);
             const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/candidates/sort`, {
               method: 'POST',
               headers: {
