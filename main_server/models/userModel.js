@@ -67,6 +67,18 @@ const userSchema = new Schema({
       default: [],
     },
 
+    calUsername: {
+      type: String,
+      required: false 
+    },
+    
+    calEventType: {
+      type: String,
+      required: false,
+      default: '45min' 
+    },
+
+
   appliedjobs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Job' ,required: false}],
 
   savedjobs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Job' ,required: false}],
