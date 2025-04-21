@@ -128,7 +128,6 @@
           );
           
           const data = await response.json();
-          console.log('Current user data:', data);  
         
          
           if (response.ok) {

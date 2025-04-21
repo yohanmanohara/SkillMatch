@@ -197,7 +197,6 @@ export default function TabsDemo() {
     }
   };
   
-  console.log("dw",userpicture);
 
   const checkImageDimensions = (file: File): Promise<boolean> => {
     return new Promise((resolve) => {

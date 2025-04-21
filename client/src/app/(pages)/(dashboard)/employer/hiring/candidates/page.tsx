@@ -150,7 +150,6 @@ export default function Candidates() {
         }
         
         const data: APIResponse = await res.json();
-        console.log('API Response:', data);
 
         const transformedCandidates = data.appliedJobs.map((job: AppliedJob) => {
           const jobDetail = data.jobDetails.find(detail => detail._id === job.jobId);
@@ -306,7 +305,6 @@ export default function Candidates() {
               c.id === candidateId ? { ...c, status: 'sorted' } : c
             ));
         
-            console.log('Sorting candidate:', candidateId);
             const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/candidates/sort`, {
               method: 'POST',
               headers: {
