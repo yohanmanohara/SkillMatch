@@ -380,7 +380,6 @@ const JobListingPage = () => {
   )}
 </div>
 
-          {/* Pagination */}
           {filteredJobs.length > jobsPerPage && (
             <Pagination className="mt-8">
               <PaginationContent>

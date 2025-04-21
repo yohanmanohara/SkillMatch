@@ -214,7 +214,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, userType, onDelete, onEdit }) =>
       console.log("CV URL to use:", cvUrlToUse);
     
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/appliedjobs`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/appliedjobs `,
         {
           method: 'POST',
           headers: {

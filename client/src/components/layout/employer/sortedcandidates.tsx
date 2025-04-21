@@ -5,7 +5,7 @@ import { DataTable } from '@/components/ui/data-table';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowUpDown, MoreHorizontal, Filter, Star } from 'lucide-react';
+import { ArrowUpDown, MoreHorizontal, Filter } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +15,13 @@ import {
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
 import { toast } from '@/components/ui/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 
 interface AppliedJob {
   _id: string;
@@ -47,7 +54,7 @@ interface Candidate {
   email: string;
   jobTitle: string;
   company: string;
-  status: 'applied' | 'interviewed' | 'offered' | 'rejected' | 'new' | 'processed' | 'sorted'| 'unsorted';
+  status: 'applied' | 'interviewed' | 'offered' | 'rejected' | 'new' | 'processed' | 'sorted' | 'unsorted';
   appliedDate: string;
   cvUrl: string;
   contactNumber?: string;
@@ -81,7 +88,6 @@ interface SortedCandidatesProps {
 }
 
 const SortedCandidates: React.FC<SortedCandidatesProps> = ({
-  
   filteredCandidates,
   positionFilters,
   selectedPosition,
@@ -91,11 +97,164 @@ const SortedCandidates: React.FC<SortedCandidatesProps> = ({
   toggleFavorite,
   handleViewCV
 }) => {
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
+  const [processingCandidate, setProcessingCandidate] = useState<Candidate | null>(null);
+  const [isCalEmbedOpen, setIsCalEmbedOpen] = useState(false);
 
-    const [candidates, setCandidates] = useState<Candidate[]>([]);
-    
-  const columns: ColumnDef<Candidate>[] = [
  
+  const getCalEmbedUrl = (candidate: Candidate) => {
+    const baseUrl = "https://cal.com";
+    const username = "warusha-yohan-7jjt6q"; 
+    const eventType = "45min"; 
+    
+    const params = new URLSearchParams({
+      name: candidate.name,
+      email: candidate.email,
+      guest: candidate.email,
+      notes: `Interview for ${candidate.jobTitle} position at ${candidate.company}\n\nCandidate Details:\n- Phone: ${candidate.contactNumber || 'N/A'}\n- Applied: ${new Date(candidate.appliedDate).toLocaleDateString()}\n- CV: ${candidate.cvUrl || 'Not provided'}`,
+    });
+    
+    return `${baseUrl}/${username}/${eventType}?${params.toString()}`;
+  };
+
+  const handleProcessClick = (candidate: Candidate) => {
+    setProcessingCandidate(candidate);
+    setIsCalEmbedOpen(true);
+  };
+
+  const handleCalBookingSuccess = () => {
+    if (!processingCandidate) return;
+
+    const updateCandidateStatus = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/candidates/process`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({ 
+            candidateId: processingCandidate.id,
+            status: 'processed'
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to update candidate status');
+        }
+
+        setCandidates(prev => prev.map(c => 
+          c.id === processingCandidate.id ? { 
+            ...c, 
+            status: 'processed'
+          } : c
+        ));
+
+        toast({
+          title: 'Success',
+          description: 'Interview scheduled successfully!',
+          variant: 'default',
+        });
+
+    
+        setTimeout(() => {
+          setIsCalEmbedOpen(false);
+          setProcessingCandidate(null);
+        }, 1500);
+
+      } catch (error) {
+        console.error('Status update failed:', error);
+        toast({
+          title: 'Error',
+          description: error instanceof Error ? error.message : 'Failed to update candidate status',
+          variant: 'destructive',
+        });
+      }
+    };
+
+    updateCandidateStatus();
+  };
+
+  const handleRejectCandidate = async (candidateId: string) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/candidates/reject`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ candidateId })
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to reject candidate');
+      }
+  
+      setCandidates(prev => prev.map(c => 
+        c.id === candidateId ? { ...c, status: 'rejected' } : c
+      ));
+  
+      toast({
+        title: 'Success',
+        description: 'Application rejected successfully!',
+        variant: 'default',
+      });
+  
+      window.location.reload();
+  
+    } catch (error) {
+      console.error('Rejection failed:', error);
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Failed to reject application',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleUnsortCandidate = async (candidateId: string) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/candidates/unsort`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ candidateId })
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to unsort candidate');
+      }
+  
+      setCandidates(prev => prev.map(c => 
+        c.id === candidateId ? { ...c, status: 'applied' } : c
+      ));
+  
+      toast({
+        title: 'Success',
+        description: 'Candidate unsorted successfully!',
+        variant: 'default',
+      });
+      window.location.reload();
+  
+    } catch (error) {
+      console.error('Unsorting failed:', error);
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Failed to unsort candidate',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const columns: ColumnDef<Candidate>[] = [
     {
       accessorKey: 'name',
       header: ({ column }) => (
@@ -166,135 +325,6 @@ const SortedCandidates: React.FC<SortedCandidatesProps> = ({
       id: 'actions',
       cell: ({ row }) => {
         const candidate = row.original;
-          const handleRejectCandidate = async (candidateId: string) => {
-                  try {
-                    // const rejectionReason = prompt('Please enter rejection reason:') || 'No reason provided';
-                    
-                    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/candidates/reject`, {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                      },
-                      body: JSON.stringify({ 
-                        candidateId,
-                        // rejectionReason 
-                      })
-                    });
-                
-                    const data = await response.json();
-                
-                    if (!response.ok) {
-                      throw new Error(data.message || 'Failed to reject candidate');
-                    }
-                
-                
-                    // Update local state
-            setCandidates(prev => prev.map(c => 
-                c.id === candidateId ? { 
-                  ...c, 
-                  status: 'rejected',
-                //   rejectionReason 
-                } : c
-              ));
-                
-                    toast({
-                      title: 'Success',
-                      description: 'Application rejected successfully!',
-                      variant: 'default',
-                    });
-
-                    window.location.reload();
-                
-                  } catch (error) {
-                    console.error('Rejection failed:', error);
-                    toast({
-                      title: 'Error',
-                      description: error instanceof Error ? error.message : 'Failed to reject application',
-                      variant: 'destructive',
-                    });
-                  }
-                };
-
-
-                const handleUnsortCandidate = async (candidateId: string) => {
-                    try {
-                        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/candidates/unsort`, {
-                            method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        },
-                        body: JSON.stringify({ candidateId })
-                      });
-                  
-                      const data = await response.json();
-                  
-                      if (!response.ok) {
-                        throw new Error(data.message || 'Failed to unsort candidate');
-                      }
-                  
-                      // Update local state
-                      setCandidates(prev => prev.map(c => 
-                        c.id === candidateId ? { ...c, status: 'applied' } : c
-                      ));
-                  
-                      toast({
-                        title: 'Success',
-                        description: 'Candidate unsorted successfully!',
-                        variant: 'default',
-                      });
-                        window.location.reload();
-                  
-                    } catch (error) {
-                      console.error('Unsorting failed:', error);
-                      toast({
-                        title: 'Error',
-                        description: error instanceof Error ? error.message : 'Failed to unsort candidate',
-                        variant: 'destructive',
-                      });
-                    }
-                  };
-                
-        const handleprocess = async (candidateId: string) => {
-
-            try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/candidates/process`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({ candidateId })
-                });
-            
-                const data = await response.json();
-            
-                if (!response.ok) {
-                throw new Error(data.message || 'Failed to process candidate');
-                }
-            
-                // Update local state
-                setCandidates(prev => prev.map(c => 
-                    c.id === candidateId ? { ...c, status: 'processed' } : c
-                ));
-            
-                toast({
-                title: 'Success',
-                description: 'Application processed successfully!',
-                variant: 'default',
-                });
-                window.location.reload();
-            
-            } catch (error) {
-                console.error('Processing failed:', error);
-                toast({
-                title: 'Error',
-                description: error instanceof Error ? error.message : 'Failed to process application',
-                variant: 'destructive',
-                });
-            }
-            }
 
         return (
           <DropdownMenu>
@@ -314,67 +344,50 @@ const SortedCandidates: React.FC<SortedCandidatesProps> = ({
               >
                 View CV
               </DropdownMenuItem>
+              <DropdownMenuItem className="text-green-600 focus:text-green-600">
+                Show Job Details
+              </DropdownMenuItem>
               {candidate.contactNumber && (
                 <DropdownMenuItem onClick={() => candidate.contactNumber && navigator.clipboard.writeText(candidate.contactNumber)}>
                   Copy phone number
                 </DropdownMenuItem>
               )}
 
-              {
-                !(candidate.status === 'processed')
-                    && (
-                  <DropdownMenuItem 
-                    className="text-green-600 focus:text-green-600"
-                    onSelect={(e) => {
-                        e.preventDefault();
-                        handleprocess(candidate.id);
-                        }}
-                >
-                    Processed application
-                  </DropdownMenuItem>
-                )
-
-              }
-              
-
-              {
-                candidate.status === 'rejected' 
-                ? (
-                  null
-                )
-                : (
-                    <DropdownMenuItem 
-                        className="text-red-600 focus:text-red-600"
-                        onSelect={(e) => {
-                        e.preventDefault();
-                        handleRejectCandidate(candidate.id);
-                        }}
-                    >
-                        Reject application
-                    </DropdownMenuItem>
-                )
-              }
-
-
-              {candidate.status === 'sorted' 
-              
-                && (
-                    <DropdownMenuItem 
-                    className="text-orange-500"
-                    onSelect={(e) => {
-                     e.preventDefault();
-                     handleUnsortCandidate(candidate.id);
-                  
+              {!(candidate.status === 'processed' || candidate.status === 'interviewed') && (
+                <DropdownMenuItem 
+                  className="text-green-600 focus:text-green-600"
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    handleProcessClick(candidate);
                   }}
-                    >
+                >
+                  Schedule Interview
+                </DropdownMenuItem>
+              )}
+
+              {candidate.status === 'rejected' ? null : (
+                <DropdownMenuItem 
+                  className="text-red-600 focus:text-red-600"
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    handleRejectCandidate(candidate.id);
+                  }}
+                >
+                  Reject application
+                </DropdownMenuItem>
+              )}
+
+              {candidate.status === 'sorted' && (
+                <DropdownMenuItem 
+                  className="text-orange-500"
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    handleUnsortCandidate(candidate.id);
+                  }}
+                >
                   Unsort the candidates
-                 </DropdownMenuItem>
-                )
-            }
-                         
-
-
-               
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -434,6 +447,40 @@ const SortedCandidates: React.FC<SortedCandidatesProps> = ({
         data={filteredCandidates} 
         searchKey="name"
       />
+      
+      {/* Cal.com Embed Dialog */}
+      <Dialog open={isCalEmbedOpen} onOpenChange={setIsCalEmbedOpen}>
+        <DialogContent className="sm:max-w-[80vw] h-fit">
+          <DialogHeader>
+            <DialogTitle>Schedule Interview with {processingCandidate?.name}</DialogTitle>
+            <DialogDescription>
+              Select an available time slot for the interview
+            </DialogDescription>
+          </DialogHeader>
+          
+          {processingCandidate && (
+            <div className="h-[700px] w-full">
+              <iframe
+                src={getCalEmbedUrl(processingCandidate)}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  borderRadius: '8px'
+                }}
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                onLoad={() => {
+                  window.addEventListener('message', (e) => {
+                    if (e.origin === "https://cal.com" && e.data.type === "bookingSuccessful") {
+                      handleCalBookingSuccess();
+                    }
+                  });
+                }}
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

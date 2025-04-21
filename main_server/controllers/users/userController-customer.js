@@ -311,6 +311,9 @@ const getappliedjobs = async (req, res) => {
       jobId: { $in: company.addedjobs.map(id => new mongoose.Types.ObjectId(id)) }
     });
 
+    applieduser = await userModel.find({
+      _id: { $in: appliedJobs.map(job => job.userId) }
+    });
 
     const jobDetails = await jobModel.find({
       _id: { $in: appliedJobs.map(job => job.jobId) }
@@ -318,7 +321,7 @@ const getappliedjobs = async (req, res) => {
     res.status(200).json({ 
 
       appliedJobs,
-      user,
+      applieduser,
       jobDetails
     
     });
