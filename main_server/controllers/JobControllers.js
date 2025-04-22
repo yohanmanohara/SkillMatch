@@ -2,6 +2,7 @@ const JobModel = require('../models/jobModel');
 const userModel = require('../models/userModel');
 const BaseController = require('./BaseController');
 const { s3Client, bucketName } = require('../Connnections/awsLightsailClient');
+const axios = require('axios');
 
 
 class cvController extends BaseController {
@@ -57,10 +58,39 @@ class cvController extends BaseController {
     
             console.log(`Resume uploaded successfully for user ${id}`);
             console.log(`File URL: ${uploadResult.Location}`);
+
+
+
+
+
+             
+              try {
+                const extractorResponse = await axios.post('http://127.0.0.1:5000/api/resume_extractor', {
+                    url: resumeUrl,
+                    userId: id
+                });
+    
+                console.log("Resume extraction response:", extractorResponse.data);
+              } catch (extractorError) {
+                console.error("Error calling resume extractor:", extractorError.message);
+              }
+    
+
+
+
+
+
+
+
+
+
             return res.status(200).json({ 
                 url: uploadResult.Location,
                 key: objectKey 
             });
+           
+
+            
     
         } catch (error) {
             console.error("Upload Error:", error);
@@ -153,11 +183,10 @@ class JobController extends BaseController {
                         details: error.message 
                     });
                 }
-                // File doesn't exist, proceed with upload
+  
             }
 
     
-            // Upload to AWS S3 if the file doesn't exist
             console.log(`Uploading file ${objectKey} to AWS S3...`);
             const uploadResult = await s3Client.upload({
                 Bucket: bucketName,
@@ -166,17 +195,17 @@ class JobController extends BaseController {
                 ContentType: req.file.mimetype
             }).promise();
     
-            const fileUrl = uploadResult.Location; // Get the uploaded file URL
+            const fileUrl = uploadResult.Location; 
             console.log(`File uploaded successfully: ${fileUrl}`);
     
             return res.status(200).json({ url: fileUrl });
     
         } catch (error) {
-            console.error("Upload Error:", error); // Log the full error stack
+            console.error("Upload Error:", error); 
             return res.status(500).json({ 
                 error: "Upload failed", 
                 details: error.message 
-            }); // Provide detailed error message in the response
+            }); 
 
         }
     }
