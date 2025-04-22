@@ -1,3 +1,10 @@
+import pandas as pd
+import torch
+from transformers import BertTokenizer, BertModel
+from sklearn.metrics.pairwise import cosine_similarity
+from lib import db  # Assuming you're importing the MongoDB connection object from a db.py file
+
+
 class JobMatcher:
     def __init__(self):
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
