@@ -4,7 +4,6 @@ import requests
 from transformers import LayoutLMv3Processor, LayoutLMv3ForTokenClassification
 from PIL import Image
 import io
-import 
 
 # Load model and processor once globally
 model_name = "microsoft/layoutlmv3-base"
