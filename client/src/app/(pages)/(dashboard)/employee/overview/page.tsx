@@ -111,7 +111,7 @@ function Page() {
 
   return (
     <div>
-      <Button variat='deafualt' className="mb-4" onClick={() => setIsAnalyticsView(!isAnalyticsView)}>
+      <Button variant='default' className="mb-4" onClick={() => setIsAnalyticsView(!isAnalyticsView)}>
         {isAnalyticsView ? "Overview" : "Analytics"}
       </Button>
 
