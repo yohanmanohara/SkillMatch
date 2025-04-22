@@ -133,12 +133,7 @@ export const navItemempy: NavItem[] = [//employer view
     icon: 'post',
     label: 'profile'
   },
-  {
-    title: 'Manage',
-    href: '/employer/manage',
-    icon: 'employee',
-    label: 'profile'
-  },
+
   {
     title: 'Support',
     href: '/employer/support',
@@ -147,12 +142,7 @@ export const navItemempy: NavItem[] = [//employer view
   },
  
 
-  {
-    title: 'Settings',
-    href: '/employer/settings',
-    icon: 'profile',
-    label: 'settings'
-  },
+ 
  
 
   
