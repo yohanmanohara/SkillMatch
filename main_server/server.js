@@ -8,6 +8,8 @@ const userRoutes = require('./routes/user');
 const { s3Client, bucketName } = require('./Connnections/awsLightsailClient');
 const savenoteRoutes = require('./routes/SaveNoteRoutes');
 const analyticsRoutes = require('./routes/analyticsRoute');
+const fetchUserIds = require('./utils/backgroudcalbookingstore');
+
 
 dotenv.config();
 const app = express();
@@ -38,6 +40,20 @@ s3Client.listObjectsV2({ Bucket: bucketName }, (err) => {
     console.log('Connected to AWS Lightsail storage');
   }
 });
+
+function repeatFetchUserIds() {
+  setInterval(async () => {
+      try {
+          const userPairs = await fetchUserIds();
+          console.log('User ID - calapikey pairs:', userPairs);
+      } catch (error) {
+          console.error('Error fetching user ID - calapikey pairs:', error);
+      }
+  }, 5000);  // runs every 5 seconds
+}
+
+repeatFetchUserIds();
+
 
 app.listen(port, () => {
   console.log(`Server is listening on port: ${port}`);
