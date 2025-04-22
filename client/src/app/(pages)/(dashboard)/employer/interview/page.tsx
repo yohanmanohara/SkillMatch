@@ -149,6 +149,7 @@ useEffect(() => {
         }
 
         const data = await response.json()
+        console.log('Bookings:', data.data)
         setBookings(data.data)
       } catch (err) {
         console.error('Fetch error:', err)
@@ -161,13 +162,11 @@ useEffect(() => {
 
   const handleApiKeySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate inputs
     if (!inputApiKey.trim() || !userId) {
       setError('API key and user ID are required');
       return;
     }
-  
+    
     setLoadingForm(true);
     setError(null);
     
@@ -197,12 +196,10 @@ useEffect(() => {
       const data = await responses.json();
       console.log('API Key submission successful:', data);
       
-      // Update state
+      
       setApiKey(inputApiKey);
       setInputApiKey('');
       setShowApiKeyForm(false);
-      
-      // Only reload if absolutely necessary
       window.location.reload();
       
     } catch (err) {

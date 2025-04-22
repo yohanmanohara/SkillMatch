@@ -2,6 +2,7 @@
 const userModel = require('../models/userModel');
 const { isValidObjectId } = require('mongoose');
 const axios = require('axios');
+const Booking = require('../models/calbooking'); 
 
 const getapikey = async (req, res) => {
     const { userId } = req.body;
@@ -114,8 +115,7 @@ const calapikeystore = async (req, res) => {
 
 const getcaluser = async (req, res) => {
     try {
-        const { userId } = req.body; // Get userId from request body
-        
+        const { userId } = req.body; 
         if (!userId) {
             return res.status(400).json({ 
                 success: false,
@@ -232,6 +232,7 @@ const update_cal = async (req, res) => {
 
 const calbookings = async (req, res) => {
     const { apiKey } = req.body;
+    const { userId } = req.body;
     try {
        
 
@@ -250,7 +251,7 @@ const calbookings = async (req, res) => {
             timeout: 10000
         });
 
-
+        console.log('Cal.com API response:', calResponse.data);
         return res.status(200).json(calResponse.data);
 
     } catch (error) {
