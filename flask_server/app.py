@@ -18,11 +18,18 @@ ner_pipeline = pipeline("ner", model=ner_model, tokenizer=ner_tokenizer, aggrega
 
 # === ROUTES ===
 
-@app.route('/api/job_suggestion', methods=['POST'])
-def suggest_jobs():
-    """Suggest top 3 jobs for each candidate in DB."""
-    suggestions = job_matcher.suggest_jobs()
-    return jsonify(suggestions)
+@app.route('/api/job_suggestion/<user_id>', methods=['GET'])
+def suggest_jobs(user_id):
+    # Call the suggest_jobs_for_candidate method
+    suggested_jobs = job_matcher.suggest_jobs_for_candidate(user_id)
+
+    if not suggested_jobs:
+        return jsonify({"message": "No jobs found for the candidate"}), 404
+
+    return jsonify({"user_id": user_id, "suggested_jobs": suggested_jobs}), 200
+
+
+
 
 @app.route('/api/candidate_suggestion', methods=['POST'])
 def suggest_candidates():
@@ -46,10 +53,11 @@ def extract():
         return jsonify({"error": "Missing user_id or aws_pdf_url"}), 400
 
     try:
-        entities = extract_resume_entities(user_id, aws_link)
+        summary, raw_entities = extract_resume_entities(user_id, aws_link)
         return jsonify({
             "user_id": user_id,
-            "entities": [{"token": token, "label_id": label} for token, label in entities]
+            "summary": summary,
+            "entities": [{"token": token, "label_id": label, "label": LABEL_MAP.get(label, "OTHER")} for token, label in raw_entities]
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
