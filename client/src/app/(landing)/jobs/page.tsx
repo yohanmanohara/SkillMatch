@@ -65,9 +65,9 @@ const JobListingPage = () => {
   const [location, setLocation] = useState("");
   const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [jobsPerPage] = useState(5);
+  const [jobsPerPage] = useState(400);
   const [employmentTypes, setEmploymentTypes] = useState<string[]>([]);
-  const [salaryRange, setSalaryRange] = useState<[number, number]>([0, 100000]);
+  const [salaryRange, setSalaryRange] = useState<[number, number]>([0, 6000000]);
   const [experienceLevels, setExperienceLevels] = useState<string[]>([]);
   const router = useRouter();
 

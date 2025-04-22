@@ -55,12 +55,12 @@ const normalizeJobData = (job: TopJobsProps['jobs'][0]): JobData => {
 };
 
 const TopJobs: React.FC<TopJobsProps> = ({ jobs }) => {
-  const topJobs = jobs.slice(0, 5);
+  
 
   return (
     <div className="space-y-6">
       <div className="grid gap-4">
-        {topJobs.map((job, index) => (
+        {jobs.map((job, index) => (
           <JobCard key={job._id || index} job={normalizeJobData(job)} userType={"employer"} />
         ))}
       </div>

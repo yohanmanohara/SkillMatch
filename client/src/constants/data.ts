@@ -77,25 +77,21 @@ export const navItem: NavItem[] = [//customer view
     icon: 'spinner',
     label: 'profile'
   },
-  {
-    title: 'Support',
-    href: '/employee/support',
-    icon: 'media',
-    label: 'profile'
-  },
+
   {
     title: 'Recomanded jobs',
     href: '/employee/recomandadjobs',
     icon: 'profile',
     label: 'profile'
   },
-
   {
-    title: 'Settings',
-    href: '/employee/settings',
-    icon: 'car',
-    label: 'settings'
+    title: 'Support',
+    href: '/employee/support',
+    icon: 'media',
+    label: 'profile'
   },
+
+  
  
 
   
