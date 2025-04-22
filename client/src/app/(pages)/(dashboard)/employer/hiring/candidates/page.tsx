@@ -16,7 +16,6 @@ import {
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
 import { toast } from '@/components/ui/use-toast';
-import { Sort } from '@mui/icons-material';
 
 interface AppliedJob {
   _id: string;
@@ -95,6 +94,7 @@ const isValidUrl = (url: string) => {
 };
 
 export default function Candidates() {
+  
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -176,7 +176,7 @@ export default function Candidates() {
 
         setCandidates(transformedCandidates);
         
-        // Extract unique job titles for filters
+
         const uniquePositions = Array.from(
           new Set(transformedCandidates.map(candidate => candidate.jobTitle))
         );

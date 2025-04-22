@@ -1,6 +1,8 @@
-// controllers/userController.js
+
 const userModel = require('../models/userModel');
 const { isValidObjectId } = require('mongoose');
+const axios = require('axios');
+
 
 const getcaluser = async (req, res) => {
     try {
@@ -120,5 +122,53 @@ const update_cal = async (req, res) => {
     }
 };
 
+const calbookings = async (req, res) => {
+    const { apiKey } = req.body;
+    try {
+       
 
-module.exports = { getcaluser ,update_cal};
+        if (!apiKey) {
+            return res.status(500).json({
+                success: false,
+                error: 'Server configuration error'
+            });
+        }
+
+        const calResponse = await axios.get(`https://api.cal.com/v2/bookings`, {
+            headers: {
+                'Authorization': apiKey,
+                'cal-api-version': '2024-08-13'
+            },
+            timeout: 10000
+        });
+
+
+        return res.status(200).json(calResponse.data);
+
+    } catch (error) {
+        console.error('Cal.com API error:', error);
+
+        let status = 500;
+        let message = 'Internal server error';
+
+        if (axios.isAxiosError(error)) {
+            if (error.response) {
+                status = error.response.status;
+                message = error.response.data?.message || 'Cal.com API error';
+            } else if (error.request) {
+                message = 'No response from Cal.com API';
+            } else if (error.code === 'ECONNABORTED') {
+                message = 'Request to Cal.com timed out';
+            }
+        }
+
+        return res.status(status).json({ success: false, error: message });
+    }
+};
+
+
+
+
+
+
+module.exports = { getcaluser ,update_cal,calbookings};
