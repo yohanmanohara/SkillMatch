@@ -2,7 +2,6 @@ const JobModel = require('../models/jobModel');
 const userModel = require('../models/userModel');
 const BaseController = require('./BaseController');
 const { s3Client, bucketName } = require('../Connnections/awsLightsailClient');
-const axios = require('axios');
 
 
 class cvController extends BaseController {
@@ -21,24 +20,28 @@ class cvController extends BaseController {
                 return res.status(500).json({ error: "AWS S3 client not initialized" });
             }
     
-            const objectKey = `resume/${id}-${req.file.originalname}`;
+            const prefix = `resume/${id}-`;
+            const listedObjects = await s3Client.listObjectsV2({
+                Bucket: bucketName,
+                Prefix: prefix
+            }).promise();
     
-            // Delete any existing resume
-            try {
-                await s3Client.deleteObject({
-                    Bucket: bucketName,
-                    Key: objectKey
-                }).promise();
-                console.log(`Deleted previous resume for user ${id}`);
-            } catch (deleteError) {
-                if (deleteError.code !== 'NoSuchKey') {
-                    console.error("Error deleting previous resume:", deleteError);
-                    throw deleteError;
-                }
+            if (listedObjects.Contents.length > 0) {
+                // If there are existing resumes for this user, return the first one
+                const existingKey = listedObjects.Contents[0].Key;
+                const existingUrl = `https://${bucketName}.s3.amazonaws.com/${existingKey}`;
+                console.log(`Resume already exists for user ${id}, returning URL.`);
+                console.log(`File URL: ${existingUrl}`);
+
+                return res.status(200).json({ 
+                    url: existingUrl,
+                    key: existingKey 
+                });
             }
     
-            // Upload the new resume
-            console.log(`Uploading resume for user ${id} to S3...`);
+            // No existing file found — proceed to upload
+            const objectKey = `resume/${id}-${req.file.originalname}`;
+            console.log(`Uploading new resume for user ${id} to S3...`);
             const uploadResult = await s3Client.upload({
                 Bucket: bucketName,
                 Key: objectKey,
@@ -52,23 +55,10 @@ class cvController extends BaseController {
                 }
             }).promise();
     
-            const resumeUrl = uploadResult.Location;
             console.log(`Resume uploaded successfully for user ${id}`);
-    
-            // POST the URL to /api/resume_extractor
-            try {
-                const extractorResponse = await axios.post('http://127.0.0.1:5000/api/resume_extractor', {
-                    url: resumeUrl,
-                    userId: id
-                });
-    
-                console.log("Resume extraction response:", extractorResponse.data);
-            } catch (extractorError) {
-                console.error("Error calling resume extractor:", extractorError.message);
-            }
-    
+            console.log(`File URL: ${uploadResult.Location}`);
             return res.status(200).json({ 
-                url: resumeUrl,
+                url: uploadResult.Location,
                 key: objectKey 
             });
     
@@ -80,6 +70,9 @@ class cvController extends BaseController {
             });
         }
     }
+    
+    
+
 
     async getResume(req, res) {
         const { id } = req.query;
