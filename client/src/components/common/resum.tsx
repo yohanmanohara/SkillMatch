@@ -121,7 +121,7 @@ const ResumeManager = () => {
         <div className="text-red-500 text-center py-4">{error}</div>
       ) : !cv ? (
         <div className="text-center py-8 text-gray-500">
-          You haven't uploaded a CV yet.
+          You haven&apos;t uploaded a CV yet.
         </div>
       ) : (
         <div className=" grid grid-cols-1 gap-4 md:ml-44 md:mr-44 ">
@@ -205,7 +205,7 @@ const ResumeManager = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete your CV. You won't be able to use it for future applications.
+              This will permanently delete your CV. You won&apos;t be able to use it for future applications.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

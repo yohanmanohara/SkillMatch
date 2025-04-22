@@ -104,7 +104,7 @@ const CalSetupForm = ({ userId, setCurrentUser, setShowCalSetup, setIsCalEmbedOp
         </div>
 
         <div className="text-sm text-muted-foreground">
-          <p>This is your Cal.com username (e.g., "john-doe" in cal.com/john-doe)</p>
+          <p>This is your Cal.com username (e.g., &quot;john-doe&quot; in cal.com/john-doe)</p>
         </div>
       </div>
 
