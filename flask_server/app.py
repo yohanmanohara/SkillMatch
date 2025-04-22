@@ -18,8 +18,14 @@ ner_pipeline = pipeline("ner", model=ner_model, tokenizer=ner_tokenizer, aggrega
 
 # === ROUTES ===
 
-@app.route('/api/job_suggestion/<user_id>', methods=['GET'])
-def suggest_jobs(user_id):
+@app.route('/api/job_suggestion', methods=['POST'])
+def suggest_jobs():
+    # Get the 'id' parameter from the query string
+    user_id = request.args.get('id')
+
+    if not user_id:
+        return jsonify({"message": "ID parameter is required"}), 400
+
     # Call the suggest_jobs_for_candidate method
     suggested_jobs = job_matcher.suggest_jobs_for_candidate(user_id)
 
