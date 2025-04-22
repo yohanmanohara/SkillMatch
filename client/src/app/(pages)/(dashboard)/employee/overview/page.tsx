@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Bell, Briefcase, Bookmark, Star } from "lucide-react";
-import Analytics from "@/components/common/emplyee-analytics";
+import Analytics from "@/components/common/emplyee-analytics"; // Ensure this is correct
 
 // Dummy User Data
 const dashboardData = {
@@ -51,7 +51,7 @@ function Page() {
   const [userData, setUserData] = useState<{ username: string; role: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [jobAlerts, setJobAlerts] = useState<string[]>([]);
-  const [isAnalyticsView, setIsAnalyticsView] = useState(false);  // New state for toggle
+  const [isAnalyticsView, setIsAnalyticsView] = useState(false); // New state for toggle
 
   const userId = sessionStorage.getItem("poop");
 
@@ -111,18 +111,14 @@ function Page() {
 
   return (
     <div>
-      <Button variant="default" className="mb-4" onClick={() => setIsAnalyticsView(!isAnalyticsView)}>
+      <Button variat='deafualt' className="mb-4" onClick={() => setIsAnalyticsView(!isAnalyticsView)}>
         {isAnalyticsView ? "Overview" : "Analytics"}
       </Button>
 
       {/* Conditionally Render Analytics or Overview */}
       {isAnalyticsView ? (
-        <Analytics>
-          {/* Analytics content */}
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Add any additional Analytics content here */}
-          </div>
-        </Analytics>
+        // Assuming Analytics is a standalone component
+        <Analytics /> // Just render Analytics directly, not with children
       ) : (
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Profile Summary */}
@@ -260,7 +256,7 @@ function Page() {
                   </div>
                 ))
               ) : (
-                <div>No recent job alerts</div>
+                <div>No new job alerts</div>
               )}
             </CardContent>
           </Card>
