@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Trash } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "@/components/ui/use-toast";
 import {
   LineChart,
@@ -17,13 +18,19 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar
 } from "recharts";
 
-export default function Page() {
+function Page() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("");
   const [notes, setNotes] = useState("");
   const [eventTitle, setEventTitle] = useState("");
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   const [savedNotes, setSavedNotes] = useState<
     { id?: number; date: Date | undefined; text: string }[]
@@ -31,69 +38,77 @@ export default function Page() {
   const [events, setEvents] = useState<
     { date: Date | undefined; time: string; title: string }[]
   >([]);
-
   const [isLoading, setIsLoading] = useState(false);
   const userId = sessionStorage.getItem("poop");
 
   // Analytics State
-  const [trends, setTrends] = useState<any[]>([]);
-  const [filters, setFilters] = useState({
-    timeInterval: "daily",
-    startDate: "",
-    endDate: "",
+  const [analyticsData, setAnalyticsData] = useState({
+    statusDistribution: [],
+    applicationTrends: [],
+    topJobs: [],
+    totalApplications: 0
   });
 
-  // Fetch Trends Data
-  const fetchTrends = async () => {
+  const [filters, setFilters] = useState({
+    timeInterval: 'daily',
+    startDate: '',
+    endDate: ''
+  });
+
+  const [trends, setTrends] = useState([]);
+
+  // Fetch analytics Data
+  const fetchAnalytics = async () => {
     try {
-      // Validate startDate and endDate
-      if (!filters.startDate || !filters.endDate) {
-        toast({
-          title: "Error",
-          description: "Please select both start and end dates.",
-          variant: "destructive",
-        });
-        return;
+      const queryParams = new URLSearchParams({
+        timeInterval: filters.timeInterval,
+        userId: userId || ''
+      }).toString();
+      
+      // Only add date filters if both are provided
+      if (filters.startDate && filters.endDate) {
+        queryParams.append('startDate', filters.startDate);
+        queryParams.append('endDate', filters.endDate);
       }
-  
-      // Build query parameters
-      const queryParams = new URLSearchParams(filters).toString();
+      
+      console.log("Fetching analytics with params:", queryParams);
+      
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/analytics?${queryParams}`
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/analytics/applications?${queryParams}`
       );
-  
-      // Handle non-OK responses
+      
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to fetch trends");
+        throw new Error("Failed to fetch analytics data");
       }
-  
-      // Parse and set trends data
+      
       const data = await response.json();
-      setTrends(data);
+      console.log("Analytics data received:", data);
+      
+      // Ensure proper data structure even if some properties are missing
+      setAnalyticsData({
+        statusDistribution: data.statusDistribution || [],
+        applicationTrends: data.applicationTrends || [],
+        topJobs: data.topJobs || [],
+        totalApplications: data.totalApplications || 0
+      });
+      
+      setTrends(data.applicationTrends || []); // Keep compatibility with existing chart
     } catch (error) {
-      // Type-check the error before accessing its properties
-      let errorMessage = "Failed to load application trends.";
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-  
-      console.error("Error fetching trends:", error);
+      console.error("Error fetching analytics:", error);
       toast({
         title: "Error",
-        description: errorMessage,
+        description: "Failed to load application analytics.",
         variant: "destructive",
       });
     }
   };
 
   useEffect(() => {
-    fetchTrends();
-  }, [filters]);
+    fetchAnalytics();
+  }, [filters, userId]);
 
   const handleSaveNote = async () => {
     if (notes.trim() === "") return;
-
     if (!userId) {
       toast({
         title: "Error",
@@ -131,9 +146,10 @@ export default function Page() {
       }
 
       const savedNote = await response.json();
-      setSavedNotes([...savedNotes, { id: savedNote.id, date, text: notes }]);
-      setNotes("");
 
+      setSavedNotes([...savedNotes, { id: savedNote.id, date, text: notes }]);
+
+      setNotes("");
       toast({
         title: "Success",
         description: "Note saved successfully.",
@@ -325,49 +341,189 @@ export default function Page() {
         )}
       </div>
 
-      {/* Analytics Section */}
-      <div className="mt-10">
-        <h2 className="text-xl font-bold mb-4">Application Trends</h2>
-        <div className="flex gap-4 mb-4">
-          <select
-            value={filters.timeInterval}
-            onChange={(e) =>
-              setFilters({ ...filters, timeInterval: e.target.value })
-            }
-            className="border p-2 rounded"
-          >
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-          </select>
-          <input
-            type="date"
-            value={filters.startDate}
-            onChange={(e) =>
-              setFilters({ ...filters, startDate: e.target.value })
-            }
-            className="border p-2 rounded"
-          />
-          <input
-            type="date"
-            value={filters.endDate}
-            onChange={(e) =>
-              setFilters({ ...filters, endDate: e.target.value })
-            }
-            className="border p-2 rounded"
-          />
-        </div>
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={trends}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="count" stroke="#8884d8" />
-          </LineChart>
-        </ResponsiveContainer>
+      {/* Analytics Section Toggle Button */}
+      <div className="mt-10 flex justify-between items-center">
+        <h2 className="text-xl font-bold">Application Analytics</h2>
+        <Button 
+          variant="outline"
+          onClick={() => setShowAnalytics(!showAnalytics)}
+        >
+          {showAnalytics ? "Hide Analytics" : "Show Analytics"}
+        </Button>
       </div>
+
+      {/* Analytics Section */}
+      {showAnalytics && (
+        <div className="mt-4">
+          <h2 className="text-xl font-bold mb-4">Application Analytics</h2>
+          
+          {/* Filters */}
+          <div className="flex gap-4 mb-6">
+            <select
+              value={filters.timeInterval}
+              onChange={(e) =>
+                setFilters({ ...filters, timeInterval: e.target.value })
+              }
+              className="border p-2 rounded"
+            >
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+            <input
+              type="date"
+              value={filters.startDate}
+              onChange={(e) =>
+                setFilters({ ...filters, startDate: e.target.value })
+              }
+              className="border p-2 rounded"
+            />
+            <input
+              type="date"
+              value={filters.endDate}
+              onChange={(e) =>
+                setFilters({ ...filters, endDate: e.target.value })
+              }
+              className="border p-2 rounded"
+            />
+            <Button 
+              variant="outline" 
+              onClick={() => setFilters({timeInterval: 'daily', startDate: '', endDate: ''})}
+            >
+              Reset Filters
+            </Button>
+          </div>
+          
+          {/* Summary Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4 mb-8">
+            <Card className="bg-card dark:border-gray-700">
+              <CardContent className="p-6">
+                <div className="text-3xl font-bold">{analyticsData.totalApplications}</div>
+                <p className="text-muted-foreground mt-1">Total Applications</p>
+              </CardContent>
+            </Card>
+            
+            {analyticsData.statusDistribution.slice(0, 2).map((status, i) => (
+              <Card key={status.status} className="bg-card dark:border-gray-700">
+                <CardContent className="p-6">
+                  <div className="text-3xl font-bold">{status.count}</div>
+                  <p className="text-muted-foreground mt-1">
+                    {status.status.charAt(0).toUpperCase() + status.status.slice(1)}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Application Trend Chart */}
+          <div className="mb-10">
+            <h3 className="text-lg font-semibold mb-4">Application Trends</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={trends}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="count" stroke="#8884d8" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          
+          {/* Status Distribution Chart */}
+          <div className="mb-10">
+            <h3 className="text-lg font-semibold mb-4">Application Status Distribution</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Pie Chart */}
+              <Card className="p-4">
+                <CardContent>
+                  <h4 className="font-medium mb-4">Status Distribution</h4>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={analyticsData.statusDistribution}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="count"
+                        nameKey="status"
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {analyticsData.statusDistribution.map((entry, index) => (
+                          <Cell 
+                            key={`cell-${index}`} 
+                            fill={`hsl(var(--chart-${(index % 5) + 1}))`} 
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(value, name) => [value, name]} />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              {/* Bar Chart */}
+              <Card className="p-4">
+                <CardContent>
+                  <h4 className="font-medium mb-4">Top Positions</h4>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart
+                      data={analyticsData.topJobs.slice(0, 5)}
+                      layout="vertical"
+                      margin={{
+                        top: 5,
+                        right: 30,
+                        left: 80,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
+                      <XAxis type="number" />
+                      <YAxis 
+                        type="category" 
+                        dataKey="title" 
+                        width={80}
+                        tick={{ fontSize: 12 }}
+                      />
+                      <Tooltip />
+                      <Bar dataKey="count" fill="hsl(var(--chart-2))">
+                        {analyticsData.topJobs.slice(0, 5).map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={`hsl(var(--chart-${(index % 5) + 1}))`} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+          
+          {/* Top Jobs */}
+          {analyticsData.topJobs.length > 0 && (
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Top Positions</h3>
+              <div className="space-y-2">
+                {analyticsData.topJobs.map(job => (
+                  <Card key={job.jobId}>
+                    <CardContent className="p-4 flex justify-between items-center">
+                      <div>
+                        <p className="font-medium">{job.title}</p>
+                        <p className="text-sm text-muted-foreground">{job.company}</p>
+                      </div>
+                      <Badge>{job.count} applications</Badge>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }
+
+export default Page;
