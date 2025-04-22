@@ -7,24 +7,21 @@ const JobRoutes = require('./routes/JobRoutes');
 const userRoutes = require('./routes/user');
 const { s3Client, bucketName } = require('./Connnections/awsLightsailClient');
 const savenoteRoutes = require('./routes/SaveNoteRoutes');
-const analyticsRoutes = require('./routes/analyticsRoute'); // Import the analytics routes
+const analyticsRoutes = require('./routes/analyticsRoute');
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3002;
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Middleware
 app.use(express.json());
 app.use(cors());
 
-// Routes
 app.use('/api/file', upload.single('file'), JobRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/savenotes', savenoteRoutes);
-app.use('/api/analytics', analyticsRoutes); 
+app.use('/api/analytics', analyticsRoutes);
 
-// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('Connected to MongoDB');
@@ -42,7 +39,6 @@ s3Client.listObjectsV2({ Bucket: bucketName }, (err) => {
   }
 });
 
-// Start the server
 app.listen(port, () => {
   console.log(`Server is listening on port: ${port}`);
 });
