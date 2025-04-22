@@ -1,5 +1,6 @@
 "use client"
 import * as React from 'react';
+import { Suspense } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -87,6 +88,7 @@ export default function UltraModernLogin() {
   }
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Visual Panel - Glass Morphism Effect */}
       <div 
@@ -283,5 +285,6 @@ export default function UltraModernLogin() {
         </div>
       </div>
     </div>
+    </Suspense>
   );
 }
