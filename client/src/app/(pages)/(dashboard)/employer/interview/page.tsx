@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useMemo } from 'react'
-import { format, isAfter, parseISO } from 'date-fns'
+import { format, isAfter, parseISO, set } from 'date-fns'
 import {
   Card,
   CardHeader,
@@ -20,7 +20,7 @@ import {
   DialogTitle,
   DialogDescription
 } from '@/components/ui/dialog'
-import { CalendarIcon, ClockIcon, UserIcon, VideoIcon } from 'lucide-react'
+import { AlertCircle, CalendarIcon, ClockIcon, Loader2, UserIcon, VideoIcon, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
@@ -60,14 +60,12 @@ export default function InterviewLinks() {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [sessionId, setSessionId] = useState<string | null>(null)
   const [showApiKeyForm, setShowApiKeyForm] = useState(false)
   const [inputApiKey, setInputApiKey] = useState('')
-
-  const apiKey = 'cal_live_c6049ba840b72c00fee423ca1b331b3b'
+  const [apiKey, setApiKey] = useState<string | null>(null)
   const userId = typeof window !== 'undefined' ? sessionStorage.getItem('poop') : null
+  const [loadingform, setLoadingForm] = useState(false)
 
-  // Filter out past interviews and sort by date
   const upcomingBookings = useMemo(() => {
     const now = new Date()
     return bookings
@@ -76,9 +74,61 @@ export default function InterviewLinks() {
   }, [bookings])
 
   useEffect(() => {
-    if (!apiKey || !userId) return
 
-    const fetchBookings = async () => {
+    const getapiKey = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/getapikey`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId })
+          
+        })
+
+        if (!response.ok) throw new Error('Failed to fetch API key')
+
+        const data = await response.json()
+        setApiKey(data.apiKey)
+        console.log('API Keys:', apiKey)
+
+       
+        
+      }
+      catch (err) {
+        console.error('Error fetching API key:', err)
+        setError('Failed to fetch API key')
+      }
+    }
+
+    
+
+    getapiKey()
+   
+
+  }, [apiKey, userId])
+
+useEffect(() => {
+  if (apiKey) {
+    console.log('API Key updated:', apiKey);
+    fetchBookings()
+    setShowApiKeyForm(false)
+   
+  }
+  else {
+    setShowApiKeyForm(true)
+  }
+
+}
+, [apiKey])
+
+ 
+
+  const fetchBookings = async () => {
+
+    if (!apiKey) {
+      setShowApiKeyForm(true) 
+      return
+    }
+  
       try {
         setLoading(true)
         setError(null)
@@ -109,32 +159,63 @@ export default function InterviewLinks() {
       }
     }
 
-    fetchBookings()
-  }, [apiKey, userId])
-
   const handleApiKeySubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
-
-    try {
-      if (!sessionId) throw new Error('Session not initialized')
-
-      const response = await fetch('/api/store-api-key', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId, apiKey: inputApiKey })
-      })
-
-      if (!response.ok) throw new Error('Failed to store API key')
-
-      setShowApiKeyForm(false)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to submit API key')
-    } finally {
-      setLoading(false)
+    e.preventDefault();
+    
+    // Validate inputs
+    if (!inputApiKey.trim() || !userId) {
+      setError('API key and user ID are required');
+      return;
     }
-  }
+  
+    setLoadingForm(true);
+    setError(null);
+    
+    try {
+      if (!process.env.NEXT_PUBLIC_SERVER_URL) {
+        throw new Error('Server URL is not configured');
+      }
+    
+      const responses = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/calapikeystore`,
+        {
+          method: 'POST',
+          cache: 'no-store',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ inputApiKey, userId }),
+        }
+      );
+  
+    
+      if (!responses.ok) {
+        const errorData = await responses.json().catch(() => ({}));
+        throw new Error(
+          errorData.error || `HTTP error! status: ${responses.status}`
+        );
+      }
+  
+      const data = await responses.json();
+      console.log('API Key submission successful:', data);
+      
+      // Update state
+      setApiKey(inputApiKey);
+      setInputApiKey('');
+      setShowApiKeyForm(false);
+      
+      // Only reload if absolutely necessary
+      window.location.reload();
+      
+    } catch (err) {
+      console.error('API Key submission failed:', err);
+      setError(
+        err instanceof Error 
+          ? err.message 
+          : 'An unknown error occurred while submitting the API key'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
@@ -281,24 +362,49 @@ export default function InterviewLinks() {
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleApiKeySubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Input
-                type="password"
-                value={inputApiKey}
-                onChange={(e) => setInputApiKey(e.target.value)}
-                placeholder="cal_xxxxxxxxxxxxxxxx"
-                className="font-mono"
-                required
-              />
-              <p className="text-sm text-muted-foreground">
-                Find your API key in Cal.com under{' '}
-                <strong>Settings → Developer → API Keys</strong>
-              </p>
-            </div>
-            <Button type="submit" className="w-full">
-              Connect Account
-            </Button>
-          </form>
+  <div className="space-y-2">
+    <div className="relative">
+      <Input
+        type="password"
+        value={inputApiKey}
+        onChange={(e) => setInputApiKey(e.target.value)}
+        placeholder="cal_xxxxxxxxxxxxxxxx"
+        className="font-mono pr-10" // Added padding for icon
+        required
+        disabled={loadingform} // Disable during submission
+      />
+     
+    </div>
+    
+    <p className="text-sm text-muted-foreground">
+      Find your API key in Cal.com under{' '}
+      <strong>Settings → Developer → API Keys</strong>
+    </p>
+    
+    {error && (
+      <p className="text-sm text-red-500 flex items-center gap-2">
+        <AlertCircle className="h-4 w-4" />
+        {error}
+      </p>
+    )}
+  </div>
+  
+  <Button 
+    type="submit" 
+    className="w-full"
+    disabled={loadingform || !inputApiKey.trim()} // Disable if empty or loading
+  >
+    {loadingform ? (
+      <div className="flex items-center gap-2">
+        <Loader2 className="h-4 w-4 animate-spin" />
+        Connecting...
+      </div>
+    ) : (
+      "Connect Account"
+    )}
+  </Button>
+  
+</form>
         </DialogContent>
       </Dialog>
     </div>

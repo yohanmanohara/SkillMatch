@@ -3,6 +3,114 @@ const userModel = require('../models/userModel');
 const { isValidObjectId } = require('mongoose');
 const axios = require('axios');
 
+const getapikey = async (req, res) => {
+    const { userId } = req.body;
+    const user = await userModel.findById(userId).select('apiKey');
+    if (!user) {
+        return res.status(404).json({
+            success: false,
+            message: 'User not found'
+        });
+    }
+    if (!user.apiKey) {
+        return res.status(404).json({
+            success: false,
+            message: 'API key not found'
+        });
+    }
+    console.log(user.apiKey);
+    return res.status(200).json({
+        success: true,
+        apiKey: user.apiKey
+    });
+
+
+}
+
+const calapikeystore = async (req, res) => {
+    const { inputApiKey, userId } = req.body;
+
+    try {
+        // Validate user ID format
+        if (!isValidObjectId(userId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid user ID format'
+            });
+        }
+
+        // Validate input API key format
+        if (!inputApiKey || typeof inputApiKey !== 'string') {
+            return res.status(400).json({
+                success: false,
+                message: 'Valid API key is required'
+            });
+        }
+
+        // First check if the user exists and already has the same API key
+        const existingUser = await userModel.findOne({
+            _id: userId,
+            apiKey: inputApiKey
+        });
+
+        if (existingUser) {
+            return res.status(200).json({
+                success: true,
+                message: 'API key already exists and matches',
+                user: {
+                    apiKey: existingUser.apiKey,
+                    name: existingUser.name,
+                    email: existingUser.email
+                }
+            });
+        }
+
+        // If not, proceed with update
+        const updatedUser = await userModel.findByIdAndUpdate(
+            { 
+                _id: userId
+            },
+            { 
+                $set: { 
+                    apiKey: inputApiKey
+                } 
+            },
+            { 
+                new: true,
+                runValidators: true,
+                select: 'apiKey name email' 
+            }
+        );  
+
+        // Check if user was found and updated
+        if (!updatedUser) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'API key updated successfully',
+            user: updatedUser
+        });
+
+    } catch (error) {
+        console.error('Error updating API key:', error);
+        
+        let errorMessage = 'Failed to update API key';
+        if (error.name === 'ValidationError') {
+            errorMessage = error.message;
+        }
+
+        res.status(500).json({
+            success: false,
+            message: errorMessage,
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+};
 
 const getcaluser = async (req, res) => {
     try {
@@ -171,4 +279,4 @@ const calbookings = async (req, res) => {
 
 
 
-module.exports = { getcaluser ,update_cal,calbookings};
+module.exports = { getcaluser ,update_cal,calbookings,getapikey,calapikeystore};

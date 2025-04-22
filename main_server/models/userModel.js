@@ -77,6 +77,10 @@ const userSchema = new Schema({
       required: false,
       default: '45min' 
     },
+    apiKey: {
+      type: String,
+      required: false
+    },
 
 
   appliedjobs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Job' ,required: false}],
