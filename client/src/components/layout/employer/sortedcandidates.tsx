@@ -29,7 +29,7 @@ interface AppliedJob {
   appliedDate: string;
   cvUrl: string;
   jobId: string;
-  status: 'applied' | 'interviewed' | 'offered' | 'rejected' | 'new' | 'processed' | 'sorted';
+  status: 'applied' | 'interviewed' | 'offered' | 'rejected' | 'new' | 'processed' | 'sorted'|'hired';
   userId: string;
   __v: number;
   isFavorite?: boolean;
@@ -55,7 +55,7 @@ interface Candidate {
   email: string;
   jobTitle: string;
   company: string;
-  status: 'applied' | 'interviewed' | 'offered' | 'rejected' | 'new' | 'processed' | 'sorted' | 'unsorted';
+  status: 'applied' | 'interviewed' | 'offered' | 'rejected' | 'new' | 'processed' | 'sorted' | 'unsorted' | 'hired';
   appliedDate: string;
   cvUrl: string;
   contactNumber?: string;
@@ -74,6 +74,7 @@ const statusVariantMap: Record<Candidate['status'], 'default' | 'destructive' | 
   processed: 'default',
   sorted: 'default',
   unsorted: 'outline',
+  hired: 'destructive',
 };
 
 interface SortedCandidatesProps {
@@ -162,6 +163,40 @@ const SortedCandidates: React.FC<SortedCandidatesProps> = ({
     return `${baseUrl}/${currentUser.calUsername}/${eventType}?${params.toString()}`;
   };
 
+  const haddlehireclick = async (candidate: Candidate) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/candidates/hire`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ candidateId: candidate.id })
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to hire candidate');
+      }
+  
+      toast({
+        title: 'Success',
+        description: 'Candidate hired successfully!',
+        variant: 'default',
+      });
+  
+      window.location.reload();
+  
+    } catch (error) {
+      console.error('Hiring failed:', error);
+      toast({
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Failed to hire candidate',
+        variant: 'destructive',
+      });
+    }
+  }
   const handleProcessClick = (candidate: Candidate) => {
     if (!currentUser?.calUsername) {
       setProcessingCandidate(candidate);
@@ -176,7 +211,6 @@ const SortedCandidates: React.FC<SortedCandidatesProps> = ({
     if (!processingCandidate) return;
 
     const updateCandidateStatus = async () => {
-        console.log('Processing candidate:', processingCandidate.id);  
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/candidates/process`, {
           method: 'POST',
@@ -393,6 +427,20 @@ const SortedCandidates: React.FC<SortedCandidatesProps> = ({
               <DropdownMenuItem className="text-green-600 focus:text-green-600">
                 Show Job Details
               </DropdownMenuItem>
+
+
+           { (candidate.status === 'processed' || candidate.status === 'interviewed')
+            && (
+              <DropdownMenuItem className="text-green-600 focus:text-green-600"
+              onSelect={(e) => {
+                e.preventDefault();
+                haddlehireclick(candidate);
+              }}
+              >
+                hired
+              </DropdownMenuItem>
+            )
+             }
               {candidate.contactNumber && (
                 <DropdownMenuItem onClick={() => candidate.contactNumber && navigator.clipboard.writeText(candidate.contactNumber)}>
                   Copy phone number
@@ -511,8 +559,6 @@ const SortedCandidates: React.FC<SortedCandidatesProps> = ({
       </DialogContent>
     </Dialog> 
 
-
-      {/* Cal.com Embed Dialog */}
       <Dialog open={isCalEmbedOpen} onOpenChange={setIsCalEmbedOpen}>
         <DialogContent className="sm:max-w-[80vw] h-fit">
           <DialogHeader>

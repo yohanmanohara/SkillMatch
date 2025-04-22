@@ -1,6 +1,69 @@
 require('dotenv').config();
 const AppliedJob = require('../models/appliedJobs');
 
+
+const candidatehire = async (req, res) => {
+  const { candidateId } = req.body;
+  try {
+  
+    if (!candidateId) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Candidate ID is required' 
+      });
+    }
+
+    const updatedJob = await AppliedJob.findOneAndUpdate(
+      { 
+        _id: candidateId,
+        status: { $ne: 'hired' } 
+      },
+      { 
+        $set: { 
+          status: 'hired',
+          
+         
+        } 
+      },
+      { 
+        new: true,
+        runValidators: true 
+      }
+    );
+
+    if (!updatedJob) {
+      const existingJob = await AppliedJob.findById(candidateId);
+      if (!existingJob) {
+        return res.status(404).json({
+          success: false,
+          message: 'Candidate not found'
+        });
+      }
+      return res.status(400).json({
+        success: false,
+        message: 'Candidate is already sorted'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Candidate successfully sorted',
+      data: updatedJob    
+    });
+
+  } catch (error) {
+    console.error('Error sorting candidate:', error);
+    return res.status(500).json({ 
+      success: false,
+      message: 'Internal server error while sorting candidate',
+      error: error.message 
+    });
+  }
+
+
+}
+
+
 const sortCandidates = async (req, res) => {
   const { candidateId } = req.body;
   
@@ -238,4 +301,4 @@ const processcandidates = async (req, res) => {
   }
 };
 
-module.exports = { sortCandidates, rejectCandidates, unsortcandidates ,processcandidates};    
+module.exports = { sortCandidates, rejectCandidates, unsortcandidates ,processcandidates,candidatehire};    

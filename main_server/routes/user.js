@@ -34,12 +34,15 @@ const {update_cal} = require('../controllers/cal_controller')
 const {calbookings} = require('../controllers/cal_controller')
 const {getapikey} = require('../controllers/cal_controller')
 const {calapikeystore} = require('../controllers/cal_controller')
+const {candidatehire} = require('../controllers/candidatesController')
+
 const router = express.Router()
 
 router.post('/candidates/process', processcandidates)
 router.post('/candidates/unsort', unsortcandidates)
 router.post('/candidates/reject', rejectCandidates)
 router.post('/candidates/sort', sortCandidates)
+router.post('/candidates/hire', candidatehire)
 
 router.post('/calapikeystore', calapikeystore)
 router.post('/getapikey', getapikey)
