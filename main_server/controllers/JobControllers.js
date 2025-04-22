@@ -2,6 +2,7 @@ const JobModel = require('../models/jobModel');
 const userModel = require('../models/userModel');
 const BaseController = require('./BaseController');
 const { s3Client, bucketName } = require('../Connnections/awsLightsailClient');
+const axios = require('axios');
 
 
 class cvController extends BaseController {
@@ -9,21 +10,20 @@ class cvController extends BaseController {
         const { id } = req.query;
         console.log('File received:', req.file);
         console.log('Query parameters:', req.query);
-
+    
         try {
             if (!req.file) {
                 return res.status(400).json({ error: "No file uploaded" });
             }
-
+    
             if (!s3Client) {
                 console.error("S3 client is not initialized.");
                 return res.status(500).json({ error: "AWS S3 client not initialized" });
             }
-
-            // Always use the same key for each user to prevent duplicates
+    
             const objectKey = `resume/${id}-${req.file.originalname}`;
-
-            // First delete any existing resume for this user
+    
+            // Delete any existing resume
             try {
                 await s3Client.deleteObject({
                     Bucket: bucketName,
@@ -35,9 +35,8 @@ class cvController extends BaseController {
                     console.error("Error deleting previous resume:", deleteError);
                     throw deleteError;
                 }
-                // No previous file exists, which is fine
             }
-
+    
             // Upload the new resume
             console.log(`Uploading resume for user ${id} to S3...`);
             const uploadResult = await s3Client.upload({
@@ -45,20 +44,34 @@ class cvController extends BaseController {
                 Key: objectKey,
                 Body: req.file.buffer,
                 ContentType: req.file.mimetype,
-                ACL: 'private', // Set to private for security
+                ACL: 'private',
                 Metadata: {
                     originalname: req.file.originalname,
                     uploadedAt: new Date().toISOString(),
                     userId: id
                 }
             }).promise();
-
+    
+            const resumeUrl = uploadResult.Location;
             console.log(`Resume uploaded successfully for user ${id}`);
+    
+            // POST the URL to /api/resume_extractor
+            try {
+                const extractorResponse = await axios.post('http://127.0.0.1:5000/api/resume_extractor', {
+                    url: resumeUrl,
+                    userId: id
+                });
+    
+                console.log("Resume extraction response:", extractorResponse.data);
+            } catch (extractorError) {
+                console.error("Error calling resume extractor:", extractorError.message);
+            }
+    
             return res.status(200).json({ 
-                url: uploadResult.Location,
-                key: objectKey
+                url: resumeUrl,
+                key: objectKey 
             });
-
+    
         } catch (error) {
             console.error("Upload Error:", error);
             return res.status(500).json({ 
