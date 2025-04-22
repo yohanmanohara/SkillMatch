@@ -9,7 +9,7 @@ interface MongoConnection {
 // Cache the connection
 let cachedConnection: MongoConnection | null = null;
 
-async function connectToDatabase(): Promise<MongoConnection> {
+export async function connectToDatabase(): Promise<MongoConnection> {
   if (cachedConnection) {
     return cachedConnection;
   }
