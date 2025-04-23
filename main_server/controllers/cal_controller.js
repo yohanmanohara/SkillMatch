@@ -4,6 +4,39 @@ const { isValidObjectId } = require('mongoose');
 const axios = require('axios');
 const Booking = require('../models/calbooking'); 
 
+
+
+
+const calbookingsemployee = async (req, res) => {
+     const { userId } = req.body;
+     console.log("userid",userId)
+
+
+    const boobkingdata = await Booking.find({ userId: userId })
+
+    if (!boobkingdata) {
+        return res.status(404).json({
+            success: false,
+            message: 'Booking data not found'
+        });
+
+        
+    }
+
+    console.log("make",boobkingdata)
+    return res.status(200).json({
+        success: true,
+        data: boobkingdata
+    });
+
+
+
+
+
+
+
+}
+
 const getapikey = async (req, res) => {
     const { userId } = req.body;
     const user = await userModel.findById(userId).select('apiKey');
@@ -19,7 +52,7 @@ const getapikey = async (req, res) => {
             message: 'API key not found'
         });
     }
-    console.log(user.apiKey);
+ 
     return res.status(200).json({
         success: true,
         apiKey: user.apiKey
@@ -280,4 +313,4 @@ const calbookings = async (req, res) => {
 
 
 
-module.exports = { getcaluser ,update_cal,calbookings,getapikey,calapikeystore};
+module.exports = { getcaluser ,update_cal,calbookings,getapikey,calapikeystore,calbookingsemployee};

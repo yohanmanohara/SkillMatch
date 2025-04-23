@@ -88,7 +88,6 @@ export default function InterviewLinks() {
 
         const data = await response.json()
         setApiKey(data.apiKey)
-        console.log('API Keys:', apiKey)
 
        
         
@@ -108,7 +107,6 @@ export default function InterviewLinks() {
 
 useEffect(() => {
   if (apiKey) {
-    console.log('API Key updated:', apiKey);
     fetchBookings()
     setShowApiKeyForm(false)
    
@@ -149,7 +147,7 @@ useEffect(() => {
         }
 
         const data = await response.json()
-        console.log('Bookings:', data.data) 
+
         setBookings(data.data)
       } catch (err) {
         console.error('Fetch error:', err)
@@ -194,7 +192,6 @@ useEffect(() => {
       }
   
       const data = await responses.json();
-      console.log('API Key submission successful:', data);
       
       
       setApiKey(inputApiKey);
