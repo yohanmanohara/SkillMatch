@@ -149,7 +149,7 @@ useEffect(() => {
         }
 
         const data = await response.json()
-        console.log('Bookings:', data.data)
+        console.log('Bookings:', data.data) 
         setBookings(data.data)
       } catch (err) {
         console.error('Fetch error:', err)
