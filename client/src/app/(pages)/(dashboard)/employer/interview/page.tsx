@@ -147,6 +147,7 @@ useEffect(() => {
         }
 
         const data = await response.json()
+
         setBookings(data.data)
       } catch (err) {
         console.error('Fetch error:', err)
