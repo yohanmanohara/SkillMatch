@@ -260,7 +260,7 @@ function Page() {
     
   };
 
-  const handleAddEvent = () => {
+  /*const handleAddEvent = () => {
     if (!eventTitle.trim() || !time.trim()) return;
     setEvents([...events, { date, time, title: eventTitle }]);
     setEventTitle("");
@@ -269,8 +269,62 @@ function Page() {
 
   const handleDeleteEvent = (index: number) => {
     setEvents(events.filter((_, i) => i !== index));
-  };
+  };*/
 
+  const handleAddEvent = async () => {
+    if (!eventTitle.trim() || !time.trim() || !date || !userId) {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields.",
+        variant: "destructive"
+      });
+      return;
+    }
+  
+    // If everything is valid, handle both adding to the events array and saving to the backend
+    const eventData = {
+      title: eventTitle,
+      time,
+      date: date.toISOString(),
+      userId
+    };
+  
+    try {
+      const token = sessionStorage.getItem("token");
+  
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/addevent`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(eventData)
+        }
+      );
+  
+      if (!response.ok) throw new Error("Failed to add event");
+  
+      const savedEvent = await response.json();
+      setEvents([...events, { ...savedEvent }]); // assuming backend returns the saved event
+      setEventTitle("");
+      setTime("");
+  
+      toast({
+        title: "Success",
+        description: "Event added successfully."
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message ?? "Failed to add event.",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  
   return (
     <div className="p-6 space-y-10">
       {/* Calendar + Events */}
@@ -294,7 +348,7 @@ function Page() {
                     <p className="text-sm text-gray-600"><strong>Time:</strong> {event.time}</p>
                     <p>{event.title}</p>
                   </CardContent>
-                  <Button variant="outline" size="icon" onClick={() => handleDeleteEvent(index)}>
+                  <Button variant="outline" size="icon" onClick={() => handleDeleteNote(index)}>
                     <Trash className="w-4 h-4 text-red-500" />
                   </Button>
                 </Card>
