@@ -9,6 +9,7 @@ const { s3Client, bucketName } = require('./Connnections/awsLightsailClient');
 const savenoteRoutes = require('./routes/SaveNoteRoutes');
 const analyticsRoutes = require('./routes/analyticsRoute');
 const fetchUserIds = require('./utils/backgroudcalbookingstore');
+const addeventRoutes = require('./routes/AddEventsRoutes');
 
 
 dotenv.config();
@@ -23,6 +24,8 @@ app.use('/api/file', upload.single('file'), JobRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/savenotes', savenoteRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/addevent', addeventRoutes);
+
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
