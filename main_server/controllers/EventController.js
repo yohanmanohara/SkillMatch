@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const EventModel = require('../models/Addevent');
 const BaseController = require('./BaseController');
 

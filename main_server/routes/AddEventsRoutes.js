@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const AddeventController = require('../controllers/AddeventController');
+const AddeventController = require('../controllers/EventController');
 
 // Get all events for a user
 router.get('/', async (req, res) => {
