@@ -2,11 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
-
-
 interface CardItem {
   href: string;
   src: string;
@@ -16,54 +11,43 @@ interface CardItem {
 }
 
 const Page: React.FC = () => {
-
   const firstRowItems: CardItem[] = [
-
     {
       href: 'gettingStarted',
       src: '/puzzle.png',
       alt: 'Getting Started',
       title: 'Getting Started',
-
       description: 'Start off the right foot!',
-
     },
     {
       href: 'account',
       src: '/vector.png',
       alt: 'Account',
-
       title: 'Account',
       description: 'Set up your account',
-
     },
     {
       href: 'faq',
       src: '/message.png',
       alt: 'F.A.Q',
-
       title: 'F.A.Q',
       description: 'Common questions answered',
     },
   ];
 
   const secondRowItems: CardItem[] = [
-
     {
       href: 'security',
       src: '/shield.png',
       alt: 'Security',
       title: 'Security',
-
       description: 'Protect your account',
-
     },
     {
       href: 'community',
       src: '/community.png',
       alt: 'Community',
       title: 'Community',
-
       description: 'Engage with others',
     },
     
@@ -107,7 +91,6 @@ const Page: React.FC = () => {
           ))}
         </div>
       </div>
-
     </div>
   );
 };
