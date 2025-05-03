@@ -530,9 +530,37 @@ function Page() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Chart 1: Application Status Distribution */}
           <Card className="p-4 bg-black text-white">
-            <CardHeader>
-              <CardTitle className="text-white">Application Status Distribution</CardTitle>
-            </CardHeader>
+          <CardHeader>
+          <div className="flex justify-between items-center">
+          <CardTitle className="text-white">Application Status Distribution</CardTitle>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+            if (analyticsData.statusDistribution.length === 0) {
+              toast({ title: "No Data", description: "There is no data to download." });
+            return;
+            }
+            const headers = ["Status", "Count"];
+            const rows = analyticsData.statusDistribution.map(entry => 
+            `${entry.status},${entry.count}`
+            );
+            const csv = [headers.join(',')].concat(rows).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'application_status_distribution.csv';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            }}
+            >
+              Download CSV
+          </Button>
+            </div>
+          </CardHeader>
             <CardContent>
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -561,9 +589,38 @@ function Page() {
           
           {/* Chart 2: Top Jobs with Applications */}
           <Card className="p-4 bg-black text-white">
-            <CardHeader>
-              <CardTitle className="text-white">Top Jobs with Applications</CardTitle>
-            </CardHeader>
+          <CardHeader>
+  <div className="flex justify-between items-center">
+    <CardTitle className="text-white">Top Jobs with Applications</CardTitle>
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => {
+        const data = analyticsData.topJobs.slice(0, 5);
+        if (data.length === 0) {
+          toast({ title: "No Data", description: "There is no data to download." });
+          return;
+        }
+        const headers = ["Job Title", "Company", "Applications"];
+        const rows = data.map(job => 
+          `${job.title},${job.company},${job.count}`
+        );
+        const csv = [headers.join(',')].concat(rows).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'top_jobs_applications.csv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }}
+    >
+      Download CSV
+    </Button>
+  </div>
+</CardHeader>
             <CardContent>
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -594,9 +651,37 @@ function Page() {
           
           {/* Chart 3: Application Trends Over Time */}
           <Card className="p-4 bg-black text-white">
-            <CardHeader>
-              <CardTitle className="text-white">Application Trends</CardTitle>
-            </CardHeader>
+          <CardHeader>
+  <div className="flex justify-between items-center">
+    <CardTitle className="text-white">Application Trends</CardTitle>
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => {
+        if (analyticsData.applicationTrends.length === 0) {
+          toast({ title: "No Data", description: "There is no data to download." });
+          return;
+        }
+        const headers = ["Date", "Applications"];
+        const rows = analyticsData.applicationTrends.map(trend => 
+          `${trend.date},${trend.count}`
+        );
+        const csv = [headers.join(',')].concat(rows).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'application_trends.csv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }}
+    >
+      Download CSV
+    </Button>
+  </div>
+</CardHeader>
             <CardContent>
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -634,9 +719,38 @@ function Page() {
           
           {/* Chart 4: Hiring Companies */}
           <Card className="p-4 bg-black text-white">
-            <CardHeader>
-              <CardTitle className="text-white">Top Hiring Companies</CardTitle>
-            </CardHeader>
+          <CardHeader>
+  <div className="flex justify-between items-center">
+    <CardTitle className="text-white">Top Hiring Companies</CardTitle>
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => {
+        const data = analyticsData.topJobs.slice(0, 5);
+        if (data.length === 0) {
+          toast({ title: "No Data", description: "There is no data to download." });
+          return;
+        }
+        const headers = ["Company", "Applications"];
+        const rows = data.map(job => 
+          `${job.company},${job.count}`
+        );
+        const csv = [headers.join(',')].concat(rows).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'hiring_companies.csv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }}
+    >
+      Download CSV
+    </Button>
+  </div>
+</CardHeader>
             <CardContent className="flex justify-center items-center">
               <div className="h-[300px] w-full relative">
                 <ResponsiveContainer width="100%" height="100%">
@@ -675,9 +789,37 @@ function Page() {
           
           {/* Chart 5: Application Rate by Status */}
           <Card className="p-4 bg-black text-white col-span-1 lg:col-span-2">
-            <CardHeader>
-              <CardTitle className="text-white">Application Success Rate</CardTitle>
-            </CardHeader>
+          <CardHeader>
+  <div className="flex justify-between items-center">
+    <CardTitle className="text-white">Application Success Rate</CardTitle>
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => {
+        if (analyticsData.statusDistribution.length === 0) {
+          toast({ title: "No Data", description: "There is no data to download." });
+          return;
+        }
+        const headers = ["Status", "Applications"];
+        const rows = analyticsData.statusDistribution.map(entry => 
+          `${entry.status},${entry.count}`
+        );
+        const csv = [headers.join(',')].concat(rows).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'application_success_rate.csv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }}
+    >
+      Download CSV
+    </Button>
+  </div>
+</CardHeader>
             <CardContent>
               <div className="h-[250px]">
                 <ResponsiveContainer width="100%" height="100%">
