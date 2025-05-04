@@ -26,6 +26,7 @@ type BarChartCardProps = {
   categoryKey: string
   trendInfo?: string
   subtext?: string
+  footer?: React.ReactNode
 }
 
 export function BarChartCard({
@@ -37,6 +38,7 @@ export function BarChartCard({
   categoryKey,
   trendInfo = "Trending up",
   subtext = "Showing data overview",
+  footer,
 }: BarChartCardProps) {
   return (
     <Card>
@@ -44,13 +46,14 @@ export function BarChartCard({
         <CardTitle>{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
+
       <CardContent>
         <ChartContainer config={config}>
           <BarChart
             accessibilityLayer
             data={data}
             layout="vertical"
-            margin={{ left:60 }}
+            margin={{ left: 60 }}
           >
             <YAxis
               dataKey={categoryKey}
@@ -71,11 +74,18 @@ export function BarChartCard({
           </BarChart>
         </ChartContainer>
       </CardContent>
+
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          {trendInfo} <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">{subtext}</div>
+        {footer ? (
+          footer
+        ) : (
+          <>
+            <div className="flex gap-2 font-medium leading-none">
+              {trendInfo} <TrendingUp className="h-4 w-4" />
+            </div>
+            <div className="leading-none text-muted-foreground">{subtext}</div>
+          </>
+        )}
       </CardFooter>
     </Card>
   )
