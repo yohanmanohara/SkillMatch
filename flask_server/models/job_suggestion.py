@@ -23,7 +23,7 @@ class JobMatcher:
             self.job_embeddings = self.encode_jobs()
             print(f"\n[Init] Job embeddings shape: {self.job_embeddings.shape}\n")  # Debugging embedding shape
         else:
-            print("\n[Init] No job descriptions to encode.\n")
+            print("\n[Init] No job descriptions tfo encode.\n")
             self.job_embeddings = None
 
         # Fetch resume data
@@ -60,20 +60,25 @@ class JobMatcher:
 
     def fetch_job_descriptions(self):
         job_collection = self.db["jobs"]
-        jobs = list(job_collection.find({}, {"_id": 0, "title": 1, "description": 1}))
-        print(f"\n[fetch_job_descriptions] Jobs retrieved: {len(jobs)}\n")  # Debugging job data length
+        jobs = list(job_collection.find({}, {"_id": 1, "title": 1, "description": 1}))
+        print(f"\n[fetch_job_descriptions] Jobs retrieved: {len(jobs)}\n")  # Debug
 
         if not jobs:
             print("\n[fetch_job_descriptions] Warning: No job data retrieved.\n")
-            return pd.DataFrame(columns=["title", "description"])
+            return pd.DataFrame(columns=["_id", "title", "description"])
+
+        # Convert ObjectId to string for JSON compatibility
+        for job in jobs:
+            job['_id'] = str(job['_id'])
 
         df = pd.DataFrame(jobs)
 
         if "description" not in df.columns:
             print("\n[fetch_job_descriptions] Warning: 'description' field missing.\n")
-            return pd.DataFrame(columns=["title", "description"])
+            return pd.DataFrame(columns=["_id", "title", "description"])
 
         return df
+
 
     def encode_jobs(self):
         if self.jobs.empty:
@@ -130,7 +135,7 @@ class JobMatcher:
         top_jobs = similarities.argsort()[::-1][:3]
         print(f"\n[suggest_jobs_for_candidate] Top job indices: {top_jobs}\n")  # Debugging indices
 
-        recommended_jobs = self.jobs.iloc[top_jobs]['title'].tolist()
+        recommended_jobs = self.jobs.iloc[top_jobs][['_id', 'title']].to_dict(orient='records')
         print(f"\n[suggest_jobs_for_candidate] Recommended jobs: {recommended_jobs}\n")  # Final output
-
         return recommended_jobs
+

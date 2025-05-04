@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+import os
 from models import JobMatcher, Model
 from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
 from utils import extract_resume_entities
@@ -71,4 +72,5 @@ def extract():
 # === START SERVER ===
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.getenv("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
