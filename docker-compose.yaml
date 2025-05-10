@@ -38,20 +38,22 @@ services:
       - api_gateway
 
 
-  # flask_server:
-  #   build: ./flask_server
-  #   container_name: flask_server
-  #   ports:
-  #     - "5000:5000"
-  #   volumes:
-  #     - ./flask_server:/app
+  flask_server:
+    build: ./flask_server
+    container_name: flask_server
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./flask_server:/app
      
-  #   environment:
-  #     - PORT=3003
-  #     - MONGO_URI="mongodb+srv://Recruitwise:recruitwise@recruitwise.us4pdz2.mongodb.net/"
+    environment:
+      - PORT=3003
+      - MONGO_URI=mongodb+srv://Recruitwise:recruitwise@recruitwise.us4pdz2.mongodb.net/test?retryWrites=true&w=majority
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
     
-  #   depends_on:
-  #     - api_gateway
+    depends_on:
+      - api_gateway
 
 
 
