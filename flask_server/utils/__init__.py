@@ -1,1 +1,0 @@
-from utils.resume_data_extractor_ai import *  # Import the updated JobMatcher model
