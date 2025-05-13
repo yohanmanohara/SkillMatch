@@ -1,0 +1,19 @@
+category,skills
+Programming Languages,Python,Java,JavaScript,C++,C#,R,Go,Rust,Swift,Kotlin
+Web Development,HTML,CSS,React,Angular,Vue.js,Django,Flask,Spring Boot,Laravel
+Mobile Development,Android,iOS,React Native,Flutter,Xamarin,Ionic
+Data Science,Pandas,NumPy,Scikit-learn,TensorFlow,PyTorch,Spark,Hadoop
+Database,SQL,MySQL,PostgreSQL,MongoDB,Redis,Cassandra,Oracle
+DevOps,Docker,Kubernetes,AWS,Azure,Terraform,Ansible,Jenkins
+Cloud Computing,AWS,Azure,GCP,IBM Cloud,Oracle Cloud,Serverless
+Machine Learning,TensorFlow,PyTorch,Keras,OpenCV,NLTK,spaCy
+Cybersecurity,Ethical Hacking,Penetration Testing,SIEM,Firewalls,OWASP
+Networking,TCP/IP,DNS,HTTP/HTTPS,Load Balancing,SDN,VPN
+Operating Systems,Linux,Windows,macOS,Unix,Shell Scripting
+Version Control,Git,GitHub,GitLab,Bitbucket,SVN
+Agile Methodologies,Scrum,Kanban,SAFe,Lean,Agile
+Testing,JUnit,Selenium,Jest,Cypress,Postman,TestNG
+UI/UX Design,Figma,Adobe XD,Sketch,Wireframing,Prototyping
+Embedded Systems,Arduino,Raspberry Pi,IoT,Microcontrollers,PCB Design
+Blockchain,Solidity,Ethereum,Hyperledger,Smart Contracts,DApps
+Business Intelligence,Tableau,Power BI,Looker,Qlik,Data Warehousing

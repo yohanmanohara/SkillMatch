@@ -13,64 +13,68 @@ services:
     environment:
       - PORT=3001
   
-  main_server:
-    build: ./main_server
-    container_name: main_server
-    ports:
-      - "3002:3002"
-    volumes:
-      - ./main_server:/app
-      - main_server_node_modules:/app/node_modules
-    environment:
-      - PORT=3002
-      - MONGO_URI=mongodb+srv://Recruitwise:recruitwise@recruitwise.us4pdz2.mongodb.net/
-      - JWT_SECRET=secret
-      - EMAIL=warushayohan80@gmail.com
-      - EMAIL_PASSWORD=wlasedetnswsefnc
-      - AWS_LIGHTSAIL_ENDPOINT=https://skillmatchnsbm.s3.ap-southeast-1.amazonaws.com
-      - AWS_ACCESS_KEY_ID=AKIA356SJTRS3SEAKSQI
-      - AWS_SECRET_ACCESS_KEY=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
-      - AWS_REGION=Singapore
-      - AWS_BUCKET_NAME=skillmatchnsbm
-    # networks:
-    #   - skillmatch-network
-    depends_on:
-      - api_gateway
-
-
-  # flask_server:
-  #   build: ./flask_server
-  #   container_name: flask_server
+  # main_server:
+  #   build: ./main_server
+  #   container_name: main_server
   #   ports:
-  #     - "5000:5000"
+  #     - "3002:3002"
   #   volumes:
-  #     - ./flask_server:/app
-     
+  #     - ./main_server:/app
+  #     - main_server_node_modules:/app/node_modules
   #   environment:
-  #     - PORT=3003
-  #     - MONGO_URI="mongodb+srv://Recruitwise:recruitwise@recruitwise.us4pdz2.mongodb.net/"
-    
+  #     - PORT=3002
+  #     - MONGO_URI=mongodb+srv://Recruitwise:recruitwise@recruitwise.us4pdz2.mongodb.net/
+  #     - JWT_SECRET=secret
+  #     - EMAIL=warushayohan80@gmail.com
+  #     - EMAIL_PASSWORD=wlasedetnswsefnc
+  #     - AWS_LIGHTSAIL_ENDPOINT=https://skillmatchnsbm.s3.ap-southeast-1.amazonaws.com
+  #     - AWS_ACCESS_KEY_ID=AKIA356SJTRS3SEAKSQI
+  #     - AWS_SECRET_ACCESS_KEY=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
+  #     - AWS_REGION=Singapore
+  #     - AWS_BUCKET_NAME=skillmatchnsbm
+  #   # networks:
+  #   #   - skillmatch-network
   #   depends_on:
   #     - api_gateway
 
 
-
-  client:
-    build: ./client
-    container_name: client
+  flask_server:
+    build: ./flask_server
+    container_name: flask_server
     ports:
-      - "3000:3000"
+      - "3003:3003"
     volumes:
-      - ./client:/app
-      - client_node_modules:/app/node_modules
+      - ./flask_server:/app
+      - ./model:/app/model
+
+     
     environment:
-      - NEXT_PUBLIC_SERVER_URL=http://localhost:3001
-      - EMAIL=warushayohan80@gmail.com
-      - EMAIL_PASSWORD=wlasedetnswsefnc
-    # networks:
-    #   - skillmatch-network
+      - PORT=3003
+      - MONGO_URI=mongodb+srv://Recruitwise:recruitwise@recruitwise.us4pdz2.mongodb.net/test?retryWrites=true&w=majority
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+    
     depends_on:
       - api_gateway
+
+
+
+  # client:
+  #   build: ./client
+  #   container_name: client
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./client:/app
+  #     - client_node_modules:/app/node_modules
+  #   environment:
+  #     - NEXT_PUBLIC_SERVER_URL=http://localhost:3001
+  #     - EMAIL=warushayohan80@gmail.com
+  #     - EMAIL_PASSWORD=wlasedetnswsefnc
+  #   # networks:
+  #   #   - skillmatch-network
+  #   depends_on:
+  #     - api_gateway
 
 volumes:
   api_gateway_node_modules:

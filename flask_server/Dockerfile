@@ -1,25 +1,18 @@
-# Use an official Python base image
-FROM python:3.11-slim
+FROM python:3.9-slim
 
-# Set working directory
 WORKDIR /app
 
-# Copy requirements first to leverage Docker cache
+# Install system dependencies (if needed for some packages)
+RUN apt-get update && apt-get install -y gcc python3-dev && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
 COPY requirements.txt .
-
-# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install pdfminer.six python-docx pandas
 
-# Copy rest of the app
+# Copy application
 COPY . .
 
-# Expose Flask app port
 EXPOSE 3003
 
-# Set environment variable for Flask
-ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=3003
-
-# Run the application
-CMD ["flask", "run"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=3003", "--reload"]
