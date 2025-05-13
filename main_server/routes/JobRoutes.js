@@ -12,6 +12,7 @@ router.put('/:id', (req, res) => JobController.updateJob(req, res));
 router.delete('/:id', (req, res) => JobController.deleteSingleJob(req, res));
 router.delete('', (req, res) => JobController.deleteAllJobs(req, res));
 router.post("/fileupload",(req, res) => JobController.fileUpload(req, res));
+
 router.post("/cvupload",(req, res) => cvController.cvUpload(req, res));
 router.get('/jobsearch', (req, res) => JobController.primaryJobSearch(req, res));
 

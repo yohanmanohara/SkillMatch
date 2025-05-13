@@ -22,6 +22,7 @@ const {fetchjobs} = require('../controllers/organization/organizationControllers
 const {updatejobs} = require('../controllers/organization/organizationControllers')
 const {deletejob} = require('../controllers/organization/organizationControllers')
 const {updatecv} = require('../controllers/users/userController-customer')
+const {removecv} = require('../controllers/users/userController-customer')
 const {getOrganizationJobs} = require('../controllers/organization/organizationControllers')
 const {appliedjobs} = require('../controllers/users/userController-customer')
 const {getappliedjobs} = require('../controllers/users/userController-customer')
@@ -36,6 +37,8 @@ const {calbookingsemployee} = require('../controllers/cal_controller')
 const {getapikey} = require('../controllers/cal_controller')
 const {calapikeystore} = require('../controllers/cal_controller')
 const {candidatehire} = require('../controllers/candidatesController')
+const {deleteresume} = require('../controllers/users/userController-customer')
+const { route } = require('./JobRoutes')
 
 const router = express.Router()
 
@@ -53,7 +56,7 @@ router.post('/caluser', getcaluser)
 router.post('/updatecal',update_cal)
 
 router.post('/getorganizationspicture', getpicture)
-
+router.post('/removecv', removecv)
 router.post('/updatecv',updatecv)
 
 router.get('/fetchjobs',fetchjobs)
@@ -65,7 +68,7 @@ router.post('/createorganizations', createOrganization)
 router.post('/appliedjobs', appliedjobs)
 
 router.post('/getappliedjobs', getappliedjobs)
-
+router.delete('/deleteresume', deleteresume)
 
 router.post('/login', loginUser)
 
