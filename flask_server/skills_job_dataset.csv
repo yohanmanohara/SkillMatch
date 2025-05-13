@@ -1,0 +1,123 @@
+Key_Skills,Job_Title
+"Python| Java| Git| Docker| AWS| Kubernetes| CI/CD| SQL",Software Engineer
+"Python| R| SQL| TensorFlow| PyTorch| Tableau| Spark| Hadoop",Data Scientist
+"Agile| JIRA| Scrum| Product Roadmap| Market Research| SWOT| Balsamiq| Confluence",Product Manager
+"Figma| Adobe XD| Sketch| UI Design| UX Research| Prototyping| HTML/CSS| User Testing",UX/UI Designer
+"Excel| Financial Modeling| SQL| Power BI| GAAP| SAP| Bloomberg| Forecasting",Financial Analyst
+"SEO| Google Analytics| Social Media| PPC| Content Marketing| CRM| Email Marketing| A/B Testing",Marketing Specialist
+"Six Sigma| Lean| Project Management| ERP| Supply Chain| KPI| Process Improvement| SAP",Operations Manager
+"Recruitment| Employee Relations| HRIS| Labor Law| Performance Management| Payroll| Onboarding| Training",HR Generalist
+"CRM| Salesforce| Negotiation| Cold Calling| Lead Generation| Client Relations| Sales Pipeline| Closing",Sales Representative
+"Zendesk| CRM| Troubleshooting| Live Chat| Customer Support| Ticketing System| Communication| Problem Solving",Customer Support Specialist
+"Cisco| Firewalls| VPN| TCP/IP| DNS| DHCP| Network Security| Troubleshooting",Network Administrator
+"Adobe Photoshop| Illustrator| InDesign| Typography| Branding| Print Design| Web Design| UI Graphics",Graphic Designer
+"SEO| WordPress| Content Management| Copywriting| Editing| Blogging| Social Media| Research",Content Writer
+"Legal Research| Contract Law| Litigation| Compliance| Corporate Law| Intellectual Property| Drafting| Negotiation",Legal Counsel
+"Excel| SQL| Power BI| Market Research| Data Analysis| Statistical Methods| Reporting| Visualization",Research Analyst
+"Selenium| JIRA| Test Cases| Bug Tracking| Regression Testing| Automation| QA Methodologies| Postman",Quality Assurance Tester
+"Market Analysis| B2B Sales| Lead Generation| Partnerships| Negotiation| CRM| Business Strategy| Pitching",Business Development Manager
+"JIRA| Trello| MS Project| Agile| Documentation| Coordination| Risk Management| Reporting",Project Coordinator
+"Cloud Architecture| Microservices| AWS| Azure| Kubernetes| System Design| Security| Scalability",Systems Architect
+"CI/CD| Jenkins| Docker| Kubernetes| AWS| Terraform| Ansible| Linux",DevOps Engineer
+"HTML| CSS| JavaScript| React| Angular| Responsive Design| UI Libraries| Figma",UI Developer
+"QuickBooks| Excel| GAAP| Financial Reporting| Tax Preparation| Auditing| SAP| Reconciliation",Accountant
+"Helpdesk| Troubleshooting| Active Directory| Windows OS| Hardware Support| Ticketing System| Remote Support| Linux",Technical Support Engineer
+"Google Ads| Facebook Ads| SEO| Google Analytics| PPC| Conversion Optimization| A/B Testing| CRM",Digital Marketing Manager
+"ERP| SAP| Logistics| Inventory Management| Forecasting| Data Analysis| Procurement| Six Sigma",Supply Chain Analyst
+"Vendor Management| Budgeting| Event Planning| Coordination| Marketing| CRM| Negotiation| Logistics",Event Planner
+"Media Relations| Press Releases| Crisis Management| Social Media| Branding| Copywriting| Influencer Marketing| Analytics",Public Relations Specialist
+"Lab Testing| Quality Control| Medical Equipment| Data Recording| Compliance| Specimen Handling| Safety Protocols| Documentation",Medical Technologist
+"AutoCAD| Revit| Structural Analysis| Project Management| Civil 3D| GIS| Construction Codes| Estimation",Civil Engineer
+"Chemical Analysis| Process Engineering| Safety Compliance| Lab Equipment| Quality Control| Data Reporting| Troubleshooting| Six Sigma",Chemical Engineer
+"CAD| SolidWorks| CNC| Mechanical Systems| Troubleshooting| Maintenance| Hydraulics| Pneumatics",Mechanical Technician
+"SIEM| Firewalls| Ethical Hacking| Penetration Testing| NIST| ISO 27001| Risk Assessment| Incident Response",IT Security Specialist
+"SQL| Oracle| MySQL| Database Design| Backup Recovery| Performance Tuning| NoSQL| ETL",Database Administrator
+"Calendar Management| Travel Coordination| Meeting Scheduling| MS Office| Confidentiality| Communication| Organization| Reporting",Executive Assistant
+"Logistics| Inventory Control| Shipping| Procurement| ERP| WMS| Freight Management| Compliance",Logistics Coordinator
+"AutoCAD| Revit| SketchUp| Building Codes| 3D Modeling| Construction Drawings| Sustainable Design| Project Coordination",Architectural Designer
+"Space Planning| Material Selection| Color Theory| AutoCAD| SketchUp| Client Presentations| Vendor Sourcing| Budgeting",Interior Decorator
+"Environmental Regulations| GIS| Data Collection| Sustainability| Compliance| Field Sampling| Report Writing| Pollution Control",Environmental Scientist
+"Social Media| Content Creation| Analytics| SEO| Community Management| Advertising| Branding| Influencer Marketing",Social Media Manager
+"Pharmaceutical Knowledge| Sales Targets| CRM| Client Relationships| Medical Terminology| Compliance| Territory Management| Negotiation",Pharmaceutical Sales Representative
+"Python| TensorFlow| PyTorch| NLP| Computer Vision| Machine Learning| Deep Learning| AWS SageMaker",Artificial Intelligence Engineer
+"PLC Programming| Robotics| Automation| CAD| Troubleshooting| Maintenance| Industrial IoT| Safety Standards",Robotics Technician
+"iOS| Android| Swift| Kotlin| React Native| APIs| Firebase| Mobile UI/UX",Mobile App Developer
+"SIEM| IDS/IPS| Firewalls| Threat Hunting| Vulnerability Assessment| NIST| ISO 27001| Incident Response",Cybersecurity Analyst
+"Data Entry| Excel| Accuracy| Typing Speed| Database Management| Record Keeping| Administrative Support| Organization",Data Entry Clerk
+"Financial Planning| Wealth Management| Retirement Strategies| Tax Laws| Risk Assessment| Investment Analysis| Client Advisory| CRM",Financial Planner
+"Shopify| WooCommerce| Amazon Seller Central| Digital Marketing| Inventory Management| SEO| Conversion Optimization| Analytics",E-commerce Manager
+"Legal Documentation| Case Management| Court Filings| Research| Client Communication| Confidentiality| Organization| Compliance",Legal Assistant
+"CRM| Client Onboarding| Upselling| Customer Retention| Problem Solving| Reporting| Feedback Analysis| Relationship Building",Customer Success Manager
+"HTML| CSS| JavaScript| React| UX Principles| Figma| Responsive Design| Accessibility",Front-End Developer
+"Medical Devices| Biomechanics| FDA Regulations| CAD| Prototyping| Testing| Quality Control| Research",Biomedical Engineer
+"Excel| SQL| Power BI| Process Optimization| Reporting| Data Analysis| KPI Tracking| Six Sigma",Operations Analyst
+"SEO| Content Strategy| Editorial Calendar| Brand Voice| Copywriting| Analytics| CMS| Social Media",Content Strategist
+"Textile Design| Fashion Illustration| Trend Analysis| Pattern Making| Adobe Illustrator| CAD| Branding| Merchandising",Fashion Designer
+"Unity| Unreal Engine| C#| 3D Modeling| Game Physics| AI Programming| Level Design| VR/AR",Game Developer
+"R| Python| SPSS| Statistical Modeling| Hypothesis Testing| Data Visualization| Research Methods| Machine Learning",Statistician
+"VoIP| Cisco| Network Infrastructure| Troubleshooting| Firewalls| SD-WAN| Cloud Telephony| Security",Telecommunications Specialist
+"Technical Writing| API Documentation| Markdown| Confluence| Git| User Manuals| Research| Editing",Technical Writer
+"CAD| SolidWorks| ANSYS| Thermodynamics| Mechanical Systems| Prototyping| Manufacturing Processes| FEA",Mechanical Engineer
+"Lab Procedures| Chemical Handling| Quality Testing| Data Recording| Safety Compliance| Instrumentation| Troubleshooting| Reporting",Chemical Technician
+"IT Strategy| Cloud Computing| Cybersecurity| Digital Transformation| Consulting| Project Management| Vendor Management| Compliance",IT Consultant
+"Risk Assessment| Financial Modeling| Compliance| Fraud Detection| Data Analysis| Regulatory Requirements| Reporting| Auditing",Risk Analyst
+"Benefits Administration| HRIS| Employee Education| Compliance| Retirement Plans| Health Insurance| Payroll Integration| Reporting",Benefits Administrator
+"Experimental Design| Data Analysis| Scientific Writing| Lab Techniques| Peer Review| Research Funding| Statistics| Publication",Research Scientist
+"Video Editing| Storyboarding| Adobe Premiere| SEO| Content Marketing| Social Media| Analytics| Scriptwriting",Digital Content Producer
+"Healthcare Regulations| Patient Services| Budgeting| Staff Management| Compliance| EHR| Policy Implementation| Reporting",Healthcare Administrator
+"CRM| Customer Feedback| Process Improvement| Communication| Problem Solving| Analytics| Retention Strategies| Training",Customer Experience Specialist
+"SQL| Excel| Power BI| Process Mapping| Stakeholder Management| Requirements Gathering| Agile| JIRA",Business Analyst
+"User Research| Surveys| Personas| Usability Testing| Qualitative Analysis| Figma| Data Interpretation| Reporting",UX Researcher
+"System Requirements| SQL| UML| Business Analysis| Technical Documentation| Solution Design| Agile| JIRA",Systems Analyst
+"Supply Chain| ERP| Vendor Management| Forecasting| Logistics| Inventory Optimization| Six Sigma| Data Analysis",Supply Chain Manager
+"Recruitment| LinkedIn Sourcing| Interviewing| Employer Branding| ATS| Onboarding| Compliance| Talent Pipelines",Recruitment Specialist
+"Financial Modeling| Excel| SQL| Forecasting| Variance Analysis| GAAP| Power BI| Reporting",Financial Analyst
+"Training Development| LMS| Instructional Design| Employee Engagement| Leadership Development| Presentation Skills| E-learning| Coaching",Corporate Trainer
+"Keyword Research| On-Page SEO| Google Analytics| Backlink Strategy| Content Optimization| Technical SEO| SEM| Reporting",SEO Specialist
+"Legal Filing| Document Preparation| Court Procedures| Research| Confidentiality| Organization| Communication| Compliance",Legal Secretary
+"Brand Strategy| Marketing Campaigns| Competitive Analysis| Social Media| Market Research| Positioning| Advertising| Analytics",Brand Manager
+"Client Relations| Account Growth| CRM| Contract Negotiation| Sales Pipeline| Reporting| Upselling| Communication",Account Manager
+"IT Strategy| Team Leadership| Budgeting| Cybersecurity| Cloud Computing| Vendor Management| Compliance| Project Management",IT Manager
+"Help Desk| Ticketing System| Troubleshooting| Active Directory| Remote Support| Hardware| Software Installation| Documentation",Help Desk Support
+"GIS| ArcGIS| Spatial Analysis| Cartography| Remote Sensing| Data Collection| Mapping| Python",GIS Specialist
+"Agile| Scrum| Product Backlog| User Stories| Stakeholder Management| Roadmapping| JIRA| Prioritization",Product Owner
+"Lab Testing| Sample Analysis| Equipment Maintenance| Data Recording| Safety Protocols| Quality Control| Documentation| Troubleshooting",Laboratory Technician
+"Agile| Project Management| Risk Mitigation| Technical Leadership| JIRA| Budgeting| Stakeholder Communication| Reporting",Technical Project Manager
+"Molecular Biology| PCR| DNA Sequencing| Lab Techniques| Research Development| Data Analysis| Compliance| Documentation",Biotechnologist
+"Sustainability| ESG| Carbon Footprint| Environmental Policy| Green Energy| Reporting| Compliance| Stakeholder Engagement",Sustainability Consultant
+"Real Estate| Property Valuation| Client Representation| Market Analysis| Negotiation| Contracts| MLS| CRM",Real Estate Agent
+"E-learning| Instructional Design| LMS| Curriculum Development| Storyboarding| SCORM| Training Delivery| Evaluation",Instructional Designer
+"Risk Assessment| Underwriting| Insurance Policies| Compliance| Financial Analysis| Actuarial Data| Client Advisory| Regulations",Insurance Underwriter
+"Tax Law| Financial Reporting| Compliance| GAAP| IRS Regulations| Auditing| Excel| Reconciliation",Tax Accountant
+"Process Mapping| Six Sigma| Lean| Workflow Optimization| Data Analysis| Reporting| Automation| ERP",Business Process Analyst
+"Cisco| Network Design| Routing| Firewalls| VPN| Troubleshooting| Cloud Networking| Security",Network Engineer
+"SQL| NoSQL| ETL| Database Design| Stored Procedures| Performance Tuning| Data Warehousing| Backup Recovery",Database Developer
+"CAD| SolidWorks| Mechanical Design| Prototyping| Manufacturing Drawings| GD&T| FEA| Product Development",Mechanical Designer
+"Inspection Protocols| Quality Standards| Calibration| Documentation| Compliance| Testing| Reporting| Six Sigma",Quality Control Inspector
+"Creative Direction| Adobe Creative Suite| Branding| Visual Storytelling| Team Leadership| Art Production| Marketing| UX/UI",Art Director
+"Unity| Unreal Engine| 3D Modeling| VR/AR| C#| Game Development| Motion Tracking| UX Design",Virtual Reality Developer
+"Clinical Trials| Protocol Compliance| Patient Recruitment| Data Collection| Ethics| Regulatory Requirements| Documentation| Reporting",Clinical Research Coordinator
+"Figma| User Research| Wireframing| Prototyping| Usability Testing| Interaction Design| Accessibility| UI Patterns",UX Designer
+"Technical Sales| Product Demos| Solution Architecture| CRM| Negotiation| Client Training| RFPs| Industry Knowledge",Sales Engineer
+"Team Leadership| Customer Satisfaction| Process Improvement| CRM| Reporting| Training| Conflict Resolution| KPIs",Customer Service Manager
+"ERP Implementation| SAP| Oracle| Business Process Reengineering| System Configuration| Training| Change Management| Data Migration",ERP Consultant
+"OSHA Compliance| Workplace Safety| Risk Assessment| Training| Incident Investigation| Emergency Response| Auditing| Reporting",Health and Safety Specialist
+"Team Management| Operational Efficiency| Performance Metrics| Reporting| Process Improvement| Scheduling| Compliance| Training",Operations Supervisor
+"Content Strategy| SEO| Editorial Calendar| CMS| Analytics| Social Media| Team Coordination| Brand Voice",Content Manager
+"Financial Reporting| Budget Control| Audit Preparation| GAAP| Compliance| Forecasting| Risk Management| Leadership",Financial Controller
+"Technical Drawing| Illustrator| CAD| Diagram Creation| 3D Modeling| Documentation| Engineering Graphics| Visualization",Technical Illustrator
+"Test Cases| Bug Tracking| Regression Testing| Automation| JIRA| Postman| QA Methodologies| Performance Testing",Software Tester
+"Brand Positioning| Market Research| Creative Strategy| Advertising| Social Media| Competitive Analysis| Consumer Insights| Analytics",Brand Strategist
+"Figma| Sketch| Adobe XD| UI Design| Interaction Patterns| Responsive Design| Prototyping| Accessibility",User Interface Designer
+"SQL| Excel| Power BI| Tableau| Data Visualization| Statistical Analysis| Python| Reporting",Data Analyst
+"Circuit Design| Power Systems| PLC| Electrical Codes| CAD| Troubleshooting| Automation| Renewable Energy",Electrical Engineer
+"Lab Procedures| Specimen Handling| Data Recording| Safety Protocols| Equipment Maintenance| Quality Control| Documentation| Compliance",Lab Assistant
+"Community Outreach| Health Education| Program Development| Public Speaking| Research| Policy Advocacy| Training| Evaluation",Public Health Educator
+"Office Management| Scheduling| Correspondence| MS Office| Organization| Communication| Confidentiality| Reporting",Administrative Assistant
+"Financial Modeling| Portfolio Management| Market Analysis| Risk Assessment| Valuation| Excel| Bloomberg| Reporting",Investment Analyst
+"Therapeutic Techniques| Psychological Assessment| Counseling| DSM-5| Research| Ethics| Crisis Intervention| Treatment Planning",Clinical Psychologist
+"Cisco| Network Security| System Administration| Troubleshooting| Firewalls| VPN| Active Directory| Cloud Networking",Network Administrator
+"Environmental Regulations| Waste Management| Sustainability| GIS| Water Treatment| Air Quality| Compliance| Reporting",Environmental Engineer
+"Python| Java| Git| Docker| AWS| CI/CD| SQL| Debugging",Software Developer
+"SQL| Power BI| Tableau| Data Warehousing| ETL| KPI Tracking| Machine Learning| Reporting",Business Intelligence Analyst
+"ROS| Python| Robotics| Automation| CAD| Machine Learning| PLC| Mechanical Systems",Robotics Engineer
