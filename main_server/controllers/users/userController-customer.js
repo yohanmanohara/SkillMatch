@@ -8,7 +8,112 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const jobModel = require('../../models/jobModel');
 const { console } = require('inspector/promises');
+const { s3Client, bucketName } = require('../../Connnections/awsLightsailClient');
 const otpStore = {};
+
+const deleteresume = async (req, res) => {
+  const { fileUrl } = req.body;
+
+  console.log('Attempting to delete file...');
+  console.log('File URL:', fileUrl);
+
+  if (!s3Client) {
+    console.error("S3 client is not initialized.");
+    return res.status(500).json({ error: "AWS S3 client not initialized" });
+  }
+
+  if (!fileUrl) {
+    return res.status(400).json({ error: "Missing required parameter: fileUrl" });
+  }
+
+  try {
+    const parsedUrl = new URL(fileUrl);
+
+    // 🛠️ Remove the bucket name from the path, if it's included in the URL
+    // e.g. /skillmatchnsbm/resume/filename.pdf → resume/filename.pdf
+    const objectKey = decodeURIComponent(
+      parsedUrl.pathname.replace(/^\/skillmatchnsbm\//, '')
+    );
+
+    console.log(`Extracted object key: ${objectKey}`);
+
+    // Additional validation
+    if (!objectKey.startsWith('resume/')) {
+      return res.status(400).json({ error: "Invalid file path in URL" });
+    }
+
+    console.log(`Deleting object from S3: ${objectKey}`);
+
+    await s3Client.deleteObject({
+      Bucket: bucketName, // Make sure `bucketName` is 'skillmatchnsbm'
+      Key: objectKey
+    }).promise();
+
+    console.log(`File ${objectKey} deleted successfully.`);
+    return res.status(200).json({ message: `File deleted: ${objectKey}` });
+
+  } catch (error) {
+    console.error("Error deleting file from S3:", error);
+
+    let errorDetails = error.message;
+    if (error instanceof TypeError && error.message.includes('Invalid URL')) {
+      errorDetails = "The provided file URL is invalid";
+    } else if (error.code === 'NoSuchKey') {
+      errorDetails = "File does not exist in S3 bucket";
+    }
+
+    return res.status(500).json({
+      error: "File deletion failed",
+      details: errorDetails
+    });
+  }
+};
+
+
+const removecv = async (req, res) => {
+  const { id } = req.query;
+  const { url } = req.body;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid user ID format' });
+  }
+  try {
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    if (!url || typeof url !== 'string' || !url.startsWith('http')) {
+      return res.status(400).json({ error: 'Invalid URL format' });
+    }
+    // Ensure cvUrl is always an array
+    if (!Array.isArray(user.cvUrl)) {
+      user.cvUrl = [];
+    }
+    // Check if URL exists in the array
+    if (!user.cvUrl.includes(url)) {
+      return res.status(200).json({   
+        message: 'CV URL does not exist',
+        cvUrls: user.cvUrl
+      });
+    }
+    // Remove URL from the array
+    user.cvUrl = user.cvUrl.filter(cv => cv !== url);
+    // Save the updated user
+    await user.save();
+    return res.status(200).json({
+      message: 'CV URL removed successfully',
+      cvUrls: user.cvUrl
+    });
+  } catch (error) {
+    console.error('CV removal error:', error);
+    return res.status(500).json({
+      error: 'Failed to remove CV URL',   
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+
+
 const updatecv = async (req, res) => {
   const { id } = req.query;
   const { url } = req.body;
@@ -346,5 +451,7 @@ module.exports = {
     updateUser,
     updatePassword,
     updatecv,
-    appliedjobs
+    appliedjobs,
+    deleteresume,
+    removecv
   };

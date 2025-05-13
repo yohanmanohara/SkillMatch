@@ -16,18 +16,23 @@ import {
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
 
+interface CVItem {
+  url: string;
+  name: string;
+  uploadedAt: string;
+}
+
 const ResumeManager = () => {
-  const [cv, setCv] = useState<{
-    map(arg0: (item: { url: string | number | bigint | ((prevState: string | null) => string | null) | null | undefined; name: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; uploadedAt: string; }) => React.JSX.Element): React.ReactNode; url: string; name: string; uploadedAt: string 
-} | null>(null);
+  const [cvs, setCvs] = useState<CVItem[]>([]);
   const [selectedCv, setSelectedCv] = useState<string | null>(null);
+  const [cvToDelete, setCvToDelete] = useState<string | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const userId = typeof window !== 'undefined' ? sessionStorage.getItem('poop') : null;
 
   useEffect(() => {
-    const fetchCV = async () => {
+    const fetchCVs = async () => {
       if (!userId) return;
   
       try {
@@ -39,59 +44,68 @@ const ResumeManager = () => {
         if (response.ok) {
           const data = await response.json();
           if (data.cvUrl && Array.isArray(data.cvUrl)) {
-            // Loop over the array of CV URLs and set them
-            const cvs = data.cvUrl.map((url: any, index: number) => ({
+            const fetchedCVs = data.cvUrl.map((url: string, index: number) => ({
               url: url,
-              name: `My CV ${index + 1}`, // Generate unique names for each CV
-              uploadedAt: new Date().toISOString() // Placeholder for upload date
+              name: `My CV ${index + 1}`,
+              uploadedAt: new Date().toISOString() // You might want to get actual upload date from your API
             }));
-            setCv(cvs); // Assuming `setCv` can handle an array of CVs
+            setCvs(fetchedCVs);
           }
         }
       } catch (error) {
-        console.error('Failed to fetch CV:', error);
-        setError('Failed to load your CV');
+        console.error('Failed to fetch CVs:', error);
+        setError('Failed to load your CVs');
       } finally {
         setIsLoading(false);
       }
     };
   
-    fetchCV();
+    fetchCVs();
   }, [userId]);
-  
 
   const handleDeleteCV = async () => {
-    if (!userId) return;
+    if (!userId || !cvToDelete) return;
 
     try {
       setIsLoading(true);
-      const updateResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updatecv/?id=${userId}`,
+      console.log("Deleting CV:", cvToDelete);
+      const deleteResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/deleteresume`,
         {
-          method: 'POST',
+          method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ url: '' }),
-        }
+          body: JSON.stringify({ fileUrl: cvToDelete  }),
+        },
+        
       );
 
-      if (!updateResponse.ok) {
-        throw new Error('Failed to remove CV reference');
-      }
-
-      const deleteResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/file/deletecv/?id=${userId}`,
-        {
-          method: 'DELETE',
-        }
-      );
+      const result = await deleteResponse.json();
+      console.log("Server response:", result);
 
       if (!deleteResponse.ok) {
         throw new Error('Failed to delete CV file');
       }
 
-      setCv(null);
+      // Then update the user's CV list
+      const updateResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/removecv/?id=${userId}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ url: cvToDelete }),
+        }
+      );
+
+      if (!updateResponse.ok) {
+        throw new Error('Failed to update user CV list');
+      }
+
+      // Update local state
+      setCvs(prevCvs => prevCvs.filter(cv => cv.url !== cvToDelete));
       setError(null);
     } catch (error) {
       console.error('Error deleting CV:', error);
@@ -99,6 +113,7 @@ const ResumeManager = () => {
     } finally {
       setIsLoading(false);
       setIsDeleteDialogOpen(false);
+      setCvToDelete(null);
     }
   };
 
@@ -110,94 +125,88 @@ const ResumeManager = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-end items-center">
-        <AddCVDialog cv={cv} onUploadSuccess={() => window.location.reload()} />
+        <AddCVDialog cvs={cvs} onUploadSuccess={() => window.location.reload()} />
       </div>
 
-      {isLoading && !cv ? (
+      {isLoading && cvs.length === 0 ? (
         <div className="flex justify-center items-center h-40">
           <Loader2 className="h-8 w-8 animate-spin" />
         </div>
       ) : error ? (
         <div className="text-red-500 text-center py-4">{error}</div>
-      ) : !cv ? (
+      ) : cvs.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
-          You haven&apos;t uploaded a CV yet.
+          You haven&apos;t uploaded any CVs yet.
         </div>
       ) : (
-        <div className=" grid grid-cols-1 gap-4 md:ml-44 md:mr-44 ">
-          {cv.map((item: { url: string | number | bigint | ((prevState: string | null) => string | null) | null | undefined; name: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; uploadedAt: string; }) => (
-          <Card 
-          key={typeof item.url === 'string' || typeof item.url === 'number' ? item.url : undefined}
-          className="p-4 hover:shadow-lg transition-all duration-200 ease-in-out rounded-xl border test backdrop-blur-sm h-24"
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div className="p-2rounded-lg">
-              <File className="h-9 w-5 text-blue-600" />
-            </div>
-            <div className="flex-1 min-w-0 space-y-1">
-              <p className="text-sm font-medium truncate">{item.name}</p>
-              <div className="flex items-center gap-2">
-                <Calendar className="h-8 w-3 text-gray-400" />
-                <p className="text-xs">{formatDate(item.uploadedAt)}</p>
+        <div className="grid grid-cols-1 gap-4 md:ml-44 md:mr-44">
+          {cvs.map((item) => (
+            <Card 
+              key={item.url}
+              className="p-4 hover:shadow-lg transition-all duration-200 ease-in-out rounded-xl border test backdrop-blur-sm h-24"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="p-2 rounded-lg">
+                  <File className="h-9 w-5 text-blue-600" />
+                </div>
+                <div className="flex-1 min-w-0 space-y-1">
+                  <p className="text-sm font-medium truncate">{item.name}</p>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-8 w-3 text-gray-400" />
+                    <p className="text-xs">{formatDate(item.uploadedAt)}</p>
+                  </div>
+                </div>
+                <div className="flex gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="rounded-lg text-gray-500 hover:text-gray-700"
+                    onClick={() => setSelectedCv(item.url)}
+                  >
+                    <Eye className="h-4 w-4" />
+                    <span className="sr-only">Preview</span>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="rounded-lg hover:bg-red-50 text-gray-500 hover:text-red-600"
+                    onClick={() => {
+                      setCvToDelete(item.url);
+                      setIsDeleteDialogOpen(true);
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    <span className="sr-only">Delete</span>
+                  </Button>
+                </div>
               </div>
-            </div>
-            <div className="flex gap-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="rounded-lg text-gray-500 hover:text-gray-700"
-                onClick={() => {
-                  if (typeof item.url === 'string') {
-                    setSelectedCv(item.url);
-                  }
-                }}
-              >
-                <Eye className="h-4 w-4" />
-                <span className="sr-only">Preview</span>
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="rounded-lg hover:bg-red-50 text-gray-500 hover:text-red-600"
-                onClick={() => {
-                  setIsDeleteDialogOpen(true);
-                }}
-              >
-                <Trash2 className="h-4 w-4" />
-                <span className="sr-only">Delete</span>
-              </Button>
-            </div>
-          </div>
-        </Card>
+            </Card>
           ))}
         </div>
       )}
 
       {/* CV Preview Dialog */}
-     
-<AlertDialog open={!!selectedCv} onOpenChange={(open) => !open && setSelectedCv(null)}>
-  <AlertDialogContent className="max-w-4xl">
-    <AlertDialogHeader>
-      <AlertDialogTitle>CV Preview</AlertDialogTitle>
-    </AlertDialogHeader>
-    <div className="w-full h-[70vh]">
-      {/* Conditionally render iframe only when selectedCv is not null or empty */}
-      {selectedCv && (
-        <iframe
-          src={selectedCv}
-          width="100%"
-          height="100%"
-          style={{ border: 'none' }}
-          title="CV Preview"
-        />
-      )}
-    </div>
-    <AlertDialogFooter>
-      <AlertDialogCancel>Close</AlertDialogCancel>
-    </AlertDialogFooter>
-  </AlertDialogContent>
-</AlertDialog>
-
+      <AlertDialog open={!!selectedCv} onOpenChange={(open: any) => !open && setSelectedCv(null)}>
+        <AlertDialogContent className="max-w-4xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>CV Preview</AlertDialogTitle>
+          </AlertDialogHeader>
+          <div className="w-full h-[70vh]">
+            {selectedCv && (
+              <iframe
+                src={selectedCv}
+                width="100%"
+                height="100%"
+                style={{ border: 'none' }}
+                title="CV Preview"
+              />
+            )}
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Close</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
@@ -209,7 +218,12 @@ const ResumeManager = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isLoading} onClick={() => {
+              setIsDeleteDialogOpen(false);
+              setCvToDelete(null);
+            }}>
+              Cancel
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteCV}
               disabled={isLoading}
@@ -227,7 +241,13 @@ const ResumeManager = () => {
     </div>
   );
 };
-const AddCVDialog = ({ cv, onUploadSuccess }: { cv: { url: string; name: string; uploadedAt: string } | null; onUploadSuccess: () => void }) => {
+
+interface AddCVDialogProps {
+  cvs: CVItem[];
+  onUploadSuccess: () => void;
+}
+
+const AddCVDialog = ({ cvs, onUploadSuccess }: AddCVDialogProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -313,7 +333,7 @@ const AddCVDialog = ({ cv, onUploadSuccess }: { cv: { url: string; name: string;
 
       const uploadData = await uploadResponse.json();
 
-      // Update user record with the new CV URL
+     
       const updateResponse = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/updatecv/?id=${userId}`,
         {
@@ -346,7 +366,7 @@ const AddCVDialog = ({ cv, onUploadSuccess }: { cv: { url: string; name: string;
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="secondary" className="w-40">
-        Add new Cv
+          Add new CV
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

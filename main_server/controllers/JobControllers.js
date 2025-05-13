@@ -6,8 +6,53 @@ const axios = require('axios');
 
 
 class cvController extends BaseController {
+
+    async deleteFile(req, res) {
+        const { id } = req.query;
+        const { fileName } = req.body;
+    
+        console.log('Attempting to delete file...');
+        console.log('User ID:', id);
+        console.log('File name:', fileName);
+    
+        if (!s3Client) {
+            console.error("S3 client is not initialized.");
+            return res.status(500).json({ error: "AWS S3 client not initialized" });
+        }
+    
+        if (!id || !fileName) {
+            return res.status(400).json({ error: "Missing required parameters: id or fileName" });
+        }
+    
+        const objectKey = `resume/${id}-${fileName}`;
+    
+        try {
+            console.log(`Deleting object from S3: ${objectKey}`);
+            
+            await s3Client.deleteObject({
+                Bucket: bucketName,
+                Key: objectKey
+            }).promise();
+    
+            console.log(`File ${objectKey} deleted successfully.`);
+            return res.status(200).json({ message: "File deleted successfully" });
+    
+        } catch (error) {
+            console.error("Error deleting file from S3:", error);
+            return res.status(500).json({
+                error: "File deletion failed",
+                details: error.message
+            });
+        }
+    }
+    
+    
+
+
     async cvUpload(req, res) {
         const { id } = req.query;
+        
+
         console.log('File received:', req.file);
         console.log('Query parameters:', req.query);
     
@@ -58,40 +103,22 @@ class cvController extends BaseController {
     
             console.log(`Resume uploaded successfully for user ${id}`);
             console.log(`File URL: ${uploadResult.Location}`);
-
-
-
-
-
-             
-              try {
-                const extractorResponse = await axios.post('http://127.0.0.1:5000/api/resume_extractor', {
-                    url: resumeUrl,
-                    userId: id
-                });
+            //   try {
+            //     const extractorResponse = await axios.post('http://127.0.0.1:5000/api/resume_extractor', {
+            //         url: resumeUrl,
+            //         userId: id
+            //     });
     
-                console.log("Resume extraction response:", extractorResponse.data);
-              } catch (extractorError) {
-                console.error("Error calling resume extractor:", extractorError.message);
-              }
+            //     console.log("Resume extraction response:", extractorResponse.data);
+            //   } catch (extractorError) {
+            //     console.error("Error calling resume extractor:", extractorError.message);
+            //   }
     
-
-
-
-
-
-
-
-
-
             return res.status(200).json({ 
                 url: uploadResult.Location,
                 key: objectKey 
             });
-           
 
-            
-    
         } catch (error) {
             console.error("Upload Error:", error);
             return res.status(500).json({ 
@@ -138,7 +165,12 @@ class cvController extends BaseController {
 class JobController extends BaseController {
     constructor() {
         super(JobModel);
+
+
     }
+
+
+
     async fileUpload(req, res) {
         const { id } = req.query; // Get the `id` from the query parameters
         try {
