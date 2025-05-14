@@ -1,4 +1,5 @@
 const Organization = require('../../models/organizationModel');
+const recomandedJobs = require('../../models/jobsuggestions');
 const User = require('../../models/userModel')
 require('dotenv').config();
 const Job = require('../../models/jobModel'); // Path to the Job model
@@ -22,9 +23,44 @@ const fetchjobs = async(req,res)=>
 };
 
 
+const recomandedjobs = async (req, res) => {
+  const { userId } = req.body; 
+  if (!userId) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
+
+  try {
+    const rejobs = await recomandedJobs.find({ _id: userId });
+    
+    if (!rejobs || rejobs.length === 0) {
+      return res.status(404).json({ 
+        status: 'success', 
+        message: 'No recommended jobs found for this user',
+        jobSuggestions: [],
+        skills: []
+      });
+    }
+    
+    const latestRecommendation = rejobs[0];
+    
+    res.status(200).json({
+      createdAt: latestRecommendation.createdAt,
+      jobSuggestions: latestRecommendation.jobSuggestions || [],
+      status: "success"
+    });
+
+  } catch (error) {
+    console.error('Error fetching recommended jobs:', error);
+    res.status(500).json({ 
+      status: 'error',
+      message: 'Error fetching recommended jobs', 
+      error: error.message 
+    });
+  }
+  
 
 
-
+}
 
 
 
@@ -313,4 +349,4 @@ const createOrganization = async (req, res) => {
 
 
 
-  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs,updatejobs,deletejob,getOrganizationJobs}; // Export the functions to be used in the routes file
+  module.exports = { createOrganization,getpicture ,addjobs,fetchjobs,updatejobs,deletejob,getOrganizationJobs,recomandedjobs}; // Export the functions to be used in the routes file

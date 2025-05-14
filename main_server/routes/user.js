@@ -38,6 +38,7 @@ const {getapikey} = require('../controllers/cal_controller')
 const {calapikeystore} = require('../controllers/cal_controller')
 const {candidatehire} = require('../controllers/candidatesController')
 const {deleteresume} = require('../controllers/users/userController-customer')
+const {recomandedjobs}  = require('../controllers/organization/organizationControllers')
 const { route } = require('./JobRoutes')
 
 const router = express.Router()
@@ -60,6 +61,7 @@ router.post('/removecv', removecv)
 router.post('/updatecv',updatecv)
 
 router.get('/fetchjobs',fetchjobs)
+router.post('/recommendedjobs',recomandedjobs)
 
 router.post('/addjobs',addjobs)
 

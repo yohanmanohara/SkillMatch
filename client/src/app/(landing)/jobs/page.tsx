@@ -70,6 +70,8 @@ const JobListingPage = () => {
   const [salaryRange, setSalaryRange] = useState<[number, number]>([0, 6000000]);
   const [experienceLevels, setExperienceLevels] = useState<string[]>([]);
   const [recommendedOnly, setRecommendedOnly] = useState(false);
+  const [recommendedTitles, setRecommendedTitles] = useState<string[]>([]);
+
   const router = useRouter();
 
   // Get all unique employment types from jobs
@@ -103,29 +105,7 @@ const JobListingPage = () => {
     fetchJobs();
   }, []);
 
-  // Filter jobs based on all filters
-  // const filtered = jobs.filter((job) => {
-  //   const matchesSearch = search === "" || 
-  //     job.title.toLowerCase().includes(search.toLowerCase()) ||
-  //     job.companyname.toLowerCase().includes(search.toLowerCase());
   
-  //   const matchesLocation = location === "" || 
-  //     job.location.toLowerCase().includes(location.toLowerCase());
-  
-  //   const matchesEmployment = employmentTypes.length === 0 || 
-  //     job.employmentTypes.some(type => employmentTypes.includes(type));
-  
-  //   const matchesExperience = experienceLevels.length === 0 || 
-  //     experienceLevels.includes(job.expirienceduration);
-  
-  //   const salary = parseInt(job.salaryMin) || 0;
-  //   const matchesSalary = salary >= salaryRange[0] && salary <= salaryRange[1];
-  
-  //   const matchesRecommended = !recommendedOnly || job.title.toLowerCase().includes("recommend");
-  
-  //   return matchesSearch && matchesLocation && matchesEmployment &&
-  //          matchesExperience && matchesSalary && matchesRecommended;
-  // });
   
   useEffect(() => {
     const filtered = jobs.filter((job) => {
@@ -145,14 +125,17 @@ const JobListingPage = () => {
       const salary = parseInt(job.salaryMin) || 0;
       const matchesSalary = salary >= salaryRange[0] && salary <= salaryRange[1];
   
-      const matchesRecommended = !recommendedOnly || job.title.toLowerCase().includes("recommend");
+      const matchesRecommended = !recommendedOnly || 
+      recommendedTitles.some(recommendedTitle => 
+        job.title.toLowerCase() === recommendedTitle.toLowerCase()
+      );
   
       return matchesSearch && matchesLocation && matchesEmployment &&
              matchesExperience && matchesSalary && matchesRecommended;
     });
   
     setFilteredJobs(filtered);
-  }, [search, location, employmentTypes, salaryRange, experienceLevels, recommendedOnly, jobs]);
+  }, [search, location, employmentTypes, salaryRange, experienceLevels, recommendedOnly, jobs,recommendedTitles]);
   
 
   const userId = sessionStorage.getItem('poop');
@@ -164,28 +147,22 @@ const JobListingPage = () => {
     if (checked) {
       try {
         setLoading(true);
-  
-        // Step 1: Get array of recommended job IDs
-        const res = await fetch(`http://localhost:3001/flask_server/api/job_suggestion?id=${userId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/recommendedjobs`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
+          body: JSON.stringify({ userId }),
         });
-        const result = await res.json();  // Now result is { suggested_jobs: [...], user_id: "3" }
-        const jobIds = result.suggested_jobs.map((job: { _id: string }) => job._id);
+        const result = await response.json();
+        const titles = Array.isArray(result.jobSuggestions) ? 
+        result.jobSuggestions : [];
+        console.log("Recommended job titles:", titles);
+        setRecommendedTitles(titles);
+
+       
         
-  
-        const jobDataResponses = await Promise.all(
-          jobIds.map((id: any) =>
-            fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/main_server/api/user/job/${id}`)
-              .then((res) => res.json())
-          )
-        );
-        
-  
-        // Step 3: Set the fetched job data to state
-        setFilteredJobs(jobDataResponses);
+
   
       } catch (error) {
         console.error("Error fetching recommended job data:", error);
