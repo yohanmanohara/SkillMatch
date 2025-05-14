@@ -44,18 +44,18 @@ s3Client.listObjectsV2({ Bucket: bucketName }, (err) => {
   }
 });
 
-// function repeatFetchUserIds() {
-//   setInterval(async () => {
-//       try {
-//           const userPairs = await fetchUserIds();
-//           console.log('User ID - calapikey pairs:', userPairs);
-//       } catch (error) {
-//           console.error('Error fetching user ID - calapikey pairs:', error);
-//       }
-//   }, 5000);  // runs every 5 seconds
-// }
+function repeatFetchUserIds() {
+  setInterval(async () => {
+      try {
+          const userPairs = await fetchUserIds();
+          console.log('User ID - calapikey pairs:', userPairs);
+      } catch (error) {
+          console.error('Error fetching user ID - calapikey pairs:', error);
+      }
+  }, 5000);  // runs every 5 seconds
+}
 
-// repeatFetchUserIds();
+repeatFetchUserIds();
 
 
 
