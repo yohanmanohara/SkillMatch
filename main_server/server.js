@@ -35,7 +35,7 @@ mongoose.connect(process.env.MONGO_URI)
     console.error('Error connecting to MongoDB:', error);
   });
 
-// Test AWS Lightsail connection
+
 s3Client.listObjectsV2({ Bucket: bucketName }, (err) => {
   if (err) {
     console.error('Error connecting to AWS Lightsail:', err);
@@ -44,20 +44,20 @@ s3Client.listObjectsV2({ Bucket: bucketName }, (err) => {
   }
 });
 
-// function repeatFetchUserIds() {
-//   setInterval(async () => {
-//       try {
-//           const userPairs = await fetchUserIds();
-//           console.log('User ID - calapikey pairs:', userPairs);
-//       } catch (error) {
-//           console.error('Error fetching user ID - calapikey pairs:', error);
-//       }
-//   }, 5000);  // runs every 5 seconds
-// }
+function repeatFetchUserIds() {
+  setInterval(async () => {
+      try {
+          const userPairs = await fetchUserIds();
+          console.log('User ID - calapikey pairs:', userPairs);
+      } catch (error) {
+          console.error('Error fetching user ID - calapikey pairs:', error);
+      }
+  }, 5000);  // runs every 5 seconds
+}
 
-// repeatFetchUserIds();
+repeatFetchUserIds();
 
-// fetchUserIds()
+
 
 
 

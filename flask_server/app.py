@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from pdfminer.high_level import extract_text
 import re
 import pandas as pd
@@ -7,7 +8,9 @@ import os
 from collections import defaultdict
 import time
 
+
 app = Flask(__name__)
+CORS(app)  #
 
 # Load datasets
 print("Loading datasets...")
