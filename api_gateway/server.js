@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3001;
 const client = 'http://localhost:3000';
 const api_gateway = 'http://localhost:3001';
 const main_server = 'http://main_server:3002';
-const flask_server = 'http://192.168.1.9:3003';
+const flask_server = 'http://flask_server:3003';
 
 
 

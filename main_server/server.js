@@ -35,7 +35,7 @@ mongoose.connect(process.env.MONGO_URI)
     console.error('Error connecting to MongoDB:', error);
   });
 
-// Test AWS Lightsail connection
+
 s3Client.listObjectsV2({ Bucket: bucketName }, (err) => {
   if (err) {
     console.error('Error connecting to AWS Lightsail:', err);
@@ -57,7 +57,7 @@ s3Client.listObjectsV2({ Bucket: bucketName }, (err) => {
 
 // repeatFetchUserIds();
 
-// fetchUserIds()
+
 
 
 
