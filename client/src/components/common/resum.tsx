@@ -313,7 +313,7 @@ const AddCVDialog = ({ cvs, onUploadSuccess }: AddCVDialogProps) => {
     }
 
     setIsUploading(true);
-
+    
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -350,7 +350,7 @@ const AddCVDialog = ({ cvs, onUploadSuccess }: AddCVDialogProps) => {
       }
 
       setIsUploading(false);
-      
+
       alert(jobId 
         ? "CV updated and job application submitted successfully!" 
         : "CV uploaded successfully!");
