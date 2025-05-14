@@ -52,7 +52,7 @@ class cvController extends BaseController {
 
     async cvUpload(req, res) {
         const { id } = req.query;
-        
+
         console.log('File received:', req.file);
         console.log('Query parameters:', req.query);
     
@@ -157,6 +157,7 @@ class cvController extends BaseController {
             console.log(`Resume uploaded successfully for user ${id}`);
             console.log(`File URL: ${uploadResult.Location}`);
 
+
             const formData = new FormData();
             formData.append('file', req.file.buffer, {
                 filename: req.file.originalname,
@@ -206,6 +207,7 @@ class cvController extends BaseController {
             console.log('Updated or created document:', updatedOrCreated);
             
               
+
             return res.status(200).json({ 
                 url: uploadResult.Location,
                 key: objectKey 
@@ -260,6 +262,7 @@ class JobController extends BaseController {
 
 
     }
+
 
     async fileUpload(req, res) {
         const { id } = req.query; 

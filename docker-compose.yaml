@@ -27,11 +27,13 @@ services:
       - EMAIL=warushayohan80@gmail.com
       - EMAIL_PASSWORD=wlasedetnswsefnc
       - AWS_LIGHTSAIL_ENDPOINT=https://skillmatchnsbm.s3.ap-southeast-1.amazonaws.com
+
       - AWS_ACCESS_KEY_ID=AKIA356SJTRS3BRXMN4V
       - AWS_SECRET_ACCESS_KEY=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
       - AWS_REGION=Singapore
       - AWS_BUCKET_NAME=skillmatchnsbm
     
+
     depends_on:
       - api_gateway
 
