@@ -28,8 +28,8 @@ services:
       - EMAIL_PASSWORD=wlasedetnswsefnc
       - AWS_LIGHTSAIL_ENDPOINT=https://skillmatchnsbm.s3.ap-southeast-1.amazonaws.com
 
-      - AWS_ACCESS_KEY_ID=AKIA356SJTRS3BRXMN4V
-      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_ACCESS_KEY_ID=AKIA356SJTRSQUOU5D44
+      - AWS_SECRET_ACCESS_KEY=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
       - AWS_REGION=Singapore
       - AWS_BUCKET_NAME=skillmatchnsbm
     

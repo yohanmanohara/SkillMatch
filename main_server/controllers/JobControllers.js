@@ -127,7 +127,13 @@ class cvController extends BaseController {
                     
                     console.log('Updated or created document:', updatedOrCreated);
                    
-                  return res.status(200)
+                  return res.status(200) .json({
+                    url: existingUrl,
+                    key: existingKey,
+                    jobSuggestions: job_suggestions,
+                    skills: skills,
+                    processingTime: processing_time
+                    });
                 
                 } catch (error) {
                     console.error('CV Processing Error:', error);
@@ -180,7 +186,7 @@ class cvController extends BaseController {
 
             const { job_suggestions, processing_time, skills, status } = extractedData;
 
-            // Define the query to find similar document
+           
             const query = {
               jobSuggestions: job_suggestions,
               skills: skills,

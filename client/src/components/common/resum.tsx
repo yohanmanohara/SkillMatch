@@ -349,6 +349,8 @@ const AddCVDialog = ({ cvs, onUploadSuccess }: AddCVDialogProps) => {
         throw new Error("Failed to update user record");
       }
 
+      setIsUploading(false);
+      
       alert(jobId 
         ? "CV updated and job application submitted successfully!" 
         : "CV uploaded successfully!");
